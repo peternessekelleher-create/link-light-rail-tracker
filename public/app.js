@@ -1,3 +1,4 @@
+import basemapLayer from './layers/basemap.js';
 import routesLayer from './layers/routes.js';
 import stationsLayer from './layers/stations.js';
 import trainsLayer from './layers/trains.js';
@@ -7,7 +8,7 @@ import { view } from './lib/view.js';
 
 // Map layers, drawn in this order. Future layers (history, ridership) are new
 // modules with the same { add(map, data) } shape.
-const LAYERS = [routesLayer, stationsLayer, trainsLayer];
+const LAYERS = [basemapLayer, routesLayer, stationsLayer, trainsLayer];
 
 const statusEl = document.getElementById('status');
 const setStatus = (msg, isError = false) => {
@@ -29,8 +30,8 @@ function boundsOf(data) {
   return b;
 }
 
-// Below 860 px the panels are drawers opened from buttons; one at a time.
-const NARROW = window.matchMedia('(max-width: 859px)');
+// Below 960 px the panels are drawers opened from buttons; one at a time.
+const NARROW = window.matchMedia('(max-width: 959px)');
 
 function setupDrawers() {
   const buttons = [...document.querySelectorAll('[data-drawer]')];
@@ -49,7 +50,7 @@ function setupDrawers() {
 
 // Keep both lines clear of the side panels on wide screens.
 const fitPadding = () =>
-  NARROW.matches ? { top: 90, bottom: 40, left: 30, right: 30 } : { top: 40, bottom: 40, left: 290, right: 310 };
+  NARROW.matches ? { top: 100, bottom: 40, left: 30, right: 30 } : { top: 40, bottom: 40, left: 330, right: 350 };
 
 async function main() {
   const [config, data] = await Promise.all([getJson('/api/config'), getJson('/api/link')]);

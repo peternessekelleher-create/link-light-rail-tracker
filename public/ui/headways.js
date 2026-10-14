@@ -21,7 +21,7 @@ export function renderHeadways(data) {
   function render() {
     const hw = liveFeed.body?.headways;
     if (!hw) {
-      rowsEl.innerHTML = '<p class="hw-empty">Waiting for live data…</p>';
+      rowsEl.innerHTML = '<p class="hw-empty">Waiting For Live Data…</p>';
       return;
     }
     const rows = [];
@@ -30,7 +30,7 @@ export function renderHeadways(data) {
         if (!view.shown(line, dir)) continue;
         const h = hw[line]?.[dir];
         if (!h) continue;
-        const actual = h.actual != null ? formatClock(h.actual) : 'Not enough trains';
+        const actual = h.actual != null ? formatClock(h.actual) : 'Not Enough Trains';
         const scheduled = h.scheduled != null ? formatClock(h.scheduled) : '—';
         let diff = '';
         if (h.actual != null && h.scheduled != null) {
@@ -39,18 +39,18 @@ export function renderHeadways(data) {
         }
         rows.push(`
           <div class="hw-row">
-            <div class="hw-title"><span class="hw-dot" style="background:${color}"></span>${escapeHtml(line)} · toward ${escapeHtml(name)}</div>
+            <div class="hw-title"><span class="hw-dot" style="background:${color}"></span>${escapeHtml(line)} · Toward ${escapeHtml(name)}</div>
             <div class="hw-values">Actual ${actual} · Scheduled ${scheduled} ${diff}</div>
-            <div class="hw-meta">Based on ${h.trains} train${h.trains === 1 ? '' : 's'}</div>
+            <div class="hw-meta">Based On ${h.trains} Train${h.trains === 1 ? '' : 's'}</div>
           </div>`);
       }
     }
-    rowsEl.innerHTML = rows.join('') || '<p class="hw-empty">All lines and directions are switched off.</p>';
+    rowsEl.innerHTML = rows.join('') || '<p class="hw-empty">All Lines And Directions Are Switched Off</p>';
   }
 
   function renderUpdated() {
     const ts = liveFeed.body?.feedTs;
-    updatedEl.textContent = ts ? `Updated ${Math.max(0, Math.round(Date.now() / 1000 - ts))} s ago` : '';
+    updatedEl.textContent = ts ? `Updated ${Math.max(0, Math.round(Date.now() / 1000 - ts))} Sec Ago` : '';
   }
 
   liveFeed.subscribe(() => { render(); renderUpdated(); });

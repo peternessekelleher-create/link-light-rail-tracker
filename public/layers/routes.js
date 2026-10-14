@@ -6,7 +6,10 @@ const OFF_OPACITY = 0.25; // a line switched off fades instead of disappearing
 // The 1 Line and 2 Line share track from Lynnwood to Int'l Dist/Chinatown.
 // The API orients both lines north-to-south, so opposite pixel offsets show
 // the shared section side by side instead of one color hiding the other.
-const OFFSET = { '1 Line': -2.5, '2 Line': 2.5 };
+// Each line shifts half its width to its own side, so the offset grows with
+// the line width as you zoom in.
+const SIDE = { '1 Line': -1, '2 Line': 1 };
+const offsetByZoom = ['interpolate', ['linear'], ['zoom'], 9, ['*', ['get', 'side'], 2.3], 15, ['*', ['get', 'side'], 4.3]];
 
 export default {
   add(map, data) {
@@ -16,22 +19,22 @@ export default {
         type: 'FeatureCollection',
         features: data.routes.map((r) => ({
           type: 'Feature',
-          properties: { line: r.line, color: r.color, offset: OFFSET[r.line] ?? 0 },
+          properties: { line: r.line, color: r.color, side: SIDE[r.line] ?? 0 },
           geometry: { type: 'LineString', coordinates: r.coordinates.map(([lat, lon]) => [lon, lat]) },
         })),
       },
     });
 
-    // A dark casing keeps the colors readable over bright satellite imagery.
+    // A dark casing keeps the official colors readable over any imagery.
     map.addLayer({
       id: 'link-routes-casing',
       type: 'line',
       source: 'link-routes',
       layout: { 'line-join': 'round', 'line-cap': 'round' },
       paint: {
-        'line-color': 'rgba(0,0,0,0.55)',
-        'line-width': ['interpolate', ['linear'], ['zoom'], 9, 5, 15, 9],
-        'line-offset': ['get', 'offset'],
+        'line-color': 'rgba(0,0,0,0.9)',
+        'line-width': ['interpolate', ['linear'], ['zoom'], 9, 7.5, 15, 13],
+        'line-offset': offsetByZoom,
       },
     });
     map.addLayer({
@@ -41,8 +44,8 @@ export default {
       layout: { 'line-join': 'round', 'line-cap': 'round' },
       paint: {
         'line-color': ['get', 'color'],
-        'line-width': ['interpolate', ['linear'], ['zoom'], 9, 3, 15, 6],
-        'line-offset': ['get', 'offset'],
+        'line-width': ['interpolate', ['linear'], ['zoom'], 9, 4.5, 15, 8.5],
+        'line-offset': offsetByZoom,
       },
     });
 

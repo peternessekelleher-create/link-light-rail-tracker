@@ -8,6 +8,7 @@
 import { measure, pointAt, sliceLine, scheduledDist } from '../lib/motion.js';
 import { ON_TIME_S, DELAY_COLORS, formatDelay, delayClass } from '../lib/delay.js';
 import { view, liveFeed } from '../lib/view.js';
+import { trainCapacity } from '../lib/capacity.js';
 
 const POLL_MS = 15 * 1000;
 const MAX_BACKOFF_MS = 2 * 60 * 1000;
@@ -179,14 +180,14 @@ export default {
 
     function renderStatus(now) {
       if (lastOk == null) {
-        ui.status.textContent = failures ? '' : 'Connecting to live data…';
+        ui.status.textContent = failures ? '' : 'Connecting To Live Data…';
         return;
       }
       const n = trains.size;
       const ago = feedTs ? Math.max(0, Math.round(now - feedTs)) : null;
       ui.status.textContent = n
-        ? `Live · ${n} train${n === 1 ? '' : 's'}${ago != null ? ` · updated ${formatAgo(ago)}` : ''}`
-        : 'No trains running right now';
+        ? `Live · ${n} Train${n === 1 ? '' : 's'}${ago != null ? ` · Updated ${formatAgo(ago)}` : ''}`
+        : 'No Trains Running Right Now';
     }
 
     let popupText = '';
@@ -195,13 +196,21 @@ export default {
       if (!t || !view.shown(t.line, t.dir)) { popup.remove(); return; }
       const age = Math.max(0, Math.round(now - t.ts));
       const next = t.nextStop
-        ? `<div>Next stop: ${escapeHtml(t.nextStop)}${t.nextDelay != null ? ` <span class="muted">(predicted ${delayText(t.nextDelay).toLowerCase()})</span>` : ''}</div>`
+        ? field('Next Stop', `${escapeHtml(t.nextStop)}${t.nextDelay != null ? ` <span class="muted">(Predicted ${formatDelay(t.nextDelay)})</span>` : ''}`)
+        : '';
+      const cap = trainCapacity(t.line, t.cars);
+      const capacity = cap
+        ? field('Cars', `${cap.cars}${cap.typical ? ' (Typical)' : ''}`) +
+          field('Seats', cap.seats.toLocaleString()) +
+          field('Max Capacity', `${cap.maxLoad.toLocaleString()} People`) +
+          `<div class="popup-note">Capacity uses Sound Transit's planning standard.</div>`
         : '';
       const html =
         `<div class="popup-name"><span class="chip" style="background:${data.colors[t.line]}">${escapeHtml(t.line)}</span> To ${escapeHtml(t.headsign)}</div>` +
         `<div class="train-status ${delayClass(t.delay)}">${delayText(t.delay)}</div>` +
         next +
-        `<div class="muted">${age > STALE_AFTER_S ? `Last seen ${Math.round(age / 60)} min ago` : `Updated ${age} s ago`}</div>`;
+        capacity +
+        `<div class="muted popup-updated">${age > STALE_AFTER_S ? `Last Seen ${Math.round(age / 60)} Min Ago` : `Updated ${age} Sec Ago`}</div>`;
       popup.setLngLat(t.at);
       if (html !== popupText || open) {
         popupText = html;
@@ -228,15 +237,17 @@ export default {
   },
 };
 
-// "Late +3:20" / "Early −1:15" / "On time": the same number as the map tag.
+const field = (name, value) => `<div class="popup-field"><span class="field-name">${name}:</span> ${value}</div>`;
+
+// "Late +3:20" / "Early −1:15" / "On Time": the same number as the map tag.
 function delayText(s) {
   const tag = formatDelay(s);
-  if (tag === 'On time') return tag;
+  if (Math.abs(s) < GHOST_THRESHOLD_S) return tag;
   return `${s > 0 ? 'Late' : 'Early'} ${tag}`;
 }
 
 function formatAgo(s) {
-  return s < 90 ? `${s} s ago` : `${Math.round(s / 60)} min ago`;
+  return s < 90 ? `${s} Sec Ago` : `${Math.round(s / 60)} Min Ago`;
 }
 
 function readGhostPref() {
@@ -254,7 +265,7 @@ function addLayers(map) {
     type: 'line',
     source: 'link-gaps',
     layout: { 'line-cap': 'round' },
-    paint: { 'line-color': '#ffffff', 'line-width': 2, 'line-opacity': 0.75, 'line-dasharray': [1, 1.5] },
+    paint: { 'line-color': '#ffffff', 'line-width': 2.5, 'line-opacity': 0.9, 'line-dasharray': [1, 1.5] },
   });
   const symbol = (id, extra = {}) => ({
     id,
@@ -283,25 +294,27 @@ function addLayers(map) {
     layout: {
       'text-field': ['get', 'tag'],
       'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 9, 10, 14, 12],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 9, 11, 14, 13],
       'text-variable-anchor': ['left', 'right'],
-      'text-radial-offset': 1.2,
+      'text-radial-offset': 1.4,
       'text-padding': 1,
     },
     paint: {
       'text-color': ['get', 'tagColor'],
-      'text-halo-color': 'rgba(0,0,0,0.9)',
-      'text-halo-width': 1.6,
+      'text-halo-color': 'rgba(0,0,0,0.95)',
+      'text-halo-width': 2.2,
     },
   });
 }
 
-// Train icons drawn once on a canvas: a circle in the line color with a white
-// outline and an arrow pointing in the direction of travel (up = north before
-// rotation). Ghosts are the same at 35% opacity with a dashed outline.
+// Train icons drawn once on a canvas: a circle in the line color with a thick
+// white outline, a thin dark outer ring for contrast on bright imagery, and
+// an arrow pointing in the direction of travel (up = north before rotation).
+// Ghosts are the same at 35% fill with a bright dashed outline.
 function addIcons(map, colors) {
   const ratio = 2;
-  const size = 30;
+  const size = 34;
+  const r = 10;
   for (const [line, color] of Object.entries(colors)) {
     for (const ghost of [false, true]) {
       const canvas = document.createElement('canvas');
@@ -309,18 +322,29 @@ function addIcons(map, colors) {
       const ctx = canvas.getContext('2d');
       ctx.scale(ratio, ratio);
       const c = size / 2;
-      ctx.beginPath();
-      ctx.arc(c, c, 10, 0, Math.PI * 2);
+      const circle = (radius) => {
+        ctx.beginPath();
+        ctx.arc(c, c, radius, 0, Math.PI * 2);
+      };
+      // Dark outer ring
+      circle(r + 2.5);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = ghost ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.85)';
+      if (ghost) ctx.setLineDash([3.5, 2.5]);
+      ctx.stroke();
+      // Fill
+      circle(r);
       ctx.globalAlpha = ghost ? 0.35 : 1;
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.globalAlpha = ghost ? 0.9 : 1;
-      ctx.lineWidth = 2.5;
+      // White outline
+      ctx.globalAlpha = 1;
+      ctx.lineWidth = 3.5;
       ctx.strokeStyle = '#ffffff';
-      if (ghost) ctx.setLineDash([3, 2.5]);
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.globalAlpha = ghost ? 0.5 : 1;
+      // Arrow
+      ctx.globalAlpha = ghost ? 0.7 : 1;
       ctx.beginPath();
       ctx.moveTo(c, c - 6);
       ctx.lineTo(c + 5, c + 4);

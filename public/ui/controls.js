@@ -25,7 +25,7 @@ export function renderControls(data) {
           <label class="switch small">
             <input type="checkbox" data-role="dir" data-dir="${escapeHtml(dir)}" checked>
             <span class="track" aria-hidden="true"></span>
-            <span>toward ${escapeHtml(name)}</span>
+            <span>Toward ${escapeHtml(name)}</span>
           </label>`,
             )
             .join('')}

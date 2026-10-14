@@ -1,7 +1,5 @@
 // Station markers with name labels; click a station for a popup.
 
-const SHARED_COLOR = '#1C2630';
-
 const escapeHtml = (s) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -16,7 +14,6 @@ export default {
           properties: {
             name: s.name,
             lines: s.lines.join('|'),
-            ring: s.lines.length === 1 ? data.colors[s.lines[0]] : SHARED_COLOR,
           },
           geometry: { type: 'Point', coordinates: [s.lon, s.lat] },
         })),
@@ -28,9 +25,9 @@ export default {
       type: 'circle',
       source: 'link-stations',
       paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 4, 15, 8],
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 4.5, 15, 8.5],
         'circle-color': '#ffffff',
-        'circle-stroke-color': ['get', 'ring'],
+        'circle-stroke-color': '#0b0e12',
         'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 9, 2, 15, 3],
       },
     });
@@ -48,8 +45,8 @@ export default {
       },
       paint: {
         'text-color': '#ffffff',
-        'text-halo-color': 'rgba(0,0,0,0.85)',
-        'text-halo-width': 1.6,
+        'text-halo-color': 'rgba(0,0,0,0.95)',
+        'text-halo-width': 2.4,
       },
     });
 

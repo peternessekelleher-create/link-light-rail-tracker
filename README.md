@@ -5,6 +5,7 @@ An interactive satellite map of Sound Transit's Link **1 Line** and **2 Line**, 
 - **Step 1:** stations and track, in the official line colors, on a Mapbox satellite map.
 - **Step 2:** live trains, each paired with a faded "ghost" at its scheduled position so lateness shows at a glance.
 - **Step 3:** switches for each line and direction, a delay tag beside each train ("+3:20"), and a headway panel comparing live and scheduled train spacing.
+- **Step 4:** car count and passenger capacity in each train's popup, Title Case labels, and higher contrast (Lighthouse accessibility 100, no contrast failures).
 
 Later steps will add on-time history and ridership.
 
@@ -28,6 +29,8 @@ Browser ──► /api/config   Mapbox token from the MAPBOX_TOKEN env var
 - **Service day:** Link's realtime feed has no `start_date`, so each trip's service day is the one (today or yesterday in Seattle) whose timetable covers the report time.
 - **Headways** (`lib/headways.js`) are computed server-side in `/api/trains`. For each line and direction, trains are ordered along the direction's main track shape. Each gap is the follower's scheduled running time from where it is to where the leader is. The scheduled figure applies the same method to every trip the timetable has under way right now. Stale trains (over 3 min) and trains still at their first stop are left out.
 - **Direction names** ("toward Federal Way Downtown") are the most common `trip_headsign` for each line and `direction_id`, served by `/api/link` as `directions`.
+- **Capacity** (`public/lib/capacity.js`): 74 seats and 194 people at target max load per car (Sound Transit's planning standard), times the car count. Link's realtime feed has no per-train car count (`multi_carriage_details`), so the typical count per line is used and labeled "(Typical)"; a real count from the feed would take over automatically.
+- **Contrast:** the satellite imagery is dimmed and desaturated (`public/layers/basemap.js`); text colors meet WCAG AA even with a panel over pure white imagery.
 - **Thresholds** for on time, late, very late and the headway warning live in `public/lib/delay.js`.
 - **API key:** OneBusAway's realtime feeds accept any key, so `/api/trains` also checks the key against OneBusAway's REST API (at most once per 10 min) so that a bad key shows the "Live data temporarily unavailable" banner.
 

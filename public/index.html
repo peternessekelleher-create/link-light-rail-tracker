@@ -12,13 +12,13 @@
   <script src="app.js" type="module"></script>
 </head>
 <body>
-  <div id="map" aria-label="Map of Link light rail lines"></div>
+  <div id="map" role="region" aria-label="Map of Link light rail lines"></div>
 
   <!-- Status chips, top center -->
   <div class="chips">
-    <p id="status" class="chip-status" role="status">Loading map…</p>
+    <p id="status" class="chip-status" role="status">Loading Map…</p>
     <p id="live-status" class="chip-status live" role="status"></p>
-    <p id="live-banner" class="chip-status banner" role="alert" hidden>Live data temporarily unavailable</p>
+    <p id="live-banner" class="chip-status banner" role="alert" hidden>Live Data Temporarily Unavailable</p>
   </div>
 
   <!-- Phone width: the panels open as drawers from these buttons -->
@@ -32,11 +32,11 @@
     </div>
     <div id="line-toggles"></div>
     <div class="divider"></div>
-    <label class="switch"><input type="checkbox" id="ghost-toggle" checked><span class="track" aria-hidden="true"></span><span>Ghost trains</span></label>
-    <label class="switch"><input type="checkbox" id="tag-toggle" checked><span class="track" aria-hidden="true"></span><span>Delay tags</span></label>
+    <label class="switch"><input type="checkbox" id="ghost-toggle" checked><span class="track" aria-hidden="true"></span><span>Ghost Trains</span></label>
+    <label class="switch"><input type="checkbox" id="tag-toggle" checked><span class="track" aria-hidden="true"></span><span>Delay Tags</span></label>
     <ul class="legend-trains">
-      <li><span class="dot live"></span>Live train</li>
-      <li><span class="dot ghost"></span>Scheduled position</li>
+      <li><span class="dot live"></span>Live Train</li>
+      <li><span class="dot ghost"></span>Scheduled Position</li>
     </ul>
   </aside>
 
@@ -48,7 +48,7 @@
       <button class="close" type="button" data-close aria-label="Close headways">×</button>
     </div>
     <div id="headway-body">
-      <p class="hw-note">Average time between trains</p>
+      <p class="hw-note">Average Time Between Trains</p>
       <div id="headway-rows"></div>
       <p id="headway-updated" class="hw-footer"></p>
     </div>
