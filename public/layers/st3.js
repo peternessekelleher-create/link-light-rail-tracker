@@ -10,10 +10,10 @@ const feature = (geometry, properties) => ({ type: 'Feature', geometry, properti
 const fc = (features) => ({ type: 'FeatureCollection', features });
 const point = (s) => ({ type: 'Point', coordinates: [s.lon, s.lat] });
 
-// A circle of radius r metres as a polygon.
+// A circle of radius r feet as a polygon.
 function circle(lon, lat, r, steps = 48) {
-  const dLat = r / 111132;
-  const dLon = r / (111320 * Math.cos((lat * Math.PI) / 180));
+  const dLat = r / 364605; // feet per degree of latitude
+  const dLon = r / (365223 * Math.cos((lat * Math.PI) / 180));
   const ring = [];
   for (let i = 0; i <= steps; i++) {
     const t = (i / steps) * 2 * Math.PI;
@@ -128,7 +128,7 @@ export default function st3Layer(model) {
 function addAlternatives(map, model) {
   const alts = model.alternatives;
   map.addSource('st3-alts', { type: 'geojson', data: fc(alts.map((a) => feature(point(a), { id: a.id, label: a.option, color: a.color }))) });
-  map.addSource('st3-alt-circles', { type: 'geojson', data: fc(alts.map((a) => feature(circle(a.lon, a.lat, a.confidence_m), { color: a.color }))) });
+  map.addSource('st3-alt-circles', { type: 'geojson', data: fc(alts.map((a) => feature(circle(a.lon, a.lat, a.confidence_ft), { color: a.color }))) });
   map.addLayer({ id: 'st3-alt-circles', type: 'fill', source: 'st3-alt-circles', paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 0.14, 'fill-outline-color': ['get', 'color'] } });
   map.addLayer({
     id: 'st3-alt-markers',

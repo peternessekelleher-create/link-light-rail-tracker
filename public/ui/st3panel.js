@@ -1,6 +1,8 @@
 // Body of the "Sound Transit 3 – Future Network" group in the layer panel:
 // what each project's line and markers mean, and the bus-network caveat.
 // The group has one switch (in index.html); nothing here toggles.
+import { NOTES } from '../config.js';
+
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -21,5 +23,6 @@ export function renderSt3Panel(model, root) {
         .join('')}
     </ul>
     <p class="st3-note">${model.stations.length} planned stations (preferred options). Lines are approximate; Phase 2 is drawn fainter.</p>
-    <p class="st3-note strong">${escapeHtml(model.note)}</p>`;
+    <p class="note">${escapeHtml(NOTES.futureLocation)}</p>
+    <p class="note">${escapeHtml(NOTES.futureBuses)}</p>`;
 }

@@ -1,8 +1,8 @@
 # Link Light Rail Tracker
 
-An interactive satellite map of Sound Transit's Link **1 Line** and **2 Line**, built live from Sound Transit's official GTFS feed. No transit data is stored in this repo.
+An interactive map of Sound Transit's Link **1 Line** and **2 Line**, built live from Sound Transit's official GTFS feed. No transit data is stored in this repo.
 
-- **Step 1:** stations and track, in the official line colors, on a Mapbox satellite map.
+- **Step 1:** stations and track, in the official line colors, on a Mapbox map (now the dark street style, no imagery).
 - **Step 2:** live trains, each paired with a faded "ghost" at its scheduled position so lateness shows at a glance.
 - **Step 3:** switches for each line and direction, a delay tag beside each train ("+3:20"), and a headway panel comparing live and scheduled train spacing.
 - **Step 4:** car count and passenger capacity in each train's popup, Title Case labels, and higher contrast (Lighthouse accessibility 100, no contrast failures).
@@ -36,7 +36,7 @@ Browser ──► /api/config   Mapbox token from the MAPBOX_TOKEN env var
 - **Headways** (`lib/headways.js`) are computed server-side in `/api/trains`. For each line and direction, trains are ordered along the direction's main track shape. Each gap is the follower's scheduled running time from where it is to where the leader is. The scheduled figure applies the same method to every trip the timetable has under way right now. Stale trains (over 3 min) and trains still at their first stop are left out.
 - **Direction names** ("toward Federal Way Downtown") are the most common `trip_headsign` for each line and `direction_id`, served by `/api/link` as `directions`.
 - **Capacity** (`public/lib/capacity.js`): 74 seats and 194 people at target max load per car (Sound Transit's planning standard), times the car count. Link's realtime feed has no per-train car count (`multi_carriage_details`), so the typical count per line is used and labeled "(Typical)"; a real count from the feed would take over automatically.
-- **Contrast:** the satellite imagery is dimmed and desaturated (`public/layers/basemap.js`); text colors meet WCAG AA even with a panel over pure white imagery.
+- **Contrast:** the basemap is Mapbox's dark street style (`dark-v11`); text colors meet WCAG AA even with a panel over pure white imagery.
 - **Thresholds** for on time, late, very late and the headway warning live in `public/lib/delay.js`.
 - **API key:** OneBusAway's realtime feeds accept any key, so `/api/trains` also checks the key against OneBusAway's REST API (at most once per 10 min) so that a bad key shows the "Live data temporarily unavailable" banner.
 
@@ -90,14 +90,14 @@ It prints the station → route table and the checks, and it exits non-zero if a
 
 ### Connecting routes
 
-- **Connects:** a route connects to a station if any of its stops is within `CONNECT_RADIUS_M` (400 m, straight line) and it runs on at least one of the three representative dates.
+- **Connects:** a route connects to a station if any of its stops is within `CONNECT_RADIUS_FT` (1,320 ft, a quarter mile, straight line) and it runs on at least one of the three representative dates.
 - **Trips per hour:** trips calling at the route's nearby stops on the representative weekday, from 9 am to 3 pm (the Midday window), counted once per trip, in the busier direction.
 - **BRT:** detected from `route_short_name`. KCM `A Line`–`H Line` are RapidRide, CT `Swift …` are Swift, PT `STCL` is Stream, and `S1`–`S3` would be ST Stride.
 
 ### Bus reach (15 / 30 minutes)
 
 - **Total time:** walk + wait + ride, optionally plus one transfer (walk + wait + ride). A stop counts only if the whole trip fits.
-- **Walking:** straight-line distance × 1.3 at 80 m/min. Leaving the station adds 2 minutes (platform to street). Access stops must be within 400 m of the station and transfer walks within 250 m. All of these are constants.
+- **Walking:** straight-line distance × 1.3 at 264 ft/min (3 mph). Leaving the station adds 2 minutes (platform to street). Access stops must be within 1,320 ft of the station and transfer walks within 800 ft. All of these are constants.
 - **Schedules:** wait and ride times come from the published `stop_times`, not live data. `pickup_type` and `drop_off_type` are respected.
 - **Windows:** 3 day types × 5 periods, in Seattle time. Day types are Weekday, Saturday and Sunday. Periods are AM rush 6–9, Midday 9–15, PM rush 15–18, Evening 18–22 and Night 22–01. The Night window uses the next day's early trips.
 - **Representative dates:** for each day type, the first date on or after the latest feed start date when every feed runs at least 90% of its usual bus trips for that weekday. That skips holidays, and an unchanged set of feeds gives the same dates every week. Currently those are Wed 2026-10-07, Sat 2026-10-03 and Sun 2026-10-04.

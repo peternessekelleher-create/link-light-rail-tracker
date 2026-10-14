@@ -9,6 +9,8 @@ export const PUBLIC_DATA = [
   'station_alternatives.geojson',
   'connections.json',
   'routes.geojson',
+  'HOW_IT_WORKS.md',
+  'METHODS.md',
 ];
 // Directories copied whole: one reach file per station.
 export const PUBLIC_DATA_DIRS = ['reach'];

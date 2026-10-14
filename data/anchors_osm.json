@@ -92,7 +92,7 @@
     "4th Ave S & Weller St pedestrian bridge": {
       "lat": 47.5976018,
       "lon": -122.3289748,
-      "method": "closest approach (8.6 m apart; no shared node)",
+      "method": "closest approach (28 ft apart; no shared node)",
       "osm_nodes": [],
       "osm_ways": [
         22927949,
@@ -210,7 +210,7 @@
     "35th Ave SW & SW Genesee St": {
       "lat": 47.5649545,
       "lon": -122.3761001,
-      "method": "closest approach (13.0 m apart; no shared node)",
+      "method": "closest approach (43 ft apart; no shared node)",
       "osm_nodes": [],
       "osm_ways": [
         31659195,

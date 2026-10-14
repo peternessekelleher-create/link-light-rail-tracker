@@ -1,4 +1,3 @@
-import basemapLayer from './layers/basemap.js';
 import routesLayer from './layers/routes.js';
 import stationsLayer from './layers/stations.js';
 import trainsLayer from './layers/trains.js';
@@ -9,6 +8,7 @@ import { renderHeadways } from './ui/headways.js';
 import { renderSt3Panel } from './ui/st3panel.js';
 import { createReachBox } from './ui/reachbox.js';
 import { createStationCard } from './ui/stationcard.js';
+import { setupMethods } from './ui/methods.js';
 import { view } from './lib/view.js';
 import { loadSt3, st3 } from './lib/st3.js';
 import { reachView } from './lib/reach.js';
@@ -17,7 +17,7 @@ import { loadConnections } from './lib/data.js';
 // Map layers, drawn in this order. Future layers (history, ridership) are new
 // modules with the same { add(map, data) } shape. The ST3 and reach layers
 // are appended once their data has loaded.
-const LAYERS = [basemapLayer, routesLayer, stationsLayer, trainsLayer];
+const LAYERS = [routesLayer, stationsLayer, trainsLayer];
 
 // Every map layer that belongs to the live Link group, for its master switch.
 const LIVE_LAYERS = ['link-routes-casing', 'link-routes', 'link-stations', 'link-station-labels', 'link-gaps', 'link-ghosts', 'link-trains', 'link-train-tags'];
@@ -86,7 +86,7 @@ async function main() {
 
   const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    style: 'mapbox://styles/mapbox/dark-v11', // dark streets, no imagery
     bounds: boundsOf(data),
     fitBoundsOptions: { padding: fitPadding() },
     customAttribution: ATTRIBUTION,
@@ -177,6 +177,7 @@ function setupGroups() {
 // app.js is a module (deferred), but mapbox-gl.js is a classic deferred
 // script listed first, so it is already loaded here.
 setupDrawers();
+setupMethods();
 main().catch((err) => {
   console.error(err);
   setStatus(err.message, true);

@@ -15,21 +15,21 @@ Companion to `station_alternatives.geojson` / `.csv` (23 planned-station options
 ## 2. How each coordinate was derived
 
 1. **Read the location description.** Each option's wording comes from Sound Transit's own documents (station planning progress reports, the Final EIS, further-study memos), e.g. "elevated station west of Delridge Way SW and north of SW Andover St."
-2. **Locate the named intersections.** Each street intersection in that description is found in OpenStreetMap (`pipeline/osm_anchors.py`, via the Overpass API): the node the two named streets share, the mean of several shared nodes at a divided-road junction, or, where one street bridges the other, the closest approach between them. Each anchor records its method and OSM node/way ids; the cache is `anchors_osm.json`. These are the `anchor_intersections` on each feature. (The first draft used Esri's free geocoder; its results can't be stored, so they were replaced. The OSM anchors agreed within 10 m except 6th Ave S & Seattle Blvd S, 24 m, and 15th Ave W & W Galer St, 21 m.)
+2. **Locate the named intersections.** Each street intersection in that description is found in OpenStreetMap (`pipeline/osm_anchors.py`, via the Overpass API): the node the two named streets share, the mean of several shared nodes at a divided-road junction, or, where one street bridges the other, the closest approach between them. Each anchor records its method and OSM node/way ids; the cache is `anchors_osm.json`. These are the `anchor_intersections` on each feature. (The first draft used Esri's free geocoder; its results can't be stored, so they were replaced. The OSM anchors agreed within 33 ft except 6th Ave S & Seattle Blvd S, 79 ft, and 15th Ave W & W Galer St, 69 ft.)
 3. **Build the point from the anchors.**
    - Station *at* a corner → that intersection.
    - Station *along a street between two cross streets* → midpoint of the two intersections.
    - Station *within a block* → centroid of the four corner intersections.
-4. **Apply the stated direction.** When the text says "north of", "west of" or "south of", the point is shifted 35–60 m (about half a Seattle block) that way. The exact offset is written into the `derivation` field.
-5. **Record uncertainty.** `confidence_m` is the radius the true station-box center most likely falls within:
-   - 60–80 m when the text names the exact block.
-   - 100–120 m when it only names a corridor.
-   - 150 m for stations known only by a cross-street pair.
+4. **Apply the stated direction.** When the text says "north of", "west of" or "south of", the point is shifted 115–200 ft (about half a Seattle block) that way. The exact offset is written into the `derivation` field.
+5. **Record uncertainty.** `confidence_ft` is the radius the true station-box center most likely falls within:
+   - 200–260 ft when the text names the exact block.
+   - 330–390 ft when it only names a corridor.
+   - 490 ft for stations known only by a cross-street pair.
 6. **Sanity-check the geometry.**
-   - 4th Ave option: 85 m west of the existing ID/C station.
-   - 5th Ave Diagonal: 68 m east.
-   - Dearborn: 420 m southeast.
-   - North-of-CID: 530 m north.
+   - 4th Ave option: 248 ft west of the existing ID/C station.
+   - 5th Ave Diagonal: 238 ft east.
+   - Dearborn: 1,287 ft southeast.
+   - North-of-CID: 1,771 ft north.
    - These match the sources' descriptions.
 
 ## 3. Known limits
@@ -37,8 +37,8 @@ Companion to `station_alternatives.geojson` / `.csv` (23 planned-station options
 - **Each point is the center of the station box.** It is not an entrance. Several options share a box and differ only in depth or tunnel length (WSJ-3a and WSJ-5 both sit at 41st & Alaska).
 - **The 2025 West Seattle redesign** switched Alaska Junction to a mined tunnel. One report says the station shifts about a block east. Sound Transit hasn't published it, so it is not mapped.
 - **Displacement counts are for whole segments.** In the Final EIS they cover the station *plus* its guideway, not the station alone.
-- **Licensing.** Anchors are © OpenStreetMap contributors under the ODbL, credited on the map. Rebuild them with `python -m pipeline.build --rebuild-anchors` (or the Action's "rebuild anchors" option); the build prints any station that moves more than 15 m.
-- **Upgrade path:** For the selected options, georeference the Final EIS Appendix J plan sheets in QGIS. That would get station boxes to within roughly 10 m.
+- **Licensing.** Anchors are © OpenStreetMap contributors under the ODbL, credited on the map. Rebuild them with `python -m pipeline.build --rebuild-anchors` (or the Action's "rebuild anchors" option); the build prints any station that moves more than 50 ft.
+- **Upgrade path:** For the selected options, georeference the Final EIS Appendix J plan sheets in QGIS. That would get station boxes to within roughly 30 ft.
 
 ## 4. Sourcing hierarchy
 

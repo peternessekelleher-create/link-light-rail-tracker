@@ -3,9 +3,9 @@
 For every station and time window (day type x period):
 
   1. Departures from the station are sampled every SAMPLE_EVERY_MIN.
-  2. Each sample runs raptor.search: walk to a stop within ACCESS_RADIUS_M
+  2. Each sample runs raptor.search: walk to a stop within ACCESS_RADIUS_FT
      (with the platform-to-street penalty), wait, ride; optionally walk up to
-     TRANSFER_RADIUS_M, wait and ride once more. A stop is reached when the
+     TRANSFER_RADIUS_FT, wait and ride once more. A stop is reached when the
      whole trip fits in MAX_TRIP_MIN.
   3. Per stop, the median total time over all samples is kept, counting a
      sample that doesn't reach the stop in time as "too long". With an even
@@ -23,19 +23,19 @@ import multiprocessing as mp
 from collections import defaultdict
 
 from .config import (
-    ACCESS_RADIUS_M, BANDS_MIN, DAY_TYPES, MAX_RIDES, MAX_TRIP_MIN, PERIODS, REACH_DIR,
-    REACH_WARN_GZ_BYTES, SAMPLE_EVERY_MIN, SHAPE_SIMPLIFY_M, STATION_EXIT_MIN, TRANSFER_RADIUS_M,
-    WALK_DETOUR, WALK_SPEED_M_PER_MIN, WORKERS,
+    ACCESS_RADIUS_FT, BANDS_MIN, DAY_TYPES, MAX_RIDES, MAX_TRIP_MIN, PERIODS, REACH_DIR,
+    REACH_WARN_GZ_BYTES, SAMPLE_EVERY_MIN, SHAPE_SIMPLIFY_FT, STATION_EXIT_MIN, TRANSFER_RADIUS_FT,
+    WALK_DETOUR, WALK_SPEED_FT_PER_MIN, WORKERS,
 )
-from .geo import dist_m, encode_polyline, m_per_deg_lon, M_PER_DEG_LAT, simplify
+from .geo import dist_ft, encode_polyline, ft_per_deg_lon, FT_PER_DEG_LAT, simplify
 from .raptor import search
 from .timetable import Day
 
 SCHEMA_VERSION = 1
 
 
-def walk_s(d_m):
-    return round(d_m * WALK_DETOUR / WALK_SPEED_M_PER_MIN * 60)
+def walk_s(d_ft):
+    return round(d_ft * WALK_DETOUR / WALK_SPEED_FT_PER_MIN * 60)
 
 
 def windows():
@@ -44,13 +44,13 @@ def windows():
 
 
 class StopGrid:
-    """Stops bucketed by ~250 m cells for radius queries."""
+    """Stops bucketed by ~800 ft cells for radius queries."""
 
-    def __init__(self, stops, cell_m=TRANSFER_RADIUS_M):
+    def __init__(self, stops, cell_ft=TRANSFER_RADIUS_FT):
         self.stops = stops
         self.lat0 = 47.6
-        self.cy = cell_m / M_PER_DEG_LAT
-        self.cx = cell_m / m_per_deg_lon(self.lat0)
+        self.cy = cell_ft / FT_PER_DEG_LAT
+        self.cx = cell_ft / ft_per_deg_lon(self.lat0)
         self.cells = defaultdict(list)
         for s in stops.values():
             self.cells[self._cell(s.lat, s.lon)].append(s)
@@ -60,18 +60,18 @@ class StopGrid:
 
     def near(self, lat, lon, r):
         cy, cx = self._cell(lat, lon)
-        n = math.ceil(r / (self.cy * M_PER_DEG_LAT)) + 1
+        n = math.ceil(r / (self.cy * FT_PER_DEG_LAT)) + 1
         for y in range(cy - n, cy + n + 1):
             for x in range(cx - n, cx + n + 1):
                 for s in self.cells.get((y, x), ()):
-                    d = dist_m((lat, lon), (s.lat, s.lon))
+                    d = dist_ft((lat, lon), (s.lat, s.lon))
                     if d <= r:
                         yield s, d
 
 
 def footpaths(net, grid):
     return {
-        s.id: tuple((o.id, walk_s(d)) for o, d in grid.near(s.lat, s.lon, TRANSFER_RADIUS_M))
+        s.id: tuple((o.id, walk_s(d)) for o, d in grid.near(s.lat, s.lon, TRANSFER_RADIUS_FT))
         for s in net.stops.values()
     }
 
@@ -101,7 +101,7 @@ def build_all(net, stations, dates, workers=WORKERS):
 def build_station(station):
     net, days = _S["net"], _S["days"]
     here = (station["lat"], station["lon"])
-    access_all = [(s.id, STATION_EXIT_MIN * 60 + walk_s(d)) for s, d in _S["grid"].near(*here, ACCESS_RADIUS_M)]
+    access_all = [(s.id, STATION_EXIT_MIN * 60 + walk_s(d)) for s, d in _S["grid"].near(*here, ACCESS_RADIUS_FT)]
 
     tables = Tables()
     out_windows = {}
@@ -241,7 +241,7 @@ def hop_geometry(net, pat):
         line = [_at(shape, a)] + [(p[0], p[1]) for p in shape[math.floor(a) + 1: math.ceil(b)]] + [_at(shape, b)]
         if b <= a:
             line = [pts[h], pts[h + 1]]
-        xy = simplify([(lon, lat) for lat, lon in line], SHAPE_SIMPLIFY_M)
+        xy = simplify([(lon, lat) for lat, lon in line], SHAPE_SIMPLIFY_FT)
         out.append([(lat, lon) for lon, lat in xy])
     return out
 
@@ -249,7 +249,7 @@ def hop_geometry(net, pat):
 def _cum_dist(shape):
     c = [0.0]
     for p, q in zip(shape, shape[1:]):
-        c.append(c[-1] + dist_m(p[:2], q[:2]))
+        c.append(c[-1] + dist_ft(p[:2], q[:2]))
     return c
 
 
@@ -278,7 +278,7 @@ def _positions_by_nearest(shape, cum, pts):
     loops and out-and-back routes don't jump ahead."""
     out, start = [], 0
     for n, p in enumerate(pts):
-        reach = cum[start] + (dist_m(pts[n - 1], p) * 3 + 500 if n else math.inf)
+        reach = cum[start] + (dist_ft(pts[n - 1], p) * 3 + 1640 if n else math.inf)
         best, best_pos = math.inf, float(start)
         i = start
         while i < len(shape) - 1 and cum[i] <= reach:
@@ -293,12 +293,12 @@ def _positions_by_nearest(shape, cum, pts):
 
 def _project(shape, i, p):
     (ay, ax), (by, bx) = shape[i][:2], shape[i + 1][:2]
-    k = m_per_deg_lon(ay) / M_PER_DEG_LAT
+    k = ft_per_deg_lon(ay) / FT_PER_DEG_LAT
     dx, dy = (bx - ax) * k, by - ay
     L = dx * dx + dy * dy
     t = 0 if L == 0 else max(0, min(1, (((p[1] - ax) * k) * dx + (p[0] - ay) * dy) / L))
     q = (ay + (by - ay) * t, ax + (bx - ax) * t)
-    return i + t, dist_m(p, q)
+    return i + t, dist_ft(p, q)
 
 
 def dates_for(net):

@@ -14,19 +14,20 @@ Existing stations: Sound Transit GTFS stops.txt. See METHODS.md.
     python3 data/build_station_alternatives.py                    # cached anchors
     python3 data/build_station_alternatives.py --rebuild-anchors  # re-query OSM
 
-Prints every station point that moves more than MOVE_WARN_M (15 m) from the
+All distances are in feet. Prints every station point that moves more than
+MOVE_WARN_FT (50 ft) from the
 previous station_alternatives.geojson.
 """
 import argparse
 import csv
 import json
-import math
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from pipeline import osm_anchors  # noqa: E402
-from pipeline.config import DATA, MOVE_WARN_M, ST_RAIL_GTFS_URL  # noqa: E402
+from pipeline.config import DATA, MOVE_WARN_FT, ST_RAIL_GTFS_URL  # noqa: E402
+from pipeline.geo import dist_ft, offset  # noqa: E402
 from pipeline.gtfs import Feed  # noqa: E402
 
 # --- Preferred options -----------------------------------------------------
@@ -92,7 +93,7 @@ ANCHOR_OVERRIDES = {
     ]},
     # 15th Ave W becomes Elliott Ave W just north of Galer, and Galer crosses
     # it on the "West Galer Street Flyover" bridge. The flyover's ramp also
-    # touches Elliott ~120 m south; the street crossing is the northern one.
+    # touches Elliott ~400 ft south; the street crossing is the northern one.
     "15th Ave W & W Galer St": {"pick": "north", "streets": [
         {"names": ["15th Avenue West", "Elliott Avenue West"]},
         {"names": ["West Galer Street", "West Galer Street Flyover"]},
@@ -110,14 +111,6 @@ EXISTING_GTFS = {
     "SODO (existing)": "C15",
 }
 
-M_PER_DEG_LAT = 111_132.0
-
-
-def offset(lat, lon, north_m=0.0, east_m=0.0):
-    m_per_deg_lon = 111_320.0 * math.cos(math.radians(lat))
-    return lat + north_m / M_PER_DEG_LAT, lon + east_m / m_per_deg_lon
-
-
 # Filled in main(): anchor name -> (lat, lon); existing station -> (lat, lon).
 A = {}
 EXISTING = {}
@@ -126,12 +119,6 @@ EXISTING = {}
 def centroid(names):
     pts = [A[n] for n in names]
     return sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
-
-
-def dist_m(a, b):
-    dlat = (a[0] - b[0]) * M_PER_DEG_LAT
-    dlon = (a[1] - b[1]) * 111_320.0 * math.cos(math.radians(a[0]))
-    return math.hypot(dlat, dlon)
 
 
 # --- Source registry ---------------------------------------------------------
@@ -159,7 +146,8 @@ S = {
 
 # --- Station alternatives ----------------------------------------------------
 # derive: ("intersection", name) | ("midpoint", [a, b]) | ("centroid", [a, b, c, d])
-# offset_m: (north, east) applied after the base point.
+# offset_ft: (north, east) in feet, applied after the base point.
+# confidence_ft: radius the true station-box center most likely falls within.
 ALTS = [
     # ===== CID: the three options carried into the Ballard Link Draft EIS =====
     dict(id="CID-DEARBORN", project="Ballard Link", station_area="Chinatown-International District",
@@ -167,7 +155,7 @@ ALTS = [
          status="Board preferred alternative (2023); in Draft EIS",
          structure="tunnel", depth_ft=None,
          location_text="Beneath 6th Avenue South, straddling Seattle Boulevard South (ST, Nov 2024).",
-         derive=("intersection", "6th Ave S & Seattle Blvd S"), offset_m=(0, 0), confidence_m=75,
+         derive=("intersection", "6th Ave S & Seattle Blvd S"), offset_ft=(0, 0), confidence_ft=250,
          impacts="6-7 yr construction; 6th Ave S fully closed during station build; Seattle Blvd S (~7,000 veh/day) kept open on decking; building demolition in Stage 1; longest walk to King St Station / existing ID/C transfers. Pairs with a Midtown station north of CID.",
          sources=["ST_CID_2024", "ST_CID_BLOG_2024", "URB_2026_04", "IEX_2025_09"]),
     dict(id="CID-5TH-DIAG", project="Ballard Link", station_area="Chinatown-International District",
@@ -176,7 +164,7 @@ ALTS = [
          structure="tunnel", depth_ft=115,
          location_text="Beneath the area between 5th Ave S and 6th Ave S, east of and connected by underground passage to the existing ID/C station; 5th Ave option sits between S Jackson St and S Weller St (ST 2022, 2024).",
          derive=("centroid", ["5th Ave S & S Jackson St", "6th Ave S & S Jackson St", "5th Ave S & S Weller St", "6th Ave S & S Weller St"]),
-         offset_m=(0, 0), confidence_m=120,
+         offset_ft=(0, 0), confidence_ft=390,
          impacts="5-6 yr construction (shortest); half a block of S King St closed; few business displacements but demolition in the heart of the CID; ~4 escalator flights to transfer at ID/C.",
          sources=["ST_CID_2024", "ST_CID_SPPR_2022", "STB_2024_11", "IEX_2025_09", "URB_2026_04"]),
     dict(id="CID-4TH-SHALLOW", project="Ballard Link", station_area="Chinatown-International District",
@@ -185,7 +173,7 @@ ALTS = [
          structure="tunnel", depth_ft=80,
          location_text="Tunnel platform under 4th Ave S, west of the existing ID/C station, between S Jackson St and Seattle Blvd S; entrances at the Weller St pedestrian bridge and the south end of Union Station (ST 2022).",
          derive=("midpoint", ["4th Ave S & S Jackson St", "4th Ave S & Weller St pedestrian bridge"]),
-         offset_m=(0, 0), confidence_m=120,
+         offset_ft=(0, 0), confidence_ft=390,
          impacts="10-12 yr construction; 4th Ave S fully closed Jackson-Main for ~4 yrs; First Hill Streetcar cut at 4th/Jackson ~2 yrs; ~$600-700M above Dearborn; BNSF rail risk. Best hub connection to King St Station and Union Station.",
          sources=["ST_CID_2024", "ST_CID_SPPR_2022", "ST_CID_FURTHER", "STB_2024_11", "URB_2026_04"]),
     dict(id="MIDTOWN-NORTH-OF-CID", project="Ballard Link", station_area="Midtown / Pioneer Square",
@@ -194,7 +182,7 @@ ALTS = [
          structure="tunnel", depth_ft=None,
          location_text="Close to Pioneer Square Station, east of 4th Avenue, between James St and Yesler Way; reported at the King County Administration Building block (ST 2024; Urbanist 2024).",
          derive=("centroid", ["4th Ave & James St", "5th Ave & James St", "4th Ave & Jefferson St", "5th Ave & Jefferson St"]),
-         offset_m=(0, 0), confidence_m=120,
+         offset_ft=(0, 0), confidence_ft=390,
          impacts="Requires demolishing the King County Administration Building; James St closed ~4 yrs. A Madison St variant would give easy transfers to RapidRide G.",
          sources=["ST_CID_BLOG_2024", "ST_CID_FURTHER", "URB_2024_10", "WIKI_BLE", "STB_2024_11"]),
 
@@ -204,7 +192,7 @@ ALTS = [
          status="Selected (Board M2024-59, Oct 2024); footprint reduced in 2025 savings",
          structure="at-grade", depth_ft=None,
          location_text="New at-grade station just west of the existing SODO Station, reached via the new S Lander St bridge (WSB 2024).",
-         derive=("intersection_existing", "SODO (existing)"), offset_m=(-35, -45), confidence_m=80,
+         derive=("intersection_existing", "SODO (existing)"), offset_ft=(-115, -148), confidence_ft=260,
          impacts="33 businesses / 240 employees displaced for SODO segment; 14,600 daily boardings (2042, new + existing).",
          sources=["WSLE_FEIS_CH6", "WSB_2024_10", "WSH_2025_11"]),
 
@@ -214,7 +202,7 @@ ALTS = [
          status="Selected (DEL-6b, Oct 2024); in final design",
          structure="elevated", depth_ft=None,
          location_text="Elevated station west of Delridge Way SW and north of SW Andover St, oriented NE-SW, just east of Nucor Steel (ST SPPR; WSB 2024).",
-         derive=("midpoint", ["Delridge Way SW & SW Andover St", "26th Ave SW & SW Andover St"]), offset_m=(50, 0), confidence_m=100,
+         derive=("midpoint", ["Delridge Way SW & SW Andover St", "26th Ave SW & SW Andover St"]), offset_ft=(164, 0), confidence_ft=330,
          impacts="DEL-6b: 34 residential, 19 business, 130 employees displaced; 5,400 daily boardings; $700-750M. DEL-5: 114 residential. DEL-6a: 48 residential. Bridge and steel mill limit the walkshed.",
          sources=["WSLE_SPPR_DELRIDGE", "WSLE_FEIS_CH6", "WSB_2024_10", "WSLE_FURTHER"]),
     dict(id="DEL-DAKOTA", project="West Seattle Link", station_area="Delridge",
@@ -222,7 +210,7 @@ ALTS = [
          status="Not selected (was 2022 Board preferred, DEL-1a)",
          structure="elevated", depth_ft=None,
          location_text="Elevated station west of Delridge Way SW between SW Dakota St and SW Genesee St, next to Youngstown Cultural Arts Center and Delridge Community Center (ST SPPR).",
-         derive=("midpoint", ["Delridge Way SW & SW Dakota St", "Delridge Way SW & SW Genesee St"]), offset_m=(0, -60), confidence_m=100,
+         derive=("midpoint", ["Delridge Way SW & SW Dakota St", "Delridge Way SW & SW Genesee St"]), offset_ft=(0, -197), confidence_ft=330,
          impacts="93-197 residential, 13-18 business displaced depending on variant; 5,400 daily boardings; $600M-1.05B. Closest to the Youngstown community hub; up to 1.0 mi of visual impact.",
          sources=["WSLE_SPPR_DELRIDGE", "WSLE_FEIS_CH6"]),
     dict(id="DEL-DELRIDGE-WAY", project="West Seattle Link", station_area="Delridge",
@@ -230,7 +218,7 @@ ALTS = [
          status="Not selected",
          structure="elevated", depth_ft=None,
          location_text="Elevated station on Delridge Way SW north of SW Dakota St, straddling the street, entrances on both sides (ST SPPR).",
-         derive=("midpoint", ["Delridge Way SW & SW Dakota St", "Delridge Way SW & SW Andover St"]), offset_m=(0, 0), confidence_m=120,
+         derive=("midpoint", ["Delridge Way SW & SW Dakota St", "Delridge Way SW & SW Andover St"]), offset_ft=(0, 0), confidence_ft=390,
          impacts="70-151 residential, 14-18 business displaced; 5,400 daily boardings; $600-850M. Fewest properties touched, least room for TOD.",
          sources=["WSLE_SPPR_DELRIDGE", "WSLE_FEIS_CH6"]),
 
@@ -240,7 +228,7 @@ ALTS = [
          status="Not selected; Avalon station removed in 2025",
          structure="elevated", depth_ft=None,
          location_text="Elevated station south of SW Genesee St and east of Fauntleroy Way SW (ST SPPR).",
-         derive=("midpoint", ["Fauntleroy Way SW & SW Genesee St", "35th Ave SW & SW Genesee St"]), offset_m=(-50, 0), confidence_m=80,
+         derive=("midpoint", ["Fauntleroy Way SW & SW Genesee St", "35th Ave SW & SW Genesee St"]), offset_ft=(-164, 0), confidence_ft=260,
          impacts="Station area (10-min walkshed, 2040): ~5,400 residents, 3,200 jobs.",
          sources=["WSLE_SPPR_AVALON"]),
     dict(id="AVA-BELOW-GRADE", project="West Seattle Link", station_area="Avalon",
@@ -248,7 +236,7 @@ ALTS = [
          status="Selected Oct 2024, then REMOVED in 2025 cost savings",
          structure="retained cut", depth_ft=None,
          location_text="Lidded retained cut south of SW Genesee St, beneath 35th Ave SW (WSB 2024); 'south side of Fauntleroy Way SW under SW Genesee St and 35th Ave SW' (ST SPPR).",
-         derive=("intersection", "35th Ave SW & SW Genesee St"), offset_m=(-60, 0), confidence_m=80,
+         derive=("intersection", "35th Ave SW & SW Genesee St"), offset_ft=(-197, 0), confidence_ft=260,
          impacts="Removing it saved an estimated $375-470M and 48 residential displacements; ST expects riders to shift to Delridge/Alaska Junction. Cannot be added back later as an infill station.",
          sources=["WSLE_SPPR_AVALON", "WSB_2024_10", "WSH_2025_11", "URB_2026_08"]),
 
@@ -258,7 +246,7 @@ ALTS = [
          status="Selected (WSJ-5b, Oct 2024); 2025 refinement: mined tunnel instead of deep open cut",
          structure="tunnel", depth_ft=50,
          location_text="Tunnel station beneath 41st Ave SW and SW Alaska St; entrances on both sides of Alaska St, one shifted toward 42nd Ave SW (WSB 2024; ST further studies).",
-         derive=("intersection", "41st Ave SW & SW Alaska St"), offset_m=(0, 0), confidence_m=80,
+         derive=("intersection", "41st Ave SW & SW Alaska St"), offset_ft=(0, 0), confidence_ft=260,
          impacts="WSJ-5b: 111 residential, 44 business, 240 employees displaced; 7,600 daily boardings; $1.75-1.90B. 42nd Ave entrance added ~90 TOD units. Some reports say the 2025 redesign shifts the station about a block east (unverified).",
          sources=["WSLE_FEIS_CH6", "WSB_2024_10", "WSLE_FURTHER", "WSH_2025_11"]),
     dict(id="WSJ-1", project="West Seattle Link", station_area="Alaska Junction",
@@ -267,7 +255,7 @@ ALTS = [
          structure="elevated", depth_ft=None,
          location_text="Elevated station south of SW Alaska St between 41st Ave SW and 42nd Ave SW, entrances on Alaska and Edmunds (ST SPPR).",
          derive=("centroid", ["41st Ave SW & SW Alaska St", "42nd Ave SW & SW Alaska St", "41st Ave SW & SW Edmunds St", "42nd Ave SW & SW Edmunds St"]),
-         offset_m=(0, 0), confidence_m=60,
+         offset_ft=(0, 0), confidence_ft=200,
          impacts="351-370 residential, 57 business displaced; 7,600 daily boardings; $1.70-1.85B.",
          sources=["WSLE_SPPR_AJ", "WSLE_FEIS_CH6"]),
     dict(id="WSJ-2", project="West Seattle Link", station_area="Alaska Junction",
@@ -275,7 +263,7 @@ ALTS = [
          status="Not selected",
          structure="elevated", depth_ft=None,
          location_text="Elevated station south (east side) of Fauntleroy Way SW, straddling SW Alaska St (ST SPPR).",
-         derive=("intersection", "Fauntleroy Way SW & SW Alaska St"), offset_m=(0, 40), confidence_m=80,
+         derive=("intersection", "Fauntleroy Way SW & SW Alaska St"), offset_ft=(0, 131), confidence_ft=260,
          impacts="474-493 residential displaced (most of any option), 15-18 business; 8,000 daily boardings (highest); $1.05-1.15B (cheapest). Farther from the Junction core.",
          sources=["WSLE_SPPR_AJ", "WSLE_FEIS_CH6"]),
     dict(id="WSJ-3B", project="West Seattle Link", station_area="Alaska Junction",
@@ -283,7 +271,7 @@ ALTS = [
          status="Not selected",
          structure="tunnel", depth_ft=80,
          location_text="Tunnel station under 42nd Ave SW crossing beneath SW Alaska St (ST SPPR).",
-         derive=("intersection", "42nd Ave SW & SW Alaska St"), offset_m=(0, 0), confidence_m=60,
+         derive=("intersection", "42nd Ave SW & SW Alaska St"), offset_ft=(0, 0), confidence_ft=200,
          impacts="126-230 residential, 42-45 business displaced; displaces Junction Plaza Park; $2.20-2.40B (most expensive).",
          sources=["WSLE_SPPR_AJ", "WSLE_FEIS_CH6"]),
     dict(id="WSJ-3A", project="West Seattle Link", station_area="Alaska Junction",
@@ -291,7 +279,7 @@ ALTS = [
          status="Not selected",
          structure="tunnel", depth_ft=70,
          location_text="Tunnel station under 41st Ave SW crossing beneath SW Alaska St (ST SPPR).",
-         derive=("intersection", "41st Ave SW & SW Alaska St"), offset_m=(0, 0), confidence_m=60,
+         derive=("intersection", "41st Ave SW & SW Alaska St"), offset_ft=(0, 0), confidence_ft=200,
          impacts="162-269 residential, 15-18 business displaced; $2.10-2.35B. Same station box as WSJ-5; differs in depth and tunnel length.",
          sources=["WSLE_SPPR_AJ", "WSLE_FEIS_CH6"]),
     dict(id="WSJ-4", project="West Seattle Link", station_area="Alaska Junction",
@@ -299,7 +287,7 @@ ALTS = [
          status="Not selected",
          structure="tunnel", depth_ft=55,
          location_text="Tunnel station under 41st Ave SW south of SW Alaska St, third entrance at SW Edmunds St (ST SPPR).",
-         derive=("midpoint", ["41st Ave SW & SW Alaska St", "41st Ave SW & SW Edmunds St"]), offset_m=(0, 0), confidence_m=60,
+         derive=("midpoint", ["41st Ave SW & SW Alaska St", "41st Ave SW & SW Edmunds St"]), offset_ft=(0, 0), confidence_ft=200,
          impacts="253 residential, 17 business displaced; $1.65-1.80B.",
          sources=["WSLE_SPPR_AJ", "WSLE_FEIS_CH6"]),
 
@@ -307,37 +295,37 @@ ALTS = [
     dict(id="BLE-WESTLAKE", project="Ballard Link", station_area="Westlake", option="Westlake new platforms",
          status="Preferred alternative; Phase 1 (target 2042)", structure="tunnel", depth_ft=None,
          location_text="5th Avenue and Pine Street (Wikipedia, citing ST).", derive=("intersection", "5th Ave & Pine St"),
-         offset_m=(0, 0), confidence_m=150, impacts="", sources=["WIKI_BLE", "COUNCIL_2026_07"]),
+         offset_ft=(0, 0), confidence_ft=490, impacts="", sources=["WIKI_BLE", "COUNCIL_2026_07"]),
     dict(id="BLE-DENNY", project="Ballard Link", station_area="Denny", option="Denny (Westlake Ave & Denny Way)",
          status="Preferred alternative; Phase 1. 2026: Board weighing merging Denny + South Lake Union into one station here",
          structure="tunnel", depth_ft=None, location_text="Westlake Avenue and Denny Way (Wikipedia, citing ST).",
-         derive=("intersection", "Westlake Ave N & Denny Way"), offset_m=(0, 0), confidence_m=150, impacts="",
+         derive=("intersection", "Westlake Ave N & Denny Way"), offset_ft=(0, 0), confidence_ft=490, impacts="",
          sources=["WIKI_BLE", "URB_2026_04"]),
     dict(id="BLE-SLU", project="Ballard Link", station_area="South Lake Union", option="South Lake Union (Harrison St & 7th Ave N)",
          status="Preferred alternative; Phase 1. 2026: may be eliminated if merged with Denny",
          structure="tunnel", depth_ft=None, location_text="Harrison Street and 7th Avenue North (Wikipedia, citing ST).",
-         derive=("intersection", "7th Ave N & Harrison St"), offset_m=(0, 0), confidence_m=150,
+         derive=("intersection", "7th Ave N & Harrison St"), offset_ft=(0, 0), confidence_ft=490,
          impacts="Without this station, about two dozen blocks of Uptown/Belltown/SLU fall outside a 10-minute walk of Ballard Link (ST analysis via The Urbanist, 2023).",
          sources=["WIKI_BLE", "URB_2026_04"]),
     dict(id="BLE-SEATTLE-CENTER", project="Ballard Link", station_area="Seattle Center", option="Seattle Center (W Republican St & 1st Ave W)",
          status="Preferred alternative; Phase 1 terminus until Phase 2", structure="tunnel", depth_ft=None,
          location_text="West Republican Street and 1st Avenue West (Wikipedia, citing ST).",
-         derive=("intersection", "1st Ave W & W Republican St"), offset_m=(0, 0), confidence_m=150, impacts="",
+         derive=("intersection", "1st Ave W & W Republican St"), offset_ft=(0, 0), confidence_ft=490, impacts="",
          sources=["WIKI_BLE", "COUNCIL_2026_07"]),
     dict(id="BLE-SMITH-COVE", project="Ballard Link", station_area="Smith Cove", option="Smith Cove (15th Ave W & W Galer St)",
          status="Preferred alternative; Phase 2 (unfunded)", structure="elevated", depth_ft=None,
          location_text="15th Avenue West and West Galer Street (Wikipedia, citing ST).",
-         derive=("intersection", "15th Ave W & W Galer St"), offset_m=(0, 0), confidence_m=150, impacts="",
+         derive=("intersection", "15th Ave W & W Galer St"), offset_ft=(0, 0), confidence_ft=490, impacts="",
          sources=["WIKI_BLE", "COUNCIL_2026_07"]),
     dict(id="BLE-INTERBAY", project="Ballard Link", station_area="Interbay", option="Interbay (17th Ave W & W Dravus St)",
          status="Preferred alternative; Phase 2 (unfunded)", structure="elevated", depth_ft=None,
          location_text="17th Avenue West and West Dravus Street (Wikipedia, citing ST).",
-         derive=("intersection", "17th Ave W & W Dravus St"), offset_m=(0, 0), confidence_m=150, impacts="",
+         derive=("intersection", "17th Ave W & W Dravus St"), offset_ft=(0, 0), confidence_ft=490, impacts="",
          sources=["WIKI_BLE", "COUNCIL_2026_07"]),
     dict(id="BLE-BALLARD", project="Ballard Link", station_area="Ballard", option="Ballard (15th Ave NW & NW Market St)",
          status="Preferred alternative; Phase 2 (unfunded)", structure="tunnel or elevated (sources conflict)", depth_ft=None,
          location_text="Northwest 15th Avenue and Northwest Market Street (Wikipedia, citing ST).",
-         derive=("intersection", "15th Ave NW & NW Market St"), offset_m=(0, 0), confidence_m=150, impacts="",
+         derive=("intersection", "15th Ave NW & NW Market St"), offset_ft=(0, 0), confidence_ft=490, impacts="",
          sources=["WIKI_BLE", "COUNCIL_2026_07"]),
 ]
 
@@ -358,14 +346,14 @@ def derive_point(alt):
         method = "Centroid of the block bounded by " + "; ".join(ref)
     else:
         raise ValueError(kind)
-    n, e = alt["offset_m"]
-    lat, lon = offset(*base, north_m=n, east_m=e)
+    n, e = alt["offset_ft"]
+    lat, lon = offset(*base, north_ft=n, east_ft=e)
     if n or e:
         parts = []
         if n:
-            parts.append(f"{abs(n):.0f} m {'north' if n > 0 else 'south'}")
+            parts.append(f"{abs(n):.0f} ft {'north' if n > 0 else 'south'}")
         if e:
-            parts.append(f"{abs(e):.0f} m {'east' if e > 0 else 'west'}")
+            parts.append(f"{abs(e):.0f} ft {'east' if e > 0 else 'west'}")
         method += ", then shifted " + " and ".join(parts) + " to match the written description"
     return round(lat, 6), round(lon, 6), method, anchors
 
@@ -419,7 +407,7 @@ before = previous_points(out / "station_alternatives.geojson")
 features, rows = [], []
 for alt in ALTS:
     lat, lon, method, anchors = derive_point(alt)
-    props = {k: v for k, v in alt.items() if k not in ("derive", "offset_m", "sources")}
+    props = {k: v for k, v in alt.items() if k not in ("derive", "offset_ft", "sources")}
     props.update(
         preferred=alt["id"] in PREFERRED,
         lat=lat, lon=lon,
@@ -432,7 +420,7 @@ for alt in ALTS:
     rows.append({
         "id": alt["id"], "preferred": alt["id"] in PREFERRED, "project": alt["project"], "station_area": alt["station_area"], "option": alt["option"],
         "status": alt["status"], "structure": alt["structure"], "depth_ft": alt["depth_ft"] or "",
-        "lat": lat, "lon": lon, "confidence_m": alt["confidence_m"], "derivation": method,
+        "lat": lat, "lon": lon, "confidence_ft": alt["confidence_ft"], "derivation": method,
         "location_text": alt["location_text"], "impacts": alt["impacts"], "sources": " | ".join(S[s] for s in alt["sources"]),
     })
 
@@ -445,7 +433,7 @@ with open(out / "station_alternatives.geojson", "w") as f:
     json.dump({"type": "FeatureCollection",
                "metadata": {"crs": "EPSG:4326",
                             "attribution": "Anchor intersections (c) OpenStreetMap contributors, ODbL",
-                            "note": "Planned-station points are derived approximations; see derivation and confidence_m on each feature."},
+                            "note": "Planned-station points are derived approximations; see derivation and confidence_ft on each feature."},
                "features": features}, f, indent=2)
     f.write("\n")
 with open(out / "station_alternatives.csv", "w", newline="") as f:
@@ -460,23 +448,23 @@ print("Distances from existing ID/C station:")
 for k in ["CID-4TH-SHALLOW", "CID-5TH-DIAG", "CID-DEARBORN", "MIDTOWN-NORTH-OF-CID"]:
     p = pts[k]
     side = ("east" if p[1] > ids[1] else "west") + "/" + ("north" if p[0] > ids[0] else "south")
-    print(f"  {k:24s} {dist_m(p, ids):6.0f} m  ({side})")
+    print(f"  {k:24s} {dist_ft(p, ids):6.0f} ft  ({side})")
 print("Alaska Junction options vs 41st & Alaska:")
 for k in ["WSJ-5", "WSJ-1", "WSJ-2", "WSJ-3A", "WSJ-3B", "WSJ-4"]:
-    print(f"  {k:8s} {dist_m(pts[k], A['41st Ave SW & SW Alaska St']):6.0f} m")
+    print(f"  {k:8s} {dist_ft(pts[k], A['41st Ave SW & SW Alaska St']):6.0f} ft")
 print("Delridge options vs Delridge & Andover:")
 for k in ["DEL-ANDOVER", "DEL-DELRIDGE-WAY", "DEL-DAKOTA"]:
-    print(f"  {k:18s} {dist_m(pts[k], A['Delridge Way SW & SW Andover St']):6.0f} m")
-print(f"SODO-1C vs existing SODO: {dist_m(pts['SODO-1C'], EXISTING['SODO (existing)']):.0f} m")
+    print(f"  {k:18s} {dist_ft(pts[k], A['Delridge Way SW & SW Andover St']):6.0f} ft")
+print(f"SODO-1C vs existing SODO: {dist_ft(pts['SODO-1C'], EXISTING['SODO (existing)']):.0f} ft")
 print(f"{len(rows)} alternatives written, {sum(r['preferred'] for r in rows)} preferred")
 assert PREFERRED <= {r["id"] for r in rows}, PREFERRED - {r["id"] for r in rows}
 
 # --- Movement since the previous build ---------------------------------------
 after = {**pts, **EXISTING}
-moved = [(k, dist_m(before[k], p)) for k, p in after.items() if k in before]
-big = [(k, d) for k, d in moved if d > MOVE_WARN_M]
-print(f"Moved more than {MOVE_WARN_M} m since the previous file: {len(big)} of {len(moved)}")
+moved = [(k, dist_ft(before[k], p)) for k, p in after.items() if k in before]
+big = [(k, d) for k, d in moved if d > MOVE_WARN_FT]
+print(f"Moved more than {MOVE_WARN_FT} ft since the previous file: {len(big)} of {len(moved)}")
 for k, d in sorted(big, key=lambda t: -t[1]):
-    print(f"  MOVED {k:24s} {d:6.1f} m")
+    print(f"  MOVED {k:24s} {d:6.1f} ft")
 for k in sorted(after.keys() - before.keys()):
     print(f"  NEW   {k}")

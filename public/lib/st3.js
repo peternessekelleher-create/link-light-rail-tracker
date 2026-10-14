@@ -32,7 +32,7 @@ export async function loadSt3(conn) {
       .filter((f) => f.properties.project && !f.properties.preferred)
       .map((f) => ({ ...f.properties, color: color[project[f.properties.id]] || '#9aa3ad' }));
   }
-  return { projects, stations, alternatives, note: conn.metadata.note };
+  return { projects, stations, alternatives };
 }
 
 // The master switch for everything ST3.

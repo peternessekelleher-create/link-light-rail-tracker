@@ -57,16 +57,17 @@ LINK_LINES = ("1 Line", "2 Line")
 # ST3 stations: features in station_alternatives.geojson with preferred = true.
 
 # --- Connections and walking -------------------------------------------------
+# All distances are in feet.
 # A bus route "connects" to a station when any of its stops is within this
-# straight-line distance. Also the farthest stop you may walk to from a
-# station to start a trip.
-CONNECT_RADIUS_M = 400
-ACCESS_RADIUS_M = CONNECT_RADIUS_M
+# straight-line distance (a quarter mile). Also the farthest stop you may
+# walk to from a station to start a trip.
+CONNECT_RADIUS_FT = 1_320
+ACCESS_RADIUS_FT = CONNECT_RADIUS_FT
 # Farthest walk between two stops when transferring.
-TRANSFER_RADIUS_M = 250
-# Walking time = straight-line distance x WALK_DETOUR / WALK_SPEED_M_PER_MIN.
+TRANSFER_RADIUS_FT = 800
+# Walking time = straight-line distance x WALK_DETOUR / WALK_SPEED_FT_PER_MIN.
 WALK_DETOUR = 1.3
-WALK_SPEED_M_PER_MIN = 80
+WALK_SPEED_FT_PER_MIN = 264  # 3 mph
 # Added once, when leaving the station: platform to street.
 STATION_EXIT_MIN = 2
 
@@ -108,8 +109,8 @@ REP_DAY_MIN_SHARE = 0.9
 WORKERS = int(os.environ.get("REACH_WORKERS") or os.cpu_count() or 2)
 
 # --- Output ------------------------------------------------------------------
-# Bus shapes are simplified to this tolerance (metres) to keep files small.
-SHAPE_SIMPLIFY_M = 4
+# Bus shapes are simplified to this tolerance to keep files small.
+SHAPE_SIMPLIFY_FT = 13
 # Warn if a reach file is bigger than this (gzipped bytes): about a second on
 # a typical phone connection.
 REACH_WARN_GZ_BYTES = 150_000
@@ -121,4 +122,4 @@ OVERPASS_URLS = ["https://overpass-api.de/api/interpreter", "https://overpass.pr
 SEATTLE_BBOX = (47.48, -122.44, 47.74, -122.22)  # south, west, north, east
 USER_AGENT = "link-light-rail-tracker/1.0 (+https://github.com/peternessekelleher-create/link-light-rail-tracker)"
 # Print any station point that moves more than this when its anchors are rebuilt.
-MOVE_WARN_M = 15
+MOVE_WARN_FT = 50

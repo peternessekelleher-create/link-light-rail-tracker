@@ -61,7 +61,7 @@ def st3_stations():
                 "phase": int(phase),
                 "opening": p["opening"][phase],
                 "alternative_id": alt["id"],
-                "confidence_m": props["confidence_m"],
+                "confidence_ft": props["confidence_ft"],
                 "lat": props["lat"],
                 "lon": props["lon"],
             })

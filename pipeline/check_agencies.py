@@ -3,13 +3,13 @@
     python -m pipeline.check_agencies
 
 Checks every feed in config.CANDIDATE_FEEDS and prints the stops it has
-within CONNECT_RADIUS_M of a station, and whether the feed runs any service
+within CONNECT_RADIUS_FT of a station, and whether the feed runs any service
 in the next four weeks. If one has both, move it into FEEDS.
 """
 import datetime as dt
 
-from .config import BUS_ROUTE_TYPES, CANDIDATE_FEEDS, CONNECT_RADIUS_M, FEEDS
-from .geo import dist_m
+from .config import BUS_ROUTE_TYPES, CANDIDATE_FEEDS, CONNECT_RADIUS_FT, FEEDS
+from .geo import dist_ft
 from .gtfs import Feed
 from .stations import all_stations
 
@@ -29,16 +29,16 @@ def main():
                 continue
             p = (float(s["stop_lat"]), float(s["stop_lon"]))
             for st in stations:
-                d = dist_m(p, (st["lat"], st["lon"]))
-                if d <= CONNECT_RADIUS_M:
+                d = dist_ft(p, (st["lat"], st["lon"]))
+                if d <= CONNECT_RADIUS_FT:
                     hits.append((st["name"], s["stop_name"], round(d)))
         today = dt.date.today()
         current = any(feed.services_on(today + dt.timedelta(days=i)) for i in range(28))
         found |= bool(hits) and current
         note = "" if current else " (feed has no service in the next 4 weeks: expired)"
-        print(f"{key} ({agency}): {len(hits)} stops within {CONNECT_RADIUS_M} m of a station{note}")
+        print(f"{key} ({agency}): {len(hits)} stops within {CONNECT_RADIUS_FT:,} ft of a station{note}")
         for h in hits:
-            print(f"    {h[0]}: {h[1]} at {h[2]} m")
+            print(f"    {h[0]}: {h[1]} at {h[2]:,} ft")
     print("Add the current feeds with stops to FEEDS." if found else "No other agency currently serves a station.")
 
 

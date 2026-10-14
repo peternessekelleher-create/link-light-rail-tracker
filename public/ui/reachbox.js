@@ -1,7 +1,7 @@
 // Corner box for bus reach: the time picker (day type + period, defaulting
 // to the current time in Seattle), the summary for the station shown, and
 // the legend.
-import { REACH_COLORS } from '../config.js';
+import { NOTES, REACH_COLORS } from '../config.js';
 import { reachView, currentWindow, windowLabel } from '../lib/reach.js';
 
 const escapeHtml = (s) =>
@@ -26,7 +26,7 @@ export function createReachBox(root, meta, stationName) {
           .join('')}</select>
       </label>
     </div>
-    <p class="rb-note">Schedule-based travel times (not live)</p>
+    <p class="note">${escapeHtml(NOTES.schedule)}</p>
     <p class="rb-summary" data-summary role="status" aria-live="polite"></p>
     <ul class="rb-legend">
       <li><span class="sw" style="background:${REACH_COLORS[15]}"></span>Within 15 min</li>

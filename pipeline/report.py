@@ -49,7 +49,7 @@ def run(net, stations, conn, results, dates):
     for sid, num in MUST_CONNECT:
         hit = next((r for a in by_id[sid]["agencies"] for r in a["routes"] if r["number"] == num), None)
         ok &= hit is not None
-        print(f"  {'PASS' if hit else 'FAIL'}  {sid} {by_id[sid]['name']} includes {num}" + (f" (stop {hit['stop_name']}, {hit['distance_m']} m)" if hit else ""))
+        print(f"  {'PASS' if hit else 'FAIL'}  {sid} {by_id[sid]['name']} includes {num}" + (f" (stop {hit['stop_name']}, {hit['distance_ft']:,} ft)" if hit else ""))
 
     net_doc = json.loads((DATA / "st3_network.json").read_text())
     selected = {a["id"] for p in net_doc["projects"] for s in p["stations"] for a in s["alternatives"] if a["role"] == "selected"}
@@ -90,19 +90,19 @@ def spot_checks(net, stations):
     """Trace one trip per station by hand: a weekday noon departure to the
     stop farthest from the station (straight line) reached with a transfer,
     and recheck every time against the raw stop_times rows of the feed zip."""
-    from .geo import dist_m
+    from .geo import dist_ft
     day = reach._S["days"]["weekday"]
     foot = reach._S["foot"]
     grid = reach._S["grid"]
     print(f"\nSpot checks: Weekday Midday ({day.date}), leaving the station at {hms(SPOT_CHECK_T0)}")
     for sid, _ in SPOT_CHECKS:
         st = next(s for s in stations if s["id"] == sid)
-        access = [(s.id, reach.STATION_EXIT_MIN * 60 + reach.walk_s(d)) for s, d in grid.near(st["lat"], st["lon"], reach.ACCESS_RADIUS_M)]
+        access = [(s.id, reach.STATION_EXIT_MIN * 60 + reach.walk_s(d)) for s, d in grid.near(st["lat"], st["lon"], reach.ACCESS_RADIUS_FT)]
         access = [(s, w) for s, w in access if s in day.stop_patterns]
         labels = search(day, foot, access, SPOT_CHECK_T0, SPOT_CHECK_T0 + MAX_TRIP_MIN * 60)
         two = [(s, l) for s, l in labels.items() if len(l.legs) == 2] or list(labels.items())
         here = (st["lat"], st["lon"])
-        stop, lab = max(two, key=lambda x: dist_m(here, (net.stops[x[0]].lat, net.stops[x[0]].lon)))
+        stop, lab = max(two, key=lambda x: dist_ft(here, (net.stops[x[0]].lat, net.stops[x[0]].lon)))
         print(f"\n  From {st['name']} to {net.stops[stop].name}: {(lab.time - SPOT_CHECK_T0) / 60:.1f} min total")
         t = SPOT_CHECK_T0
         rows = []

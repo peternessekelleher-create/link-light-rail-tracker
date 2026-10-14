@@ -1,5 +1,5 @@
 /* Colors meet WCAG AA (4.5:1) against the panel background, #0f1318 at 92%
-   over the map; the worst case, over white imagery, still passes. */
+   over the dark basemap. */
 :root {
   --panel-bg: rgba(15, 19, 24, 0.92);
   --panel-solid: #0f1318;
@@ -263,7 +263,8 @@ button.link[aria-pressed="true"] { color: var(--warn); text-decoration-color: va
 .mk { width: 14px; height: 14px; border-radius: 50%; flex: none; }
 .mk.hollow { background: #0f1318; border: 3px solid var(--line); box-shadow: 0 0 0 1.5px #000; }
 .st3-note { margin: 10px 0 0; color: var(--fg-2); }
-.st3-note.strong { color: var(--fg); font-weight: 600; }
+/* Disclaimers: small, muted, next to what they describe. #a8b1bb is 8.0:1. */
+.note { margin: 4px 0 0; font-size: 12px; line-height: 1.35; color: #a8b1bb; font-weight: 400; }
 
 .rt-num {
   display: inline-block;
@@ -303,7 +304,6 @@ button.link[aria-pressed="true"] { color: var(--warn); text-decoration-color: va
 .sc-lines { display: flex; gap: 6px; margin: 2px 0 8px; }
 .sc-st3 { margin: 2px 0 4px; font-weight: 600; }
 .sc-future { display: inline-block; margin-right: 4px; padding: 0 7px; border: 1px dashed var(--fg-2); border-radius: 999px; color: var(--fg-2); font-weight: 600; }
-.sc-note { margin: 4px 0 8px; padding: 6px 8px; border-left: 3px solid var(--warn); background: rgba(255, 210, 77, 0.08); }
 .sc-h { margin: 6px 0 4px; font-size: 14px; }
 .sc-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
 .sc-table caption { text-align: left; font-weight: 700; padding: 4px 0; color: var(--fg); }
@@ -316,6 +316,23 @@ button.link[aria-pressed="true"] { color: var(--warn); text-decoration-color: va
 .sc-stop { display: block; color: var(--fg-2); font-size: 13px; }
 .brt-tag { font-weight: 700; color: #ff9eae; }
 .sc-foot { margin: 10px 0 0; font-size: 13px; }
+
+/* ---- How this works ---------------------------------------------------- */
+
+.methods-link { margin: 12px 0 0; }
+button.link.small-link { font-size: 12px; color: #a8b1bb; min-height: 20px; }
+.card.methods { left: calc(var(--left-w) + 24px); right: auto; width: min(640px, calc(100% - var(--left-w) - 36px)); z-index: 7; }
+.methods-body { font-size: 14px; }
+.methods-body h1 { font-size: 18px; margin: 10px 0 6px; }
+.methods-body h2 { font-size: 15px; margin: 14px 0 4px; }
+.methods-body h3 { font-size: 14px; margin: 12px 0 4px; }
+.methods-body ul, .methods-body ol { padding-left: 20px; }
+.methods-body li { margin: 3px 0; }
+.methods-body a { color: #9ad8ff; overflow-wrap: anywhere; }
+.methods-body code { font-size: 13px; background: rgba(255, 255, 255, 0.08); padding: 0 3px; border-radius: 3px; }
+.methods-body table { border-collapse: collapse; font-size: 13px; }
+.methods-body th, .methods-body td { border-bottom: 1px solid var(--rule); padding: 3px 6px; text-align: left; vertical-align: top; }
+.methods-body hr { border: 0; border-top: 1px solid var(--rule); margin: 16px 0; }
 
 /* ---- Bus reach box ----------------------------------------------------- */
 
@@ -347,7 +364,6 @@ button.link[aria-pressed="true"] { color: var(--warn); text-decoration-color: va
   color: var(--fg);
   font: inherit;
 }
-.rb-note { margin: 4px 0 0; color: var(--fg-2); font-size: 13px; }
 .rb-summary { margin: 8px 0 0; min-height: 20px; }
 .rb-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 8px 0 0; padding: 0; color: var(--fg-2); font-size: 13px; font-weight: 600; }
 .rb-legend li { display: flex; align-items: center; gap: 5px; }
@@ -361,6 +377,7 @@ button.link[aria-pressed="true"] { color: var(--warn); text-decoration-color: va
 
 @media (max-width: 959px) {
   .card { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 46%; z-index: 6; }
+  .card.methods { top: 60px; left: 8px; right: 8px; width: auto; max-height: none; z-index: 7; }
   .reach-box { left: 16px; right: 16px; bottom: auto; top: 100px; width: auto; padding: 8px 10px; }
   .rb-title { display: none; }
   .rb-summary { margin-top: 6px; }

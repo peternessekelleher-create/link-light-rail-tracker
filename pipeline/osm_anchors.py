@@ -16,15 +16,15 @@ import urllib.parse
 import urllib.request
 
 from .config import OVERPASS_URLS, SEATTLE_BBOX, USER_AGENT
-from .geo import centroid, closest_points, dist_m
+from .geo import centroid, closest_points, dist_ft
 
 WORDS = {
     "Ave": "Avenue", "St": "Street", "Blvd": "Boulevard", "Pl": "Place", "Dr": "Drive",
     "S": "South", "N": "North", "E": "East", "W": "West",
     "SW": "Southwest", "NW": "Northwest", "SE": "Southeast", "NE": "Northeast",
 }
-CLUSTER_M = 80  # shared nodes this close together are one intersection
-MAX_GAP_M = 40  # closest-approach fallback must be at least this close
+CLUSTER_FT = 260  # shared nodes this close together are one intersection
+MAX_GAP_FT = 130  # closest-approach fallback must be at least this close
 
 
 def osm_name(short):
@@ -71,7 +71,7 @@ def _clusters(points):
     out = []
     for p in points:
         for c in out:
-            if dist_m(p[1], c[0][1]) <= CLUSTER_M:
+            if dist_ft(p[1], c[0][1]) <= CLUSTER_FT:
                 c.append(p)
                 break
         else:
@@ -103,7 +103,7 @@ def resolve(anchor, specs, ways, near=None, pick=None):
             if not near:
                 where = ", ".join(f"{centroid([p[1] for p in c])}" for c in clusters)
                 raise LookupError(f"{anchor}: streets meet at {len(clusters)} places ({where}); add a 'pick' or 'near' hint")
-            clusters.sort(key=lambda c: dist_m(centroid([p[1] for p in c]), near))
+            clusters.sort(key=lambda c: dist_ft(centroid([p[1] for p in c]), near))
         c = clusters[0]
         lat, lon = centroid([p[1] for p in c])
         return {
@@ -117,12 +117,12 @@ def resolve(anchor, specs, ways, near=None, pick=None):
         key=lambda t: t[0][0],
     )
     (gap, pa, pb), ia, ib = best
-    if gap > MAX_GAP_M:
-        raise LookupError(f"{anchor}: streets never meet (closest {gap:.0f} m)")
+    if gap > MAX_GAP_FT:
+        raise LookupError(f"{anchor}: streets never meet (closest {gap:.0f} ft)")
     lat, lon = centroid([pa, pb])
     return {
         "lat": round(lat, 7), "lon": round(lon, 7),
-        "method": f"closest approach ({gap:.1f} m apart; no shared node)",
+        "method": f"closest approach ({gap:.0f} ft apart; no shared node)",
         "osm_nodes": [], "osm_ways": sorted([ia, ib]),
     }
 

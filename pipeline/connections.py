@@ -1,6 +1,6 @@
 """Bus routes that connect to each station, from every feed.
 
-A route connects when any of its stops is within CONNECT_RADIUS_M of the
+A route connects when any of its stops is within CONNECT_RADIUS_FT of the
 station and it runs on at least one representative date. For each route the
 panel shows its agency, number, name, BRT brand and weekday midday trips per
 hour: trips calling at the route's stops near the station between the
@@ -14,7 +14,7 @@ Writes
 import json
 from collections import Counter, defaultdict
 
-from .config import CONNECT_RADIUS_M, DATA, FREQ_DAY, FREQ_PERIOD, PERIODS, SHAPE_SIMPLIFY_M
+from .config import CONNECT_RADIUS_FT, DATA, FREQ_DAY, FREQ_PERIOD, PERIODS, SHAPE_SIMPLIFY_FT
 from .geo import simplify
 
 
@@ -27,7 +27,7 @@ def build(net, stations, grid, dates, extra_meta):
 
     near = {}  # station id -> {stop id: distance}
     for st in stations:
-        near[st["id"]] = {s.id: d for s, d in grid.near(st["lat"], st["lon"], CONNECT_RADIUS_M)}
+        near[st["id"]] = {s.id: d for s, d in grid.near(st["lat"], st["lon"], CONNECT_RADIUS_FT)}
     stop_stations = defaultdict(list)
     for sid, stops in near.items():
         for stop in stops:
@@ -72,7 +72,7 @@ def build(net, stations, grid, dates, extra_meta):
                 "midday_tph": round(max(dirs.values(), default=0) / hours, 1),
                 "stop_id": stop,
                 "stop_name": net.stops[stop].name,
-                "distance_m": round(d),
+                "distance_ft": round(d),
             })
             connected[rid].append(st["id"])
         agencies = [
@@ -90,7 +90,7 @@ def build(net, stations, grid, dates, extra_meta):
         for d in dirs:
             shape = net.shapes.get(shape_votes[(rid, d)].most_common(1)[0][0])
             if shape:
-                xy = simplify([(lon, lat) for lat, lon, _ in shape], SHAPE_SIMPLIFY_M)
+                xy = simplify([(lon, lat) for lat, lon, _ in shape], SHAPE_SIMPLIFY_FT)
                 lines.append([[round(x, 5), round(y, 5)] for x, y in xy])
         features.append({
             "type": "Feature",
@@ -103,7 +103,7 @@ def build(net, stations, grid, dates, extra_meta):
 
     meta = {
         **extra_meta,
-        "connect_radius_m": CONNECT_RADIUS_M,
+        "connect_radius_ft": CONNECT_RADIUS_FT,
         "frequency": {"day_type": FREQ_DAY, "period": FREQ_PERIOD, "start": h0, "end": h1,
                       "measure": "trips per hour at the route's stops near the station, busier direction"},
     }

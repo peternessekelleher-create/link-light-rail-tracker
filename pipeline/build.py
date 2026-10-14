@@ -15,7 +15,7 @@ import time
 from . import connections, reach, report
 from .config import (
     BANDS_MIN, DAY_TYPES, DATA, MAX_RIDES, PERIODS, SAMPLE_EVERY_MIN, STATION_EXIT_MIN,
-    TIMEZONE, TRANSFER_RADIUS_M, ACCESS_RADIUS_M, WALK_DETOUR, WALK_SPEED_M_PER_MIN, WORKERS,
+    TIMEZONE, TRANSFER_RADIUS_FT, ACCESS_RADIUS_FT, WALK_DETOUR, WALK_SPEED_FT_PER_MIN, WORKERS,
 )
 from .feeds import Network
 from .stations import all_stations
@@ -47,17 +47,16 @@ def main():
         "day_types": [{"id": k, "label": v[0]} for k, v in DAY_TYPES.items()],
         "periods": [{"id": p, "label": label, "start": h0, "end": h1} for p, label, h0, h1 in PERIODS],
         "reach": {
-            "access_radius_m": ACCESS_RADIUS_M,
-            "transfer_radius_m": TRANSFER_RADIUS_M,
+            "access_radius_ft": ACCESS_RADIUS_FT,
+            "transfer_radius_ft": TRANSFER_RADIUS_FT,
             "walk_detour": WALK_DETOUR,
-            "walk_speed_m_per_min": WALK_SPEED_M_PER_MIN,
+            "walk_speed_ft_per_min": WALK_SPEED_FT_PER_MIN,
             "station_exit_min": STATION_EXIT_MIN,
             "sample_every_min": SAMPLE_EVERY_MIN,
             "bands_min": list(BANDS_MIN),
             "max_rides": MAX_RIDES,
             "statistic": "lower median over departures; a departure that misses 30 min counts as too long",
         },
-        "note": "Future stations show today's bus network. Metro will restructure routes when they open.",
     }
     grid = reach.StopGrid(net.stops)
     conn, _ = connections.build(net, stations, grid, dates, meta)

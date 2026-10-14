@@ -60,6 +60,8 @@
       </div>
       <div id="st3-body" class="group-body"><p class="muted">Loading…</p></div>
     </section>
+
+    <p class="methods-link"><button type="button" class="link small-link" data-open-methods>How this works</button></p>
   </aside>
 
   <aside id="headways" class="panel panel-right" aria-label="Headways">
@@ -78,6 +80,14 @@
 
   <!-- Bus reach: time picker and summary, bottom-left (top on phones) -->
   <aside id="reach-box" class="reach-box" aria-label="Bus reach"></aside>
+
+  <aside id="methods" class="card methods" role="dialog" aria-labelledby="methods-title" hidden>
+    <div class="card-head">
+      <h2 id="methods-title">How this works</h2>
+      <button class="close" type="button" data-close-methods aria-label="Close how this works">×</button>
+    </div>
+    <div class="card-body methods-body" data-body><p class="muted">Loading…</p></div>
+  </aside>
 
   <aside id="station-card" class="card" role="dialog" aria-labelledby="station-card-title" hidden>
     <div class="card-head">

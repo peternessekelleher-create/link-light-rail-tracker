@@ -1,5 +1,8 @@
 // Station card: opens on click (tap) for any Link or ST3 station and lists
 // the bus routes with a stop within the connect radius, grouped by agency.
+import { NOTES } from '../config.js';
+import { formatDistance } from '../lib/units.js';
+
 const escapeHtml = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -17,12 +20,12 @@ export function createStationCard(conn, { lineColors, onClose, onRouteHover }) {
     s.kind === 'link'
       ? `<p class="sc-lines">${s.lines.map((l) => `<span class="chip" style="background:${lineColors[l] || '#555'}">${escapeHtml(l)}</span>`).join('')}</p>`
       : `<p class="sc-st3"><span class="sc-future">Sound Transit 3 · planned</span> ${escapeHtml(s.opening)}</p>
-         <p class="sc-note">${escapeHtml(meta.note)}</p>`;
+         <p class="note">${escapeHtml(NOTES.futureLocation)}</p>`;
 
   const routeRow = (r) => `
     <tr data-route="${escapeHtml(r.route_id)}" tabindex="0">
       <td><span class="rt-num ${r.brt ? 'rapid' : ''}">${escapeHtml(r.number)}</span></td>
-      <td class="sc-name">${escapeHtml(r.name)}<span class="sc-stop">${escapeHtml(r.stop_name)} · ${r.distance_m} m</span></td>
+      <td class="sc-name">${escapeHtml(r.name)}<span class="sc-stop">${escapeHtml(r.stop_name)} · ${formatDistance(r.distance_ft)}</span></td>
       <td>${r.brt ? `<span class="brt-tag">${escapeHtml(r.brt)}</span>` : '<span class="muted">No</span>'}</td>
       <td class="num">${r.midday_tph ? r.midday_tph.toFixed(1) : '<span class="muted">–</span>'}</td>
     </tr>`;
@@ -32,7 +35,8 @@ export function createStationCard(conn, { lineColors, onClose, onRouteHover }) {
     const n = s.route_count;
     body.innerHTML = `
       ${header(s)}
-      <h3 class="sc-h">${n} connecting bus route${n === 1 ? '' : 's'} <span class="muted">· stop within ${meta.connect_radius_m} m</span></h3>
+      <h3 class="sc-h">${n} connecting bus route${n === 1 ? '' : 's'} <span class="muted">· stop within ${formatDistance(meta.connect_radius_ft)}</span></h3>
+      ${s.kind === 'st3' ? `<p class="note">${escapeHtml(NOTES.futureBuses)}</p>` : ''}
       ${s.agencies
         .map(
           (a) => `

@@ -1,10 +1,10 @@
 // Track geometry and schedule math, shared by the server (api/trains) and the
 // browser so both measure distance along a shape exactly the same way.
-// Coordinates are [lat, lon]; distances are meters; times are epoch seconds.
+// Coordinates are [lat, lon]; distances are feet; times are epoch seconds.
 
-const R = 6371008.8;
+const R = 20_902_231; // mean Earth radius in feet (6,371,008.8 m)
 const RAD = Math.PI / 180;
-const AT_PLATFORM_M = 40; // a train this close to a stop counts as at it
+const AT_PLATFORM_FT = 130; // a train this close to a stop counts as at it
 
 export function haversine([lat1, lon1], [lat2, lon2]) {
   const dLat = (lat2 - lat1) * RAD;
@@ -44,7 +44,7 @@ export function project(coords, cum, p, from = 0) {
       bestDist = cum[i] + (cum[i + 1] - cum[i]) * t;
     }
   }
-  return { dist: bestDist, seg: bestSeg, offMeters: Math.sqrt(best) * RAD * R };
+  return { dist: bestDist, seg: bestSeg, offFt: Math.sqrt(best) * RAD * R };
 }
 
 function segmentAt(cum, d) {
@@ -108,13 +108,13 @@ export function scheduledDist(stops, t) {
 export function scheduledTimeAt(stops, d, seenAt) {
   const n = stops.length;
   const clamp = (lo, hi) => Math.max(lo, Math.min(hi, seenAt));
-  if (d <= stops[0].d + AT_PLATFORM_M) return clamp(-Infinity, stops[0].p);
-  if (d >= stops[n - 1].d - AT_PLATFORM_M) return clamp(stops[n - 1].a, Infinity);
+  if (d <= stops[0].d + AT_PLATFORM_FT) return clamp(-Infinity, stops[0].p);
+  if (d >= stops[n - 1].d - AT_PLATFORM_FT) return clamp(stops[n - 1].a, Infinity);
   for (let i = 0; i < n - 1; i++) {
     const s = stops[i];
     const next = stops[i + 1];
-    if (Math.abs(d - s.d) <= AT_PLATFORM_M) return clamp(s.a, s.p);
-    if (d < next.d - AT_PLATFORM_M) {
+    if (Math.abs(d - s.d) <= AT_PLATFORM_FT) return clamp(s.a, s.p);
+    if (d < next.d - AT_PLATFORM_FT) {
       const f = (d - s.d) / (next.d - s.d || 1);
       return s.p + f * (next.a - s.p);
     }
@@ -133,13 +133,13 @@ export function runningTime(stops, d0, d1) {
 // last stop the last arrival.
 function timeAt(stops, d, key) {
   const n = stops.length;
-  if (d <= stops[0].d + AT_PLATFORM_M) return stops[0].p;
-  if (d >= stops[n - 1].d - AT_PLATFORM_M) return stops[n - 1].a;
+  if (d <= stops[0].d + AT_PLATFORM_FT) return stops[0].p;
+  if (d >= stops[n - 1].d - AT_PLATFORM_FT) return stops[n - 1].a;
   for (let i = 0; i < n - 1; i++) {
     const s = stops[i];
     const next = stops[i + 1];
-    if (d <= s.d + AT_PLATFORM_M) return s[key];
-    if (d < next.d - AT_PLATFORM_M) return s.p + ((d - s.d) / (next.d - s.d || 1)) * (next.a - s.p);
+    if (d <= s.d + AT_PLATFORM_FT) return s[key];
+    if (d < next.d - AT_PLATFORM_FT) return s.p + ((d - s.d) / (next.d - s.d || 1)) * (next.a - s.p);
   }
   return stops[n - 1].a;
 }
