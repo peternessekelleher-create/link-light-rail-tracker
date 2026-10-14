@@ -4,6 +4,7 @@
 
 const R = 6371008.8;
 const RAD = Math.PI / 180;
+const AT_PLATFORM_M = 40; // a train this close to a stop counts as at it
 
 export function haversine([lat1, lon1], [lat2, lon2]) {
   const dLat = (lat2 - lat1) * RAD;
@@ -106,7 +107,6 @@ export function scheduledDist(stops, t) {
 // the dwell window, so seenAt is clamped into it (inside the window = on time).
 export function scheduledTimeAt(stops, d, seenAt) {
   const n = stops.length;
-  const AT_PLATFORM_M = 40;
   const clamp = (lo, hi) => Math.max(lo, Math.min(hi, seenAt));
   if (d <= stops[0].d + AT_PLATFORM_M) return clamp(-Infinity, stops[0].p);
   if (d >= stops[n - 1].d - AT_PLATFORM_M) return clamp(stops[n - 1].a, Infinity);
@@ -118,6 +118,28 @@ export function scheduledTimeAt(stops, d, seenAt) {
       const f = (d - s.d) / (next.d - s.d || 1);
       return s.p + f * (next.a - s.p);
     }
+  }
+  return stops[n - 1].a;
+}
+
+// Scheduled running time from distance d0 to distance d1 along a trip:
+// departure from d0 to arrival at d1, with stops in between at their dwell.
+export function runningTime(stops, d0, d1) {
+  return timeAt(stops, d1, 'a') - timeAt(stops, d0, 'p');
+}
+
+// Scheduled time at distance d. At a platform, `key` picks arrival ('a') or
+// departure ('p'); before the first stop it is the first departure, past the
+// last stop the last arrival.
+function timeAt(stops, d, key) {
+  const n = stops.length;
+  if (d <= stops[0].d + AT_PLATFORM_M) return stops[0].p;
+  if (d >= stops[n - 1].d - AT_PLATFORM_M) return stops[n - 1].a;
+  for (let i = 0; i < n - 1; i++) {
+    const s = stops[i];
+    const next = stops[i + 1];
+    if (d <= s.d + AT_PLATFORM_M) return s[key];
+    if (d < next.d - AT_PLATFORM_M) return s.p + ((d - s.d) / (next.d - s.d || 1)) * (next.a - s.p);
   }
   return stops[n - 1].a;
 }

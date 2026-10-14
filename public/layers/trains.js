@@ -6,10 +6,12 @@
 // on the unshifted schedule. Both are driven by the same clock, so the gap
 // between them on the map is the delay shown in the popup.
 import { measure, pointAt, sliceLine, scheduledDist } from '../lib/motion.js';
+import { ON_TIME_S, DELAY_COLORS, formatDelay, delayClass } from '../lib/delay.js';
+import { view, liveFeed } from '../lib/view.js';
 
 const POLL_MS = 15 * 1000;
 const MAX_BACKOFF_MS = 2 * 60 * 1000;
-const GHOST_THRESHOLD_S = 60; // ghosts are hidden when within this of schedule
+const GHOST_THRESHOLD_S = ON_TIME_S; // ghosts are hidden when within this of schedule
 const STALE_AFTER_S = 3 * 60; // fade trains whose last report is older
 const DROP_AFTER_S = 10 * 60; // and remove them after this
 const MAX_EXTRAPOLATE_S = 90; // stop moving a train this long after its report
@@ -36,6 +38,7 @@ export default {
       status: document.getElementById('live-status'),
       banner: document.getElementById('live-banner'),
       toggle: document.getElementById('ghost-toggle'),
+      tags: document.getElementById('tag-toggle'),
     };
 
     addIcons(map, data.colors);
@@ -44,6 +47,16 @@ export default {
     ui.toggle.addEventListener('change', () => {
       showGhosts = ui.toggle.checked;
       try { localStorage.setItem(GHOSTS_KEY, showGhosts ? '1' : '0'); } catch {}
+    });
+    ui.tags.addEventListener('change', () =>
+      map.setLayoutProperty('link-train-tags', 'visibility', ui.tags.checked ? 'visible' : 'none'),
+    );
+
+    // Line and direction switches act as map filters: instant, no re-fetch.
+    view.subscribe(() => {
+      const shown = ['in', ['get', 'key'], ['literal', view.visibleKeys()]];
+      for (const id of ['link-trains', 'link-ghosts', 'link-gaps']) map.setFilter(id, shown);
+      map.setFilter('link-train-tags', ['all', shown, ['!=', ['get', 'tag'], '']]);
     });
 
     const popup = new mapboxgl.Popup({ closeButton: true, offset: 14 });
@@ -64,7 +77,9 @@ export default {
         if (!shapes.size) await loadShapes();
         const res = await fetch('/api/trains');
         if (!res.ok) throw new Error(`trains ${res.status}`);
-        ingest(await res.json());
+        const body = await res.json();
+        ingest(body);
+        liveFeed.update((f) => (f.body = body));
         failures = 0;
         lastOk = Date.now();
         ui.banner.hidden = true;
@@ -131,15 +146,25 @@ export default {
         t.drawn = targetDist(t, now) + t.corr * (1 - eased);
         const p = pointAt(t.shape.coordinates, t.shape.cum, t.drawn);
         t.at = [p.lon, p.lat];
-        live.push(point(t.at, { id, icon: `train:${t.line}`, bearing: p.bearing, opacity: age > STALE_AFTER_S ? 0.45 : 1 }));
+        const key = `${t.line}|${t.dir}`;
+        const stale = age > STALE_AFTER_S;
+        live.push(point(t.at, {
+          id,
+          key,
+          icon: `train:${t.line}`,
+          bearing: p.bearing,
+          opacity: stale ? 0.45 : 1,
+          tag: stale ? '' : formatDelay(t.delay),
+          tagColor: DELAY_COLORS[delayClass(t.delay)],
+        }));
 
         if (showGhosts && Math.abs(t.delay) >= GHOST_THRESHOLD_S && age <= STALE_AFTER_S) {
           const gd = scheduledDist(t.stops, now);
           const g = pointAt(t.shape.coordinates, t.shape.cum, gd);
-          ghosts.push(point([g.lon, g.lat], { icon: `ghost:${t.line}`, bearing: g.bearing }));
+          ghosts.push(point([g.lon, g.lat], { key, icon: `ghost:${t.line}`, bearing: g.bearing }));
           gaps.push({
             type: 'Feature',
-            properties: { color: data.colors[t.line] },
+            properties: { key },
             geometry: { type: 'LineString', coordinates: sliceLine(t.shape.coordinates, t.shape.cum, t.drawn, gd) },
           });
         }
@@ -167,16 +192,14 @@ export default {
     let popupText = '';
     function renderPopup(now, open) {
       const t = trains.get(popupTrainId);
-      if (!t) { popup.remove(); return; }
+      if (!t || !view.shown(t.line, t.dir)) { popup.remove(); return; }
       const age = Math.max(0, Math.round(now - t.ts));
-      const status = delayText(t.delay);
       const next = t.nextStop
         ? `<div>Next stop: ${escapeHtml(t.nextStop)}${t.nextDelay != null ? ` <span class="muted">(predicted ${delayText(t.nextDelay).toLowerCase()})</span>` : ''}</div>`
         : '';
       const html =
-        `<div class="popup-name"><span class="chip" style="background:${data.colors[t.line]}">${escapeHtml(t.line)}</span> ${escapeHtml(t.direction)}</div>` +
-        `<div>To ${escapeHtml(t.headsign)}</div>` +
-        `<div class="train-status ${t.delay >= GHOST_THRESHOLD_S ? 'late' : t.delay <= -GHOST_THRESHOLD_S ? 'early' : 'ontime'}">${status}</div>` +
+        `<div class="popup-name"><span class="chip" style="background:${data.colors[t.line]}">${escapeHtml(t.line)}</span> To ${escapeHtml(t.headsign)}</div>` +
+        `<div class="train-status ${delayClass(t.delay)}">${delayText(t.delay)}</div>` +
         next +
         `<div class="muted">${age > STALE_AFTER_S ? `Last seen ${Math.round(age / 60)} min ago` : `Updated ${age} s ago`}</div>`;
       popup.setLngLat(t.at);
@@ -205,10 +228,11 @@ export default {
   },
 };
 
+// "Late +3:20" / "Early −1:15" / "On time": the same number as the map tag.
 function delayText(s) {
-  if (Math.abs(s) < GHOST_THRESHOLD_S) return 'On time';
-  const min = Math.round(Math.abs(s) / 60);
-  return `${min} min ${s > 0 ? 'late' : 'early'}`;
+  const tag = formatDelay(s);
+  if (tag === 'On time') return tag;
+  return `${s > 0 ? 'Late' : 'Early'} ${tag}`;
 }
 
 function formatAgo(s) {
@@ -248,6 +272,28 @@ function addLayers(map) {
   });
   map.addLayer(symbol('link-ghosts'));
   map.addLayer(symbol('link-trains', { 'icon-opacity': ['get', 'opacity'] }));
+
+  // Delay tags beside each train. Tags may hide each other where trains
+  // crowd (downtown); the train icons above ignore placement, so they always show.
+  map.addLayer({
+    id: 'link-train-tags',
+    type: 'symbol',
+    source: 'link-trains',
+    filter: ['!=', ['get', 'tag'], ''],
+    layout: {
+      'text-field': ['get', 'tag'],
+      'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 9, 10, 14, 12],
+      'text-variable-anchor': ['left', 'right'],
+      'text-radial-offset': 1.2,
+      'text-padding': 1,
+    },
+    paint: {
+      'text-color': ['get', 'tagColor'],
+      'text-halo-color': 'rgba(0,0,0,0.9)',
+      'text-halo-width': 1.6,
+    },
+  });
 }
 
 // Train icons drawn once on a canvas: a circle in the line color with a white

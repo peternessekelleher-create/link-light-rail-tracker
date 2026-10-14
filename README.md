@@ -4,6 +4,7 @@ An interactive satellite map of Sound Transit's Link **1 Line** and **2 Line**, 
 
 - **Step 1:** stations and track, in the official line colors, on a Mapbox satellite map.
 - **Step 2:** live trains, each paired with a faded "ghost" at its scheduled position so lateness shows at a glance.
+- **Step 3:** switches for each line and direction, a delay tag beside each train ("+3:20"), and a headway panel comparing live and scheduled train spacing.
 
 Later steps will add on-time history and ridership.
 
@@ -25,6 +26,9 @@ Browser ──► /api/config   Mapbox token from the MAPBOX_TOKEN env var
 - **Motion:** reports are usually 10–60 s old. Between reports, each train keeps moving along its own track on the timetable shifted by its delay, for up to 90 s after its report. The ghost moves on the timetable itself. A new report makes the train glide to its corrected spot along the track.
 - **Ghosts** are hidden when a train is within 60 s of schedule (`GHOST_THRESHOLD_S` in `public/layers/trains.js`).
 - **Service day:** Link's realtime feed has no `start_date`, so each trip's service day is the one (today or yesterday in Seattle) whose timetable covers the report time.
+- **Headways** (`lib/headways.js`) are computed server-side in `/api/trains`. For each line and direction, trains are ordered along the direction's main track shape. Each gap is the follower's scheduled running time from where it is to where the leader is. The scheduled figure applies the same method to every trip the timetable has under way right now. Stale trains (over 3 min) and trains still at their first stop are left out.
+- **Direction names** ("toward Federal Way Downtown") are the most common `trip_headsign` for each line and `direction_id`, served by `/api/link` as `directions`.
+- **Thresholds** for on time, late, very late and the headway warning live in `public/lib/delay.js`.
 - **API key:** OneBusAway's realtime feeds accept any key, so `/api/trains` also checks the key against OneBusAway's REST API (at most once per 10 min) so that a bad key shows the "Live data temporarily unavailable" banner.
 
 - **Data:** `https://www.soundtransit.org/GTFS-rail/40_gtfs.zip`, from the [Open Transit Data downloads page](https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads). Lines are matched by `route_short_name` with `route_type` 0; colors come from `route_color`.

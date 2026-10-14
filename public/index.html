@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Link Light Rail Tracker</title>
-  <meta name="description" content="Sound Transit Link 1 Line and 2 Line stations and track on a satellite map, built live from the official GTFS feed.">
+  <meta name="description" content="Live Sound Transit Link 1 Line and 2 Line trains, delays and headways on a satellite map, built from the official GTFS feeds.">
   <link rel="preconnect" href="https://api.mapbox.com">
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css">
   <link rel="stylesheet" href="style.css">
@@ -13,17 +13,45 @@
 </head>
 <body>
   <div id="map" aria-label="Map of Link light rail lines"></div>
-  <header class="panel">
-    <h1>Link Light Rail</h1>
-    <ul id="legend" class="legend"></ul>
-    <ul class="legend legend-trains">
+
+  <!-- Status chips, top center -->
+  <div class="chips">
+    <p id="status" class="chip-status" role="status">Loading map…</p>
+    <p id="live-status" class="chip-status live" role="status"></p>
+    <p id="live-banner" class="chip-status banner" role="alert" hidden>Live data temporarily unavailable</p>
+  </div>
+
+  <!-- Phone width: the panels open as drawers from these buttons -->
+  <button class="drawer-btn left" type="button" data-drawer="controls" aria-controls="controls" aria-expanded="false">Controls</button>
+  <button class="drawer-btn right" type="button" data-drawer="headways" aria-controls="headways" aria-expanded="false">Headways</button>
+
+  <aside id="controls" class="panel panel-left" aria-label="Map controls">
+    <div class="panel-head">
+      <h1>Link Light Rail</h1>
+      <button class="close" type="button" data-close aria-label="Close controls">×</button>
+    </div>
+    <div id="line-toggles"></div>
+    <div class="divider"></div>
+    <label class="switch"><input type="checkbox" id="ghost-toggle" checked><span class="track" aria-hidden="true"></span><span>Ghost trains</span></label>
+    <label class="switch"><input type="checkbox" id="tag-toggle" checked><span class="track" aria-hidden="true"></span><span>Delay tags</span></label>
+    <ul class="legend-trains">
       <li><span class="dot live"></span>Live train</li>
       <li><span class="dot ghost"></span>Scheduled position</li>
     </ul>
-    <label class="toggle"><input type="checkbox" id="ghost-toggle" checked> Show ghost trains</label>
-    <p id="live-status" class="live-status" role="status"></p>
-    <p id="live-banner" class="banner" role="alert" hidden>Live data temporarily unavailable</p>
-    <p id="status" class="status" role="status">Loading map…</p>
-  </header>
+  </aside>
+
+  <aside id="headways" class="panel panel-right" aria-label="Headways">
+    <div class="panel-head">
+      <button id="headways-toggle" class="collapse" type="button" aria-expanded="true" aria-controls="headway-body">
+        <h2>Headways</h2><span class="chev" aria-hidden="true"></span>
+      </button>
+      <button class="close" type="button" data-close aria-label="Close headways">×</button>
+    </div>
+    <div id="headway-body">
+      <p class="hw-note">Average time between trains</p>
+      <div id="headway-rows"></div>
+      <p id="headway-updated" class="hw-footer"></p>
+    </div>
+  </aside>
 </body>
 </html>

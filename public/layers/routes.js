@@ -1,4 +1,7 @@
 // Track polylines, one per line, colored with the GTFS route_color.
+import { view } from '../lib/view.js';
+
+const OFF_OPACITY = 0.25; // a line switched off fades instead of disappearing
 
 // The 1 Line and 2 Line share track from Lynnwood to Int'l Dist/Chinatown.
 // The API orients both lines north-to-south, so opposite pixel offsets show
@@ -41,6 +44,14 @@ export default {
         'line-width': ['interpolate', ['linear'], ['zoom'], 9, 3, 15, 6],
         'line-offset': ['get', 'offset'],
       },
+    });
+
+    // Direction switches don't affect track: both directions share it.
+    view.subscribe(() => {
+      const off = Object.keys(view.lines).filter((l) => !view.lines[l]);
+      const opacity = off.length ? ['case', ['in', ['get', 'line'], ['literal', off]], OFF_OPACITY, 1] : 1;
+      map.setPaintProperty('link-routes', 'line-opacity', opacity);
+      map.setPaintProperty('link-routes-casing', 'line-opacity', opacity);
     });
   },
 };
