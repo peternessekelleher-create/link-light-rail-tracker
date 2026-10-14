@@ -24,6 +24,28 @@ function circle(lon, lat, r, steps = 48) {
   return { type: 'Polygon', coordinates: [ring] };
 }
 
+// Twins (same spot) are split apart and noted only while both are shown.
+const isTwinShown = (a, state) => a.sameSpot && state.altShown(a) && state.altShown(a.sameSpot);
+
+function altPoints(model, state) {
+  return fc(
+    [...model.alts.values()].map((a) => {
+      const twin = isTwinShown(a, state);
+      return feature(
+        { type: 'Point', coordinates: [a.props.lon, a.props.lat] },
+        {
+          id: a.id,
+          role: a.role,
+          label: a.station.multi ? a.short : a.station.name,
+          note: twin ? `\n${SAME_SPOT_NOTE}` : '',
+          ox: twin ? a.ox : 0,
+          icon: a.role === 'removed' ? 'st3-removed' : `st3-${a.role}:${a.project.id}`,
+        },
+      );
+    }),
+  );
+}
+
 const colorOf = (alt) => (alt.role === 'removed' ? REMOVED_COLOR : alt.project.color);
 
 export default function st3Layer(model, { onSelect }) {
@@ -54,24 +76,7 @@ export default function st3Layer(model, { onSelect }) {
         type: 'geojson',
         data: fc(alts.map((a) => feature(circle(a.props.lon, a.props.lat, a.props.confidence_m), { id: a.id, color: colorOf(a) }))),
       });
-      map.addSource('st3-alts', {
-        type: 'geojson',
-        data: fc(
-          alts.map((a) =>
-            feature(
-              { type: 'Point', coordinates: [a.props.lon, a.props.lat] },
-              {
-                id: a.id,
-                role: a.role,
-                label: a.station.multi ? a.short : a.station.name,
-                note: a.sameSpot ? `\n${SAME_SPOT_NOTE}` : '',
-                ox: a.ox,
-                icon: a.role === 'removed' ? 'st3-removed' : `st3-${a.role}:${a.project.id}`,
-              },
-            ),
-          ),
-        ),
-      });
+      map.addSource('st3-alts', { type: 'geojson', data: altPoints(model, st3) });
       map.addSource('st3-bus', { type: 'geojson', data: model.routes });
 
       // Lines and circles sit under the live Link tracks; markers go on top.
@@ -215,7 +220,8 @@ function apply(map, model, state) {
 
   const shown = [...model.alts.values()].filter((a) => state.altShown(a));
   const ids = (list) => ['in', ['get', 'id'], ['literal', list.map((a) => a.id)]];
-  const twin = (a) => a.ox !== 0;
+  const twin = (a) => isTwinShown(a, state);
+  map.getSource('st3-alts').setData(altPoints(model, state));
   map.setFilter('st3-circles', ids(shown));
   map.setFilter('st3-markers', ids(shown));
   map.setFilter('st3-labels-selected', ids(shown.filter((a) => a.role === 'selected' && !twin(a))));
