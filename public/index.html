@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Link Light Rail Tracker</title>
+  <meta name="description" content="Sound Transit Link 1 Line and 2 Line stations and track on a satellite map, built live from the official GTFS feed.">
+  <link rel="preconnect" href="https://api.mapbox.com">
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js" defer></script>
+  <script src="app.js" type="module"></script>
+</head>
+<body>
+  <div id="map" aria-label="Map of Link light rail lines"></div>
+  <header class="panel">
+    <h1>Link Light Rail</h1>
+    <ul id="legend" class="legend"></ul>
+    <p id="status" class="status" role="status">Loading map…</p>
+  </header>
+</body>
+</html>

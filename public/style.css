@@ -1,0 +1,44 @@
+:root {
+  --panel-bg: rgba(18, 22, 28, 0.86);
+  --panel-fg: #f3f5f7;
+  --muted: #aab3bd;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0d1014;
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+#map { position: absolute; inset: 0; }
+
+.panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  max-width: calc(100% - 24px);
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--panel-bg);
+  color: var(--panel-fg);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.panel h1 { margin: 0 0 6px; font-size: 16px; font-weight: 650; }
+
+.legend { list-style: none; margin: 0; padding: 0; display: flex; gap: 14px; flex-wrap: wrap; }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.swatch { width: 22px; height: 5px; border-radius: 3px; }
+
+.status { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+.status:empty { display: none; }
+.status.error { color: #ffb4a8; }
+
+.mapboxgl-popup-content { padding: 10px 12px; border-radius: 8px; font: inherit; }
+.popup-name { font-weight: 650; font-size: 15px; margin-bottom: 4px; }
+.popup-lines { display: flex; gap: 6px; }
+.chip { color: #fff; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }

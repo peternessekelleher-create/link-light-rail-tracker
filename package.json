@@ -1,0 +1,11 @@
+{
+  "name": "link-light-rail-tracker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check.js"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
+  }
+}

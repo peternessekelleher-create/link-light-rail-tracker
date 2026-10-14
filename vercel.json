@@ -1,0 +1,6 @@
+{
+  "outputDirectory": "public",
+  "functions": {
+    "api/link.js": { "maxDuration": 60 }
+  }
+}
