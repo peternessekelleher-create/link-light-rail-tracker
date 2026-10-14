@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "node scripts/dev.js",
     "check": "node scripts/check.js"
   },
   "dependencies": {
