@@ -3,16 +3,20 @@ import routesLayer from './layers/routes.js';
 import stationsLayer from './layers/stations.js';
 import trainsLayer from './layers/trains.js';
 import st3Layer from './layers/st3.js';
+import reachLayer from './layers/reach.js';
 import { renderControls } from './ui/controls.js';
 import { renderHeadways } from './ui/headways.js';
 import { renderSt3Panel } from './ui/st3panel.js';
-import { createAltCard } from './ui/altcard.js';
+import { createReachBox } from './ui/reachbox.js';
+import { createStationCard } from './ui/stationcard.js';
 import { view } from './lib/view.js';
 import { loadSt3, st3 } from './lib/st3.js';
+import { reachView } from './lib/reach.js';
+import { loadConnections } from './lib/data.js';
 
 // Map layers, drawn in this order. Future layers (history, ridership) are new
-// modules with the same { add(map, data) } shape. The ST3 layer is appended
-// once its data has loaded.
+// modules with the same { add(map, data) } shape. The ST3 and reach layers
+// are appended once their data has loaded.
 const LAYERS = [basemapLayer, routesLayer, stationsLayer, trainsLayer];
 
 // Every map layer that belongs to the live Link group, for its master switch.
@@ -20,7 +24,7 @@ const LIVE_LAYERS = ['link-routes-casing', 'link-routes', 'link-stations', 'link
 
 const ATTRIBUTION = [
   '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ST3 Station Anchors © OpenStreetMap Contributors (ODbL)</a>',
-  '<a href="https://kingcounty.gov/en/dept/metro/rider-tools/mobile-and-web-apps" target="_blank" rel="noopener">Bus Data: King County Metro GTFS</a>',
+  'Bus Schedules: King County Metro, Sound Transit, Community Transit, Pierce Transit (GTFS)',
 ];
 
 const statusEl = document.getElementById('status');
@@ -66,8 +70,12 @@ const fitPadding = () =>
   NARROW.matches ? { top: 100, bottom: 40, left: 30, right: 30 } : { top: 40, bottom: 40, left: 380, right: 350 };
 
 async function main() {
-  // ST3 data is optional: if it fails, the live map still works.
-  const st3Model = loadSt3().catch((err) => {
+  // Bus and ST3 data are optional: if they fail, the live map still works.
+  const connP = loadConnections().catch((err) => {
+    console.error(err);
+    return null;
+  });
+  const st3Model = connP.then((conn) => conn && loadSt3(conn)).catch((err) => {
     console.error(err);
     return null;
   });
@@ -93,17 +101,17 @@ async function main() {
   renderHeadways(data);
   setupGroups();
 
-  const model = await st3Model;
+  const [conn, model] = await Promise.all([connP, st3Model]);
   const st3Body = document.getElementById('st3-body');
   if (model) {
-    st3.init(model);
-    const card = createAltCard(model);
-    renderSt3Panel(model, st3Body, { openCard: card.open, openCompare: card.compare });
-    LAYERS.push(st3Layer(model, { onSelect: (id) => card.open(id) }));
+    renderSt3Panel(model, st3Body);
+    LAYERS.push(st3Layer(model));
   } else {
     st3Body.innerHTML = '<p class="error-text">Future Network Data Unavailable</p>';
     document.getElementById('st3-toggle').disabled = true;
   }
+  if (conn) LAYERS.push(setupReach(map, conn, data, !!model));
+  else document.getElementById('reach-box').hidden = true;
 
   const ready = () => {
     for (const layer of LAYERS) layer.add(map, data);
@@ -118,6 +126,29 @@ async function main() {
   };
   if (mapLoaded) ready();
   else map.on('load', ready);
+}
+
+// Station card (click / tap) and bus reach (hover / tap) for every Link and
+// ST3 station in connections.json.
+function setupReach(map, conn, data, withSt3) {
+  const stations = conn.stations.filter((s) => withSt3 || s.kind === 'link');
+  const nameOf = (id) => stations.find((s) => s.id === id)?.name || id;
+  let layer;
+  const card = createStationCard(conn, {
+    lineColors: data.colors,
+    onClose: () => reachView.update((v) => (v.selected = null)),
+    onRouteHover: (id) => layer.highlightRoute(map, id),
+  });
+  const box = createReachBox(document.getElementById('reach-box'), conn.metadata, nameOf);
+  layer = reachLayer(stations, {
+    onSelect: (id) => {
+      if (!id) return card.close();
+      reachView.update((v) => (v.selected = id));
+      card.open(id);
+    },
+    onStatus: box.status,
+  });
+  return layer;
 }
 
 // The two master switches. Children keep their own state while a group is

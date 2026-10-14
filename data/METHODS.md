@@ -7,6 +7,11 @@ Companion to `station_alternatives.geojson` / `.csv` (23 planned-station options
 - **No.** Sound Transit publishes station alternatives only as PDF maps, renderings and engineering plan sheets (EIS Appendix J). No GIS layer or coordinate table for the Ballard Link or West Seattle Link alternatives was found.
 - **Existing stations do have official coordinates.** They are in Sound Transit's GTFS `stops.txt`. The two existing-station reference points in this file (ID/C and SODO) now come from it.
 
+## 1a. Which option the site shows
+
+- **`preferred = true`** marks the one option per station location the site shows: the Board's selected or preferred option (12: CID-DEARBORN, MIDTOWN-NORTH-OF-CID, SODO-1C, DEL-ANDOVER, WSJ-5 and the seven other Ballard Link stations). It is set by hand in `PREFERRED` in `build_station_alternatives.py`, not parsed from the status text, and the build fails if it disagrees with the `selected` roles in `st3_network.json`. Avalon has no preferred option: the station was removed in 2025.
+- The other options stay in the file. The site draws them only when `SHOW_ALTERNATIVES` is turned on in `public/config.js`.
+
 ## 2. How each coordinate was derived
 
 1. **Read the location description.** Each option's wording comes from Sound Transit's own documents (station planning progress reports, the Final EIS, further-study memos), e.g. "elevated station west of Delridge Way SW and north of SW Andover St."

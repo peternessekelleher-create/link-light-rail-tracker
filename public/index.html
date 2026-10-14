@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Link Light Rail Tracker</title>
-  <meta name="description" content="Live Sound Transit Link 1 Line and 2 Line trains, delays and headways on a satellite map, built from the official GTFS feeds.">
+  <meta name="description" content="Live Sound Transit Link trains, the planned ST3 stations, connecting buses and how far you can get by bus in 15 and 30 minutes from any station.">
   <link rel="preconnect" href="https://api.mapbox.com">
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css">
   <link rel="stylesheet" href="style.css">
@@ -76,10 +76,13 @@
     </div>
   </aside>
 
-  <aside id="alt-card" class="card" role="dialog" aria-labelledby="alt-card-title" hidden>
+  <!-- Bus reach: time picker and summary, bottom-left (top on phones) -->
+  <aside id="reach-box" class="reach-box" aria-label="Bus reach"></aside>
+
+  <aside id="station-card" class="card" role="dialog" aria-labelledby="station-card-title" hidden>
     <div class="card-head">
-      <h2 id="alt-card-title"></h2>
-      <button class="close" type="button" data-close-card aria-label="Close card">×</button>
+      <h2 id="station-card-title"></h2>
+      <button class="close" type="button" data-close-card aria-label="Close station">×</button>
     </div>
     <div class="card-body" data-body></div>
   </aside>

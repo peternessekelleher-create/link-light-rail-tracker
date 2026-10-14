@@ -75,3 +75,20 @@ def simplify(coords, tol_m):
             keep[idx] = True
             stack += [(i, idx), (idx, j)]
     return [c for c, k in zip(coords, keep) if k]
+
+
+def encode_polyline(coords, precision=5):
+    """Google encoded polyline for [(lat, lon), ...]. Decoded in the browser
+    by public/lib/polyline.js. About 4-6 bytes per point."""
+    factor = 10 ** precision
+    out, plat, plon = [], 0, 0
+    for lat, lon in coords:
+        ilat, ilon = round(lat * factor), round(lon * factor)
+        for v in (ilat - plat, ilon - plon):
+            v = ~(v << 1) if v < 0 else v << 1
+            while v >= 0x20:
+                out.append(chr((0x20 | (v & 0x1F)) + 63))
+                v >>= 5
+            out.append(chr(v + 63))
+        plat, plon = ilat, ilon
+    return "".join(out)

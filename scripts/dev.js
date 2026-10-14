@@ -6,7 +6,7 @@ import { readFile } from 'node:fs/promises';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PUBLIC_DATA } from './copy-data.js';
+import { PUBLIC_DATA, PUBLIC_DATA_DIRS } from './copy-data.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const PORT = Number(process.env.PORT) || 3000;
@@ -32,11 +32,12 @@ createServer(async (req, res) => {
       res.json = (body) => (res.setHeader('Content-Type', 'application/json'), res.end(JSON.stringify(body)));
       return await handler(req, res);
     }
-    // /data/<file> is served from data/ (Vercel copies these at build time).
-    const data = pathname.match(/^\/data\/([\w.-]+)$/);
-    if (data && PUBLIC_DATA.includes(data[1])) {
-      const body = await readFile(join(root, 'data', data[1]));
-      res.writeHead(200, { 'Content-Type': TYPES[extname(data[1])] });
+    // /data/<file> and /data/reach/<file> are served from data/ (Vercel
+    // copies these at build time).
+    const data = pathname.match(/^\/data\/(?:([\w-]+)\/)?([\w.-]+)$/);
+    if (data && (data[1] ? PUBLIC_DATA_DIRS.includes(data[1]) : PUBLIC_DATA.includes(data[2]))) {
+      const body = await readFile(join(root, 'data', data[1] || '', data[2]));
+      res.writeHead(200, { 'Content-Type': TYPES[extname(data[2])] });
       return res.end(body);
     }
     const rel = normalize(pathname === '/' ? '/index.html' : pathname).replace(/^(\.\.[/\\])+/, '');

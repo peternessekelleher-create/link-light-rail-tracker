@@ -29,6 +29,16 @@ from pipeline import osm_anchors  # noqa: E402
 from pipeline.config import DATA, MOVE_WARN_M, ST_RAIL_GTFS_URL  # noqa: E402
 from pipeline.gtfs import Feed  # noqa: E402
 
+# --- Preferred options -----------------------------------------------------
+# The one option per station location the site shows (preferred = true). Set
+# here by hand from the Board actions in the sources, not parsed from the
+# status text. Avalon has none: the station was removed in 2025.
+PREFERRED = {
+    "CID-DEARBORN", "MIDTOWN-NORTH-OF-CID", "SODO-1C", "DEL-ANDOVER", "WSJ-5",
+    "BLE-WESTLAKE", "BLE-DENNY", "BLE-SLU", "BLE-SEATTLE-CENTER",
+    "BLE-SMITH-COVE", "BLE-INTERBAY", "BLE-BALLARD",
+}
+
 # --- Anchor intersections -----------------------------------------------------
 # Names only. Coordinates come from OpenStreetMap via pipeline/osm_anchors.py
 # and are cached in data/anchors_osm.json (rebuild with --rebuild-anchors).
@@ -411,6 +421,7 @@ for alt in ALTS:
     lat, lon, method, anchors = derive_point(alt)
     props = {k: v for k, v in alt.items() if k not in ("derive", "offset_m", "sources")}
     props.update(
+        preferred=alt["id"] in PREFERRED,
         lat=lat, lon=lon,
         coord_source="derived from OpenStreetMap intersections (no official coordinates published)",
         derivation=method,
@@ -419,7 +430,7 @@ for alt in ALTS:
     )
     features.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]}, "properties": props})
     rows.append({
-        "id": alt["id"], "project": alt["project"], "station_area": alt["station_area"], "option": alt["option"],
+        "id": alt["id"], "preferred": alt["id"] in PREFERRED, "project": alt["project"], "station_area": alt["station_area"], "option": alt["option"],
         "status": alt["status"], "structure": alt["structure"], "depth_ft": alt["depth_ft"] or "",
         "lat": lat, "lon": lon, "confidence_m": alt["confidence_m"], "derivation": method,
         "location_text": alt["location_text"], "impacts": alt["impacts"], "sources": " | ".join(S[s] for s in alt["sources"]),
@@ -427,7 +438,7 @@ for alt in ALTS:
 
 for name, (lat, lon) in EXISTING.items():
     features.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]},
-                     "properties": {"id": name, "status": "existing station (reference only)",
+                     "properties": {"id": name, "preferred": False, "status": "existing station (reference only)",
                                     "coord_source": "Sound Transit GTFS stops.txt"}})
 
 with open(out / "station_alternatives.geojson", "w") as f:
@@ -457,7 +468,8 @@ print("Delridge options vs Delridge & Andover:")
 for k in ["DEL-ANDOVER", "DEL-DELRIDGE-WAY", "DEL-DAKOTA"]:
     print(f"  {k:18s} {dist_m(pts[k], A['Delridge Way SW & SW Andover St']):6.0f} m")
 print(f"SODO-1C vs existing SODO: {dist_m(pts['SODO-1C'], EXISTING['SODO (existing)']):.0f} m")
-print(f"{len(rows)} alternatives written")
+print(f"{len(rows)} alternatives written, {sum(r['preferred'] for r in rows)} preferred")
+assert PREFERRED <= {r["id"] for r in rows}, PREFERRED - {r["id"] for r in rows}
 
 # --- Movement since the previous build ---------------------------------------
 after = {**pts, **EXISTING}

@@ -1,8 +1,13 @@
-# Weekly refresh of the ST3 station and bus-connection data.
-# Downloads the King County Metro and Sound Transit GTFS, rebuilds the small
-# files in data/, and commits them if anything changed. The site only reads
-# those committed files; nothing large is deployed.
-name: ST3 data
+# Weekly refresh of the station, bus-connection and bus-reach data.
+# Downloads the King County Metro, Sound Transit, Community Transit and Pierce
+# Transit GTFS, rebuilds the small files in data/ (connections.json,
+# routes.geojson, reach/<station>.json, the ST3 station points) and commits
+# them if anything changed. The site only reads those committed files; the
+# browser never loads raw GTFS.
+#
+# The reach build runs one station per worker process across the runner's
+# cores (pipeline/reach.py); all 51 stations take well under a minute.
+name: Transit data
 
 on:
   schedule:
@@ -10,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       rebuild_anchors:
-        description: Re-query OpenStreetMap for the station anchor intersections
+        description: Re-query OpenStreetMap for the ST3 station anchor intersections
         type: boolean
         default: false
 
@@ -18,7 +23,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: st3-data
+  group: transit-data
   cancel-in-progress: false
 
 jobs:
@@ -45,7 +50,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Weekly ST3 data refresh"
+          git commit -m "Weekly transit data refresh"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 

@@ -7,9 +7,13 @@ An interactive satellite map of Sound Transit's Link **1 Line** and **2 Line**, 
 - **Step 3:** switches for each line and direction, a delay tag beside each train ("+3:20"), and a headway panel comparing live and scheduled train spacing.
 - **Step 4:** car count and passenger capacity in each train's popup, Title Case labels, and higher contrast (Lighthouse accessibility 100, no contrast failures).
 
-- **Step 5:** a layer tree with a "Sound Transit 3 – Future Network" group: Ballard Link and West Seattle Link stations, every station alternative with its accuracy circle, dashed approximate alignments, and the King County Metro routes that connect to each alternative.
+- **Step 5:** a "Sound Transit 3 – Future Network" layer for Ballard Link and West Seattle Link.
+- **Step 6:** groundwork for isochrones.
+  - **One ST3 switch:** it shows only the 12 preferred stations (hollow markers, labelled with their target opening) and a dashed approximate alignment.
+  - **Station card:** click any 1 Line, 2 Line or ST3 station to see its connecting bus routes from every agency.
+  - **Bus reach:** hover a station (tap on a phone) to see where buses take you within 15 and 30 minutes, from schedules, for any day type and time of day.
 
-Later steps will add isochrones (travel-time maps), on-time history and ridership.
+Later steps will add full isochrone polygons, riding Link inside the reach calculation, walk-shed population and jobs, on-time history and ridership.
 
 ## How it works
 
@@ -44,22 +48,89 @@ Browser ──► /api/config   Mapbox token from the MAPBOX_TOKEN env var
     "routes":   [{ "line": "1 Line", "color": "#28813F", "coordinates": [[47.81, -122.29], ...] }]
   }
   ```
-- **Front end:** `public/`, a static page with Mapbox GL JS. Each map layer is a module in `public/layers/` and is registered in `public/app.js`.
+- **Front end:** `public/`, a static page with Mapbox GL JS. Each map layer is a module in `public/layers/` and is registered in `public/app.js`. `public/config.js` holds `SHOW_ALTERNATIVES` (false: only preferred ST3 stations are drawn) and the reach colors.
 
-## ST3 future network data
+## Transit data (stations, buses, reach)
 
-The site reads four small files from `data/` (copied to `public/data/` by the Vercel build, `scripts/copy-data.js`). They are rebuilt every Monday by a GitHub Action (`.github/workflows/st3-data.yml`), which commits them only when something changed:
+A Python build (`pipeline/`, standard library only) downloads the GTFS feeds, computes everything, and writes small files to `data/`. The Vercel build copies them to `public/data/` (`scripts/copy-data.js`). A GitHub Action (`.github/workflows/st3-data.yml`) reruns it every Monday and commits the files only when something changed. Nothing runs on your computer, and the browser never loads raw GTFS.
 
-| File | What |
-|---|---|
-| `st3_network.json` | Hand-maintained tree: projects, stations, panel labels, which option is selected, alignment order |
-| `station_alternatives.geojson` | One point per alternative, built by `data/build_station_alternatives.py` from OpenStreetMap intersections ([METHODS.md](data/METHODS.md)) |
-| `st3_bus_routes.geojson` | Each connecting Metro route: number, name, RapidRide, weekday midday trips/hour, whole-route shape (most common per direction), and the stations/alternatives it connects to |
-| `st3_bus_connections.json` | `station_id → alternative_id → routes`, with each route's nearest stop and distance |
+```sh
+python -m pipeline.build                    # everything (about 30 s)
+python -m pipeline.build --rebuild-anchors  # also re-query OpenStreetMap for the ST3 anchors
+python -m pipeline.build --only link-C27    # reach for some stations only
+python -m pipeline.check_agencies           # any other agency with stops near a station?
+```
 
-- **Connects:** any stop of the route within `CONNECT_RADIUS_M` (400 m) of the alternative, for every alternative, not just the selected one. All constants are in `pipeline/config.py`.
-- **Run it by hand:** `python -m pipeline.build` (add `--rebuild-anchors` to re-query OpenStreetMap). It prints the station → alternative → routes table, the CID route differences and the sanity checks, and exits non-zero if a check fails. Standard-library Python only.
-- **Modules:** `pipeline/gtfs.py` is a feed-agnostic GTFS reader, so a synthetic GTFS for the ST3 lines can reuse it before going to r5py or OpenTripPlanner.
+It prints the station → route table and the checks, and it exits non-zero if a check fails. Every constant lives in `pipeline/config.py`: radii, walking speed, windows and feeds.
+
+### Feeds and IDs
+
+| Prefix | Feed | Carries |
+|---|---|---|
+| `kcm:` | King County Metro, `metro.kingcounty.gov/GTFS/google_transit.zip` | Metro, plus the ST Express routes Metro operates (522, 542, 545, 547, 556, 566) |
+| `st:` | Sound Transit, `gtfs.sound.obaweb.org/prod/40_gtfs.zip` | Link and Sounder (used for the station list); its only buses are Link shuttle bus bridges, which are excluded |
+| `ct:` | Community Transit, `communitytransit.org/.../current.zip` | CT, including Swift, plus the ST Express routes CT operates (510–535) |
+| `pt:` | Pierce Transit, `gtfs.sound.obaweb.org/prod/3_gtfs.zip` | PT, including Stream, plus the ST Express routes PT operates (560–597) |
+
+- **IDs:** every stop, trip, route, service and shape ID is written as `<prefix>:<original id>`. The prefix is the source feed, not the agency, because Sound Transit (agency 40) appears in all four feeds. The panel groups routes by the real agency name.
+- **Station IDs:** `link-<parent stop_id>` for the 39 existing stations (e.g. `link-C27`, Othello) and `st3-<station id>` for the 12 preferred ST3 stations (e.g. `st3-ballard`). ST3 IDs follow the station, not the option, so they survive a change of preferred option.
+- **Pattern IDs:** `<route_id>:<direction>:<8-hex hash of the stop sequence>`. They stay stable while the stops don't change.
+- **Other agencies:** `pipeline.check_agencies` looks for other agencies with stops near a station. In October 2026, Everett Transit and Intercity Transit had none. Seattle Children's hospital shuttle has stops near Univ of Washington and U District, but its feed expired in July 2024, so it isn't included.
+- **Buses only:** routes of `route_type` 3 or 11. Link, Sounder, streetcar, monorail, water taxi and ferries are excluded.
+
+### Files
+
+| File | What | Size (gzip) |
+|---|---|---|
+| `connections.json` | Every station (id, name, kind, lines or ST3 project, opening, coordinates) with its connecting routes grouped by agency: number, name, BRT brand, weekday midday trips/hr, nearest stop and distance. `metadata` holds the feed versions, representative dates, time windows and reach constants. | 13 KB |
+| `routes.geojson` | Each connecting route's shape (most common per direction on the representative weekday). Loaded only when a card is open. | 130 KB |
+| `reach/<station id>.json` | Bus reach for all 15 time windows (format below) | 9–70 KB each, median 21 KB |
+| `station_alternatives.geojson` | All 23 ST3 options with `preferred`; see [METHODS.md](data/METHODS.md) | |
+| `st3_network.json` | Hand-maintained: projects, colors, phases, opening labels, alignment order | |
+
+### Connecting routes
+
+- **Connects:** a route connects to a station if any of its stops is within `CONNECT_RADIUS_M` (400 m, straight line) and it runs on at least one of the three representative dates.
+- **Trips per hour:** trips calling at the route's nearby stops on the representative weekday, from 9 am to 3 pm (the Midday window), counted once per trip, in the busier direction.
+- **BRT:** detected from `route_short_name`. KCM `A Line`–`H Line` are RapidRide, CT `Swift …` are Swift, PT `STCL` is Stream, and `S1`–`S3` would be ST Stride.
+
+### Bus reach (15 / 30 minutes)
+
+- **Total time:** walk + wait + ride, optionally plus one transfer (walk + wait + ride). A stop counts only if the whole trip fits.
+- **Walking:** straight-line distance × 1.3 at 80 m/min. Leaving the station adds 2 minutes (platform to street). Access stops must be within 400 m of the station and transfer walks within 250 m. All of these are constants.
+- **Schedules:** wait and ride times come from the published `stop_times`, not live data. `pickup_type` and `drop_off_type` are respected.
+- **Windows:** 3 day types × 5 periods, in Seattle time. Day types are Weekday, Saturday and Sunday. Periods are AM rush 6–9, Midday 9–15, PM rush 15–18, Evening 18–22 and Night 22–01. The Night window uses the next day's early trips.
+- **Representative dates:** for each day type, the first date on or after the latest feed start date when every feed runs at least 90% of its usual bus trips for that weekday. That skips holidays, and an unchanged set of feeds gives the same dates every week. Currently those are Wed 2026-10-07, Sat 2026-10-03 and Sun 2026-10-04.
+- **Algorithm:** RAPTOR limited to 2 rounds (`pipeline/raptor.py`), run for departures from the station every 5 minutes across the window.
+- **Median:** each stop keeps the median total over the samples, and a sample that misses 30 minutes counts as too long. With an even number of samples it's the lower median, so the time is one a rider actually gets, and the stored path is that sample's path. Bands: at most 15 minutes, or at most 30.
+- **Transfers:** a second ride on the same route but a different trip pattern is allowed. Short-turn and through-routed trips (e.g. a 50 that ends at Seward Park and one that starts there) are a real change of trip, and ruling them out cut Othello's reach by a fifth.
+- **Why rush can reach more than midday:** at 4 of the 5 checked stations, rush hour reaches more stops. This comes from the schedules. Ballard's D Line runs every 8 minutes at rush and every 10 at midday, and its AM run to downtown is scheduled 2 minutes faster. Westlake also gains peak-only routes (510, 577, 590, 13).
+
+### Reach file format
+
+All arrays; windows refer to the tables by index.
+
+```js
+{
+  "v": 1,
+  "station": { "id": "link-C27", "name": "Othello", "kind": "link", "lat": 47.538, "lon": -122.281 },
+  "access_stops": 11,
+  "stops":    [["kcm:1234", "S Othello St & MLK Jr Way S", 47.5378, -122.2817], ...],
+  "routes":   [["kcm:100210", "36", "King County Metro", null], ...],   // [id, number, agency, BRT brand]
+  "patterns": [["kcm:100210:0:3f2a91c0", 1], ...],                      // [pattern id, route]
+  "hops":     [[pattern, stop position, "encoded polyline"], ...],      // route shape between two consecutive stops
+  "windows": {
+    "weekday-pm": {
+      "date": "2026-10-07", "samples": 36, "departures": 155,           // bus departures from the access stops
+      "routes": 6, "stops15": 18, "stops30": 157,
+      "reached":  [[stop, minutes, band 15|30, transfer 0|1, [[pattern, board stop, alight stop], ...]], ...],
+      "segments": [[hop, band 15|30, transfer 0|1], ...]                 // ridden pieces to draw
+    }, ...
+  }
+}
+```
+
+Polylines are Google's encoded format, precision 5 (`public/lib/polyline.js`). The page loads a station's file on first hover and caches it.
 
 ## Deploy
 

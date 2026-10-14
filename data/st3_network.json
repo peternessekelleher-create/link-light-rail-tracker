@@ -5,6 +5,7 @@
       "id": "ballard",
       "name": "Ballard Link",
       "subtitle": "Phase 1 Funded, Target 2042",
+      "opening": { "1": "Ballard Link Phase 1 – 2042", "2": "Ballard Link Phase 2 – unfunded" },
       "color": "#B678D9",
       "alignment": ["sodo", "cid", "midtown", "westlake", "denny", "slu", "seattle-center", "smith-cove", "interbay", "ballard"],
       "stations": [
@@ -39,6 +40,7 @@
       "id": "west-seattle",
       "name": "West Seattle Link",
       "subtitle": "Target 2035",
+      "opening": { "1": "West Seattle Link – 2035" },
       "color": "#F0A04B",
       "alignment": ["alaska-junction", "delridge", "sodo"],
       "stations": [
