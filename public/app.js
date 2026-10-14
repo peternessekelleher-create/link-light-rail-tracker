@@ -1,9 +1,10 @@
 import routesLayer from './layers/routes.js';
 import stationsLayer from './layers/stations.js';
+import trainsLayer from './layers/trains.js';
 
-// Map layers, drawn in this order. Future layers (live trains, history,
-// ridership) are new modules with the same { add(map, data) } shape.
-const LAYERS = [routesLayer, stationsLayer];
+// Map layers, drawn in this order. Future layers (history, ridership) are new
+// modules with the same { add(map, data) } shape.
+const LAYERS = [routesLayer, stationsLayer, trainsLayer];
 
 const statusEl = document.getElementById('status');
 const setStatus = (msg, isError = false) => {

@@ -16,6 +16,13 @@
   <header class="panel">
     <h1>Link Light Rail</h1>
     <ul id="legend" class="legend"></ul>
+    <ul class="legend legend-trains">
+      <li><span class="dot live"></span>Live train</li>
+      <li><span class="dot ghost"></span>Scheduled position</li>
+    </ul>
+    <label class="toggle"><input type="checkbox" id="ghost-toggle" checked> Show ghost trains</label>
+    <p id="live-status" class="live-status" role="status"></p>
+    <p id="live-banner" class="banner" role="alert" hidden>Live data temporarily unavailable</p>
     <p id="status" class="status" role="status">Loading map…</p>
   </header>
 </body>
