@@ -1,0 +1,59 @@
+# Weekly refresh of the ST3 station and bus-connection data.
+# Downloads the King County Metro and Sound Transit GTFS, rebuilds the small
+# files in data/, and commits them if anything changed. The site only reads
+# those committed files; nothing large is deployed.
+name: ST3 data
+
+on:
+  schedule:
+    - cron: "23 12 * * 1" # Mondays 12:23 UTC (5:23 am Pacific in summer)
+  workflow_dispatch:
+    inputs:
+      rebuild_anchors:
+        description: Re-query OpenStreetMap for the station anchor intersections
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: st3-data
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build data
+        run: python -m pipeline.build ${{ inputs.rebuild_anchors && '--rebuild-anchors' || '' }}
+
+      - name: Commit changes
+        id: commit
+        run: |
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Weekly ST3 data refresh"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Vercel may not deploy commits made by the Actions bot. If a deploy hook
+      # is saved as the VERCEL_DEPLOY_HOOK repository secret, call it.
+      - name: Trigger Vercel deploy
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$HOOK" ]; then curl -fsS -X POST "$HOOK" > /dev/null && echo "Deploy hook called."; else echo "No VERCEL_DEPLOY_HOOK secret; relying on Vercel's Git integration."; fi
