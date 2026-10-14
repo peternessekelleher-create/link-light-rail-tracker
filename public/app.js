@@ -1,6 +1,8 @@
 import routesLayer from './layers/routes.js';
 import stationsLayer from './layers/stations.js';
-import trainsLayer from './layers/trains.js';
+import trainsLayer, { liveCrowding } from './layers/trains.js';
+import simTrainsLayer, { loadSimulated } from './layers/simtrains.js';
+import { loadCrowding } from './lib/crowding.js';
 import st3Layer from './layers/st3.js';
 import reachLayer from './layers/reach.js';
 import focusLayer, { applyLayerOrder } from './layers/focus.js';
@@ -12,8 +14,9 @@ import { createStationCard } from './ui/stationcard.js';
 import { setupMethods } from './ui/methods.js';
 import { view } from './lib/view.js';
 import { loadSt3, st3 } from './lib/st3.js';
-import { reachView } from './lib/reach.js';
+import { reachView, currentWindow } from './lib/reach.js';
 import { loadConnections } from './lib/data.js';
+import { NOTES } from './config.js';
 
 // Map layers, drawn in this order. Future layers (history, ridership) are new
 // modules with the same { add(map, data) } shape. The ST3 and reach layers
@@ -21,7 +24,7 @@ import { loadConnections } from './lib/data.js';
 const LAYERS = [routesLayer, stationsLayer, trainsLayer];
 
 // Every map layer that belongs to the live Link group, for its master switch.
-const LIVE_LAYERS = ['link-routes-casing', 'link-routes', 'link-stations', 'link-station-labels', 'link-gaps', 'link-ghosts', 'link-trains', 'link-train-tags'];
+const LIVE_LAYERS = ['link-routes-casing', 'link-routes', 'link-stations', 'link-station-labels', 'link-gaps', 'link-ghosts', 'link-trains', 'link-train-arrows', 'link-train-tags'];
 
 const ATTRIBUTION = [
   '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ST3 Station Anchors © OpenStreetMap Contributors (ODbL)</a>',
@@ -102,7 +105,14 @@ async function main() {
   renderHeadways(data);
   setupGroups();
 
-  const [conn, model] = await Promise.all([connP, st3Model]);
+  // Crowding and simulated trains are optional too.
+  const soft = (p) => p.catch((err) => (console.error(err), null));
+  const [conn, model, crowding, sim] = await Promise.all([connP, st3Model, soft(loadCrowding()), soft(loadSimulated())]);
+  if (conn && crowding) {
+    // Live trains use the window covering the current time in Seattle.
+    liveCrowding.doc = crowding;
+    liveCrowding.window = () => currentWindow(conn.metadata);
+  }
   const st3Body = document.getElementById('st3-body');
   if (model) {
     renderSt3Panel(model, st3Body);
@@ -114,6 +124,7 @@ async function main() {
   if (conn) {
     const stations = conn.stations.filter((s) => model || s.kind === 'link');
     LAYERS.push(setupReach(map, conn, data, stations));
+    if (model && sim) LAYERS.push(simTrainsLayer(sim, crowding, sim.metadata, () => currentWindow(conn.metadata)));
     // Last: it dims layers the others added, and sets the final layer order.
     LAYERS.push(focusLayer(stations, data.stations));
   } else document.getElementById('reach-box').hidden = true;
@@ -190,6 +201,7 @@ function setupGroups() {
 // script listed first, so it is already loaded here.
 setupDrawers();
 setupMethods();
+for (const el of document.querySelectorAll('[data-note]')) el.textContent = NOTES[el.dataset.note];
 main().catch((err) => {
   console.error(err);
   setStatus(err.message, true);

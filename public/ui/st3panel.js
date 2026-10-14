@@ -23,6 +23,8 @@ export function renderSt3Panel(model, root) {
         .join('')}
     </ul>
     <p class="st3-note">${model.stations.length} planned stations (preferred options). Lines are approximate; Phase 2 is drawn fainter.</p>
+    <ul class="legend-sim"><li><span class="mk sim" aria-hidden="true"></span>Simulated future trains</li></ul>
+    <p class="note">${escapeHtml(NOTES.simulated)}</p>
     <p class="note">${escapeHtml(NOTES.futureLocation)}</p>
     <p class="note">${escapeHtml(NOTES.futureBuses)}</p>`;
 }

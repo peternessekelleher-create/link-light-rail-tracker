@@ -1,0 +1,40 @@
+station_id,name,weekday_boardings,period,source,note
+link-S07,Federal Way Downtown,5000,2026,STB_2026_06,"""nearly 5,000"" weekday boardings; the 2025 figure (3,500) covers only the first weeks after opening"
+link-S05,Star Lake,2000,2026,STB_2026_06,"""approaching 2,000""; 2025 figure (659) covers only the first weeks after opening"
+link-S03,Kent Des Moines,2000,2026,STB_2026_06,"""approaching 2,000""; 2025 figure (770) covers only the first weeks after opening"
+link-S01,Angle Lake,5000,2025,ST_SPT_2025,
+link-C37,SeaTac/Airport,10118,2025,ST_SPT_2025,
+link-C35,Tukwila Int'l Blvd,3880,2025,ST_SPT_2025,
+link-C29,Rainier Beach,1778,2025,ST_SPT_2025,
+link-C27,Othello,2606,2025,ST_SPT_2025,
+link-C25,Columbia City,2334,2025,ST_SPT_2025,
+link-C23,Mount Baker,2575,2025,ST_SPT_2025,
+link-C19,Beacon Hill,3005,2025,ST_SPT_2025,
+link-C15,SODO,2055,2025,ST_SPT_2025,
+link-C13,Stadium,2003,2025,ST_SPT_2025,
+link-C09,Int'l Dist/Chinatown,5701,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-C07,Pioneer Square,3558,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-C05,Symphony,5261,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-C03,Westlake,12548,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N03,Capitol Hill,9715,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N05,Univ of Washington,5827,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N07,U District,7526,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N09,Roosevelt,3993,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N11,Northgate,4213,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N13,Pinehurst,1500,assumption,ASSUMPTION,"No published figure; assumed similar to Shoreline South/148th (1,535)"
+link-N15,Shoreline South/148th,1535,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N17,Shoreline North/185th,1311,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N19,Mountlake Terrace,1612,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-N23,Lynnwood City Center,4330,2025,ST_SPT_2025,shared 1/2 Line; the 13 Lynnwood–CID stations are scaled together to the April 2026 total (TRUNK_2026_TOTAL)
+link-E01,Judkins Park,2130,2026-04,STB_2026_06,opened with the Crosslake Connection (Mar 2026)
+link-E07,Mercer Island,1723,2026-04,STB_2026_06,opened with the Crosslake Connection (Mar 2026)
+link-E09,South Bellevue,902,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E11,East Main,208,2025,ST_SPT_2025,"before the Crosslake Connection; STB reports +647% since; likely low"
+link-E15,Bellevue Downtown,1303,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E19,Wilburton,931,2026,STB_2026_06,"""931 passengers each weekday"""
+link-E21,Spring District,637,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E23,BelRed,461,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E25,Overlake Village,477,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E27,Redmond Technology,898,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E29,Marymoor Village,549,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"
+link-E31,Downtown Redmond,1476,2025,ST_SPT_2025,"before the Crosslake Connection; likely low for 2026"

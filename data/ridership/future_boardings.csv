@@ -1,0 +1,13 @@
+station_id,name,daily_boardings_2042,source,note
+st3-alaska-junction,Alaska Junction,7600,WSLE_FEIS_CH6,
+st3-delridge,Delridge,5400,WSLE_FEIS_CH6,
+st3-sodo,SODO New Platforms,7400,WSBLE_DEIS_CH3,"New SODO station only (Table 3-4: 7,400 new + 7,200 existing = 14,600). Split evenly between the two simulated lines, which both end here."
+st3-cid,CID Station,10000,WSBLE_DEIS_CH3,"Midpoint of 9,000-11,000 (Table 3-17, new station); forecast predates Dearborn St as the preferred site"
+st3-midtown,North Of CID / Midtown,15500,WSBLE_DEIS_CH3,Table 3-18 (DT-1)
+st3-westlake,Westlake New Platforms,28700,WSBLE_DEIS_CH3,Table 3-18 (DT-1)
+st3-denny,Denny,15300,WSBLE_DEIS_CH3,Table 3-18 (DT-1)
+st3-slu,South Lake Union,10500,WSBLE_DEIS_CH3,Table 3-18 (DT-1)
+st3-seattle-center,Seattle Center,11300,WSBLE_DEIS_CH3,Table 3-18 (DT-1)
+st3-smith-cove,Smith Cove,2600,WSBLE_DEIS_CH3,Section 3.12.3.3.5
+st3-interbay,Interbay,4200,WSBLE_DEIS_CH3,Table 3-19
+st3-ballard,Ballard,13100,WSBLE_DEIS_CH3,Table 3-19

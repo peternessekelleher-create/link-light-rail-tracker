@@ -9,6 +9,8 @@ export const PUBLIC_DATA = [
   'station_alternatives.geojson',
   'connections.json',
   'routes.geojson',
+  'crowding.json',
+  'simulated_trains.json',
   'HOW_IT_WORKS.md',
   'METHODS.md',
 ];

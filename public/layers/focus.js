@@ -22,7 +22,7 @@ export const LAYER_ORDER = [
   'link-routes-casing', 'link-routes',
   'reach-stops',
   'link-stations', 'st3-marker-halo', 'st3-markers', 'st3-alt-markers',
-  'link-gaps', 'link-ghosts', 'sim-trains', 'link-trains',
+  'link-gaps', 'link-ghosts', 'sim-trains', 'link-trains', 'link-train-arrows',
   'link-station-labels', 'st3-labels', 'st3-alt-labels', 'reach-labels', 'sim-train-tags', 'link-train-tags',
   'station-hit',
 ];
@@ -40,6 +40,7 @@ const FADES = [
   { id: 'link-gaps', props: ['line-opacity'], k: DIM.trains },
   { id: 'link-ghosts', props: ['icon-opacity'], k: DIM.trains },
   { id: 'link-trains', props: ['icon-opacity'], k: DIM.trains },
+  { id: 'link-train-arrows', props: ['icon-opacity'], k: DIM.trains },
   { id: 'link-train-tags', props: ['text-opacity'], k: DIM.trains },
   { id: 'sim-trains', props: ['icon-opacity'], k: DIM.trains },
   { id: 'sim-train-tags', props: ['text-opacity'], k: DIM.trains },

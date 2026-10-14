@@ -15,7 +15,7 @@ import subprocess
 import sys
 import time
 
-from . import connections, reach, report
+from . import connections, crowding, reach, report
 from .config import (
     BANDS_MIN, DAY_TYPES, DATA, MAX_RIDES, PERIODS, SAMPLE_EVERY_MIN, STATION_EXIT_MIN,
     TIMEZONE, TRANSFER_RADIUS_FT, ACCESS_RADIUS_FT, WALK_DETOUR, WALK_SPEED_FT_PER_MIN, WORKERS,
@@ -71,6 +71,12 @@ def main():
     print(f"Reach for {len(todo)} stations in {time.time() - t:.0f}s on {WORKERS} workers")
 
     ok = report.run(net, stations, conn, results, dates)
+
+    t = time.time()
+    crowd = crowding.build(net, dates, conn)
+    print(f"\nCrowding model in {time.time() - t:.0f}s: trunk scaled x{crowd['trunk_k']:.2f}, "
+          f"1 Line direction odds rebalanced x{crowd['balance_k']:.2f}")
+    ok &= crowding.report(crowd)
 
     if not args.skip_walksheds:
         from . import walksheds

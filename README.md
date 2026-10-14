@@ -11,6 +11,7 @@ An interactive map of Sound Transit's Link **1 Line** and **2 Line**, built live
 - **Step 6:** groundwork for isochrones (M1–M3 below).
 - **M1:** every distance is in feet (miles above 5,280 ft), on Mapbox's dark basemap. Disclaimers are small print, and a "How this works" panel explains the methods.
 - **M2:** bus reach in red, with the time picker (described below).
+- **M4:** simulated future trains on Ballard Link and West Seattle Link, plus estimated typical crowding. Every train marker, live and simulated, fills to its estimated load, and hovering shows "Est. 78% full · Crowded". The model is in `pipeline/crowding.py`, its outputs are `data/crowding.json` and `data/simulated_trains.json`, and its inputs and sources are in `data/ridership/`.
 - **M3:** 5- and 10-minute walk sheds in green. Focus mode: hover a station to preview it, and click to pin it. Everything else dims (other stations 25%, lines 30%, trains 40%) and the basemap darkens. Esc or a click on empty map clears the pin.
   - **One ST3 switch:** it shows only the 12 preferred stations (hollow markers, labelled with their target opening) and a dashed approximate alignment.
   - **Station card:** click any 1 Line, 2 Line or ST3 station to see its connecting bus routes from every agency.

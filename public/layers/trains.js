@@ -9,6 +9,9 @@ import { measure, pointAt, sliceLine, scheduledDist } from '../lib/motion.js';
 import { ON_TIME_S, DELAY_COLORS, formatDelay, delayClass } from '../lib/delay.js';
 import { view, liveFeed } from '../lib/view.js';
 import { trainCapacity } from '../lib/capacity.js';
+import { addLiveTrainIcons } from '../lib/trainicons.js';
+import { directionKey, fillLevel, loadText, trainLoad } from '../lib/crowding.js';
+import { NOTES } from '../config.js';
 
 const POLL_MS = 15 * 1000;
 const MAX_BACKOFF_MS = 2 * 60 * 1000;
@@ -22,6 +25,10 @@ const GHOSTS_KEY = 'link-tracker:show-ghosts';
 
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+// Estimated typical crowding, set by app.js once data/crowding.json loads:
+// { doc, window: () => current window id }. Until then markers are empty.
+export const liveCrowding = { doc: null, window: () => null };
 
 export default {
   add(map, data) {
@@ -43,6 +50,7 @@ export default {
     };
 
     addIcons(map, data.colors);
+    addLiveTrainIcons(map, data.colors);
     addLayers(map);
     ui.toggle.checked = showGhosts;
     ui.toggle.addEventListener('change', () => {
@@ -56,7 +64,7 @@ export default {
     // Line and direction switches act as map filters: instant, no re-fetch.
     view.subscribe(() => {
       const shown = ['in', ['get', 'key'], ['literal', view.visibleKeys()]];
-      for (const id of ['link-trains', 'link-ghosts', 'link-gaps']) map.setFilter(id, shown);
+      for (const id of ['link-trains', 'link-train-arrows', 'link-ghosts', 'link-gaps']) map.setFilter(id, shown);
       map.setFilter('link-train-tags', ['all', shown, ['!=', ['get', 'tag'], '']]);
     });
 
@@ -67,8 +75,29 @@ export default {
       popupTrainId = e.features[0].properties.id;
       renderPopup(Date.now() / 1000, true);
     });
-    map.on('mouseenter', 'link-trains', () => (map.getCanvas().style.cursor = 'pointer'));
-    map.on('mouseleave', 'link-trains', () => (map.getCanvas().style.cursor = ''));
+    // Hover: "Est. 78% full · Crowded".
+    const tip = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 14, className: 'tip' });
+    map.on('mousemove', 'link-trains', (e) => {
+      map.getCanvas().style.cursor = 'pointer';
+      const t = trains.get(e.features[0].properties.id);
+      const load = t && crowdingOf(t);
+      if (!load) return tip.remove();
+      tip.setLngLat(t.at).setHTML(`<strong>${escapeHtml(t.line)}</strong> · ${loadText(load)}`).addTo(map);
+    });
+    map.on('mouseleave', 'link-trains', () => {
+      map.getCanvas().style.cursor = '';
+      tip.remove();
+    });
+
+    // The crowding model's direction for each train, matched by name.
+    const dirKeys = new Map();
+    function crowdingOf(t) {
+      const doc = liveCrowding.doc;
+      if (!doc) return null;
+      const k = `${t.line}|${t.dir}`;
+      if (!dirKeys.has(k)) dirKeys.set(k, directionKey(doc, t.line, t.dir, data.directions?.[t.line]?.[t.dir]));
+      return t.at ? trainLoad(doc, t.line, dirKeys.get(k), t.at[0], t.at[1], liveCrowding.window()) : null;
+    }
 
     // ---- Polling ----------------------------------------------------------
 
@@ -119,7 +148,7 @@ export default {
         // the track, instead of jumping.
         if (prev && prev.shapeId === t.shapeId && prev.drawn != null) {
           const corr = prev.drawn - targetDist(next, now);
-          if (Math.abs(corr) < 3000) Object.assign(next, { corr, corrAt: performance.now() });
+          if (Math.abs(corr) < 9_800) Object.assign(next, { corr, corrAt: performance.now() });
         }
         trains.set(t.id, next);
       }
@@ -152,7 +181,7 @@ export default {
         live.push(point(t.at, {
           id,
           key,
-          icon: `train:${t.line}`,
+          icon: `train:${t.line}:${fillLevel(crowdingOf(t))}`,
           bearing: p.bearing,
           opacity: stale ? 0.45 : 1,
           tag: stale ? '' : formatDelay(t.delay),
@@ -205,10 +234,13 @@ export default {
           field('Max Capacity', `${cap.maxLoad.toLocaleString()} People`) +
           `<div class="popup-note">Capacity uses Sound Transit's planning standard.</div>`
         : '';
+      const load = crowdingOf(t);
+      const crowd = load ? field('Crowding', loadText(load)) + `<div class="note">${escapeHtml(NOTES.crowding)}</div>` : '';
       const html =
         `<div class="popup-name"><span class="chip" style="background:${data.colors[t.line]}">${escapeHtml(t.line)}</span> To ${escapeHtml(t.headsign)}</div>` +
         `<div class="train-status ${delayClass(t.delay)}">${delayText(t.delay)}</div>` +
         next +
+        crowd +
         capacity +
         `<div class="muted popup-updated">${age > STALE_AFTER_S ? `Last Seen ${Math.round(age / 60)} Min Ago` : `Updated ${age} Sec Ago`}</div>`;
       popup.setLngLat(t.at);
@@ -282,7 +314,13 @@ function addLayers(map) {
     paint: extra,
   });
   map.addLayer(symbol('link-ghosts'));
-  map.addLayer(symbol('link-trains', { 'icon-opacity': ['get', 'opacity'] }));
+  // Live trains: the body (crowding fill level) stays upright so the fill
+  // rises on screen; the direction arrow rotates on its own layer above it.
+  const body = symbol('link-trains', { 'icon-opacity': ['get', 'opacity'] });
+  delete body.layout['icon-rotate'];
+  delete body.layout['icon-rotation-alignment'];
+  map.addLayer(body);
+  map.addLayer({ ...symbol('link-train-arrows', { 'icon-opacity': ['get', 'opacity'] }), source: 'link-trains', layout: { ...symbol('x').layout, 'icon-image': 'train-arrow' } });
 
   // Delay tags beside each train. Tags may hide each other where trains
   // crowd (downtown); the train icons above ignore placement, so they always show.

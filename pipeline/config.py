@@ -137,6 +137,49 @@ WALK_HIGHWAYS = {
 WALK_OK_FOOT = {"yes", "designated", "permissive"}
 WALK_EXCLUDE_ACCESS = {"no", "private"}
 
+# --- Crowding (estimated typical, not live) ----------------------------------
+# Inputs: data/ridership/*.csv (sources in data/ridership/SOURCES.md) and the
+# Seattle Transit Blog's May 2025 1 Line counts by direction (downloaded).
+RIDERSHIP_DIR = DATA / "ridership"
+STB_1LINE_URL = "https://seattletransitblog.com/wp-content/uploads/2025/08/1LineMay2025Data.csv"
+# The 13 Lynnwood-CID stations (2025 averages) are scaled together to this
+# April 2026 total, after the 2 Line began crossing the lake (STB_2026_06).
+TRUNK_2026_TOTAL = 98_300
+# Per car, Sound Transit's loading standards (ST_CAPACITY). Load % is riders
+# per train / (cars x CAR_TARGET_MAX_LOAD).
+CAR_SEATS = 74
+CAR_PLANNING_LOAD = 148  # 74 seated + 74 standing
+CAR_TARGET_MAX_LOAD = 194  # 74 seated + 120 standing
+# Cars per train: 1 Line four-car; 2 Line a mix of two- and three-car
+# (URBANIST_2026_03); simulated ST3 lines assumed four-car.
+CARS = {"1 Line": 4, "2 Line": 2.5, "sim": 4}
+# Crowding levels: (id, label, upper bound in % of target max load). The
+# bounds are the seats (74/194 = 38%), planning load (148/194 = 76%) and
+# target max load (100%).
+CROWDING_LEVELS = [
+    ("seats", "Seats available", round(100 * CAR_SEATS / CAR_TARGET_MAX_LOAD)),
+    ("some", "Some standing", round(100 * CAR_PLANNING_LOAD / CAR_TARGET_MAX_LOAD)),
+    ("crowded", "Crowded", 100),
+    ("very", "Very crowded", None),
+]
+# Assumed weekday ridership by period, as a share of the day (the hours
+# outside the periods, 1-6 am, carry the remaining 3%).
+WEEKDAY_PROFILE = {"am": 0.22, "midday": 0.30, "pm": 0.24, "evening": 0.15, "night": 0.06}
+# Assumed weekend daily ridership relative to a weekday.
+WEEKEND_FACTOR = {"weekday": 1.0, "saturday": 0.75, "sunday": 0.62}
+# The STB direction counts are raw passenger-counter totals and come out
+# about 2.6:1 northbound. Each station's north/south pattern is kept but
+# rescaled so a whole day balances (most riders return the way they came).
+BALANCE_DIRECTIONS = True
+# Stations missing from the STB data borrow another station's direction split.
+DIRECTION_PROXY = {"link-S05": "link-C35", "link-S03": "link-C35", "link-N13": "link-N11"}
+
+# --- Simulated future trains (Ballard Link, West Seattle Link) ------------
+# Headway: the 1 Line's scheduled headway in each window. Speed: the 1 Line's
+# average scheduled speed between stations, plus a dwell at every station.
+SIM_DWELL_S = 30
+SIM_HEADWAY_STATION = "C03"  # Westlake, where 1 Line headways are measured
+
 # --- Output ------------------------------------------------------------------
 # Bus shapes are simplified to this tolerance to keep files small.
 SHAPE_SIMPLIFY_FT = 13
