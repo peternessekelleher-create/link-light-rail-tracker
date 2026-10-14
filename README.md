@@ -7,7 +7,9 @@ An interactive satellite map of Sound Transit's Link **1 Line** and **2 Line**, 
 - **Step 3:** switches for each line and direction, a delay tag beside each train ("+3:20"), and a headway panel comparing live and scheduled train spacing.
 - **Step 4:** car count and passenger capacity in each train's popup, Title Case labels, and higher contrast (Lighthouse accessibility 100, no contrast failures).
 
-Later steps will add on-time history and ridership.
+- **Step 5:** a layer tree with a "Sound Transit 3 – Future Network" group: Ballard Link and West Seattle Link stations, every station alternative with its accuracy circle, dashed approximate alignments, and the King County Metro routes that connect to each alternative.
+
+Later steps will add isochrones (travel-time maps), on-time history and ridership.
 
 ## How it works
 
@@ -44,9 +46,24 @@ Browser ──► /api/config   Mapbox token from the MAPBOX_TOKEN env var
   ```
 - **Front end:** `public/`, a static page with Mapbox GL JS. Each map layer is a module in `public/layers/` and is registered in `public/app.js`.
 
+## ST3 future network data
+
+The site reads four small files from `data/` (copied to `public/data/` by the Vercel build, `scripts/copy-data.js`). They are rebuilt every Monday by a GitHub Action (`.github/workflows/st3-data.yml`), which commits them only when something changed:
+
+| File | What |
+|---|---|
+| `st3_network.json` | Hand-maintained tree: projects, stations, panel labels, which option is selected, alignment order |
+| `station_alternatives.geojson` | One point per alternative, built by `data/build_station_alternatives.py` from OpenStreetMap intersections ([METHODS.md](data/METHODS.md)) |
+| `st3_bus_routes.geojson` | Each connecting Metro route: number, name, RapidRide, weekday midday trips/hour, whole-route shape (most common per direction), and the stations/alternatives it connects to |
+| `st3_bus_connections.json` | `station_id → alternative_id → routes`, with each route's nearest stop and distance |
+
+- **Connects:** any stop of the route within `CONNECT_RADIUS_M` (400 m) of the alternative, for every alternative, not just the selected one. All constants are in `pipeline/config.py`.
+- **Run it by hand:** `python -m pipeline.build` (add `--rebuild-anchors` to re-query OpenStreetMap). It prints the station → alternative → routes table, the CID route differences and the sanity checks, and exits non-zero if a check fails. Standard-library Python only.
+- **Modules:** `pipeline/gtfs.py` is a feed-agnostic GTFS reader, so a synthetic GTFS for the ST3 lines can reuse it before going to r5py or OpenTripPlanner.
+
 ## Deploy
 
-1. Import this repo in the Vercel dashboard. The defaults are fine: no framework, no build command (`vercel.json` sets the output directory to `public`).
+1. Import this repo in the Vercel dashboard. The defaults are fine: `vercel.json` sets the build command (copy the ST3 data files) and the output directory (`public`).
 2. Add the environment variables `MAPBOX_TOKEN` (your Mapbox public `pk.` token) and `ONEBUSAWAY_API_KEY` (`TEST` until your own key arrives), then redeploy. Changing the key later needs only a new value and a redeploy.
 3. In your Mapbox account, restrict the token's URLs to your Vercel domain.
 

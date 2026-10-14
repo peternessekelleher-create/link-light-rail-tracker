@@ -1,0 +1,80 @@
+{
+  "_comment": "Layer-tree structure for the ST3 group. Positions and attributes come from station_alternatives.geojson (by alternative id); this file only says how they group, what they're called in the panel, and which option the approximate alignment goes through. role: selected | alternative | removed.",
+  "projects": [
+    {
+      "id": "ballard",
+      "name": "Ballard Link",
+      "subtitle": "Phase 1 Funded, Target 2042",
+      "color": "#B678D9",
+      "alignment": ["sodo", "cid", "midtown", "westlake", "denny", "slu", "seattle-center", "smith-cove", "interbay", "ballard"],
+      "stations": [
+        {
+          "id": "cid",
+          "name": "CID Station",
+          "alternatives": [
+            { "id": "CID-DEARBORN", "label": "Dearborn St", "short": "Dearborn", "role": "selected", "roleLabel": "Preferred" },
+            { "id": "CID-5TH-DIAG", "label": "5th Ave Shallow Diagonal", "short": "5th Ave", "role": "alternative" },
+            { "id": "CID-4TH-SHALLOW", "label": "4th Ave Shallow", "short": "4th Ave", "role": "alternative" }
+          ]
+        },
+        { "id": "midtown", "name": "North Of CID / Midtown", "note": "Pairs With Dearborn",
+          "alternatives": [{ "id": "MIDTOWN-NORTH-OF-CID", "label": "North Of CID / Midtown", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "westlake", "name": "Westlake New Platforms",
+          "alternatives": [{ "id": "BLE-WESTLAKE", "label": "Westlake New Platforms", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "denny", "name": "Denny",
+          "alternatives": [{ "id": "BLE-DENNY", "label": "Denny", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "slu", "name": "South Lake Union",
+          "alternatives": [{ "id": "BLE-SLU", "label": "South Lake Union", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "seattle-center", "name": "Seattle Center",
+          "alternatives": [{ "id": "BLE-SEATTLE-CENTER", "label": "Seattle Center", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "smith-cove", "name": "Smith Cove", "phase": 2,
+          "alternatives": [{ "id": "BLE-SMITH-COVE", "label": "Smith Cove", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "interbay", "name": "Interbay", "phase": 2,
+          "alternatives": [{ "id": "BLE-INTERBAY", "label": "Interbay", "role": "selected", "roleLabel": "Preferred" }] },
+        { "id": "ballard", "name": "Ballard", "phase": 2,
+          "alternatives": [{ "id": "BLE-BALLARD", "label": "Ballard", "role": "selected", "roleLabel": "Preferred" }] }
+      ]
+    },
+    {
+      "id": "west-seattle",
+      "name": "West Seattle Link",
+      "subtitle": "Target 2035",
+      "color": "#F0A04B",
+      "alignment": ["alaska-junction", "delridge", "sodo"],
+      "stations": [
+        { "id": "sodo", "name": "SODO New Platforms",
+          "alternatives": [{ "id": "SODO-1C", "label": "SODO New Platforms", "role": "selected", "roleLabel": "Selected" }] },
+        {
+          "id": "delridge",
+          "name": "Delridge",
+          "alternatives": [
+            { "id": "DEL-ANDOVER", "label": "Andover St", "short": "Andover", "role": "selected", "roleLabel": "Selected" },
+            { "id": "DEL-DAKOTA", "label": "Dakota St", "short": "Dakota", "role": "alternative" },
+            { "id": "DEL-DELRIDGE-WAY", "label": "Delridge Way", "short": "Delridge Way", "role": "alternative" }
+          ]
+        },
+        {
+          "id": "avalon",
+          "name": "Avalon",
+          "removed": "Removed 2025",
+          "alternatives": [
+            { "id": "AVA-BELOW-GRADE", "label": "Below-Grade Under 35th Ave SW", "short": "Below-Grade", "role": "removed", "roleLabel": "Was Selected" },
+            { "id": "AVA-ELEVATED", "label": "Elevated", "short": "Elevated", "role": "removed" }
+          ]
+        },
+        {
+          "id": "alaska-junction",
+          "name": "Alaska Junction",
+          "alternatives": [
+            { "id": "WSJ-5", "label": "WSJ-5b Medium Tunnel 41st", "short": "WSJ-5b", "role": "selected", "roleLabel": "Selected" },
+            { "id": "WSJ-1", "label": "WSJ-1 Elevated 41st/42nd", "short": "WSJ-1", "role": "alternative" },
+            { "id": "WSJ-2", "label": "WSJ-2 Elevated Fauntleroy", "short": "WSJ-2", "role": "alternative" },
+            { "id": "WSJ-3A", "label": "WSJ-3a Tunnel 41st", "short": "WSJ-3a", "role": "alternative" },
+            { "id": "WSJ-3B", "label": "WSJ-3b Tunnel 42nd", "short": "WSJ-3b", "role": "alternative" },
+            { "id": "WSJ-4", "label": "WSJ-4 Short Tunnel 41st", "short": "WSJ-4", "role": "alternative" }
+          ]
+        }
+      ]
+    }
+  ]
+}

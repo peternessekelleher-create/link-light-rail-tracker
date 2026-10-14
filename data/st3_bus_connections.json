@@ -1,0 +1,1794 @@
+{
+ "metadata": {
+  "source": "King County Metro GTFS, http://metro.kingcounty.gov/GTFS/google_transit.zip",
+  "feed_version": "FAL26-161.2",
+  "feed_start_date": "20260928",
+  "feed_end_date": "20270326",
+  "connect_radius_m": 400,
+  "midday_window": "10:00-14:00",
+  "representative_weekday": "2026-09-30",
+  "note": "Bus routes shown are today's network. King County Metro will restructure service when these stations open."
+ },
+ "stations": {
+  "cid": {
+   "CID-DEARBORN": [
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100263",
+     "number": "7",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 323
+    },
+    {
+     "route_id": "100039",
+     "number": "14",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 323
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "30636",
+     "stop_name": "4th Ave S & I-90 Ramp",
+     "distance_m": 226
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100210",
+     "number": "36",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 323
+    },
+    {
+     "route_id": "100003",
+     "number": "101",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100487",
+     "number": "102",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100005",
+     "number": "106",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 323
+    },
+    {
+     "route_id": "100023",
+     "number": "124",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100030",
+     "number": "131",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100031",
+     "number": "132",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    },
+    {
+     "route_id": "100045",
+     "number": "150",
+     "stop_id": "30635",
+     "stop_name": "4th Ave S & S Royal Brougham Way",
+     "distance_m": 281
+    }
+   ],
+   "CID-5TH-DIAG": [
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "515",
+     "stop_name": "3rd Ave S & S Main St",
+     "distance_m": 327
+    },
+    {
+     "route_id": "102615",
+     "number": "E Line",
+     "stop_id": "625",
+     "stop_name": "S Washington St & 4th Ave S",
+     "distance_m": 311
+    },
+    {
+     "route_id": "100001",
+     "number": "1",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100089",
+     "number": "2",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100173",
+     "number": "3",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100219",
+     "number": "4",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100263",
+     "number": "7",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 89
+    },
+    {
+     "route_id": "100028",
+     "number": "13",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100039",
+     "number": "14",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 89
+    },
+    {
+     "route_id": "100062",
+     "number": "17",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100161",
+     "number": "27",
+     "stop_id": "1360",
+     "stop_name": "Yesler Way & 5th Ave",
+     "distance_m": 380
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100210",
+     "number": "36",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 89
+    },
+    {
+     "route_id": "102574",
+     "number": "40",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100447",
+     "number": "49",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100252",
+     "number": "62",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 143
+    },
+    {
+     "route_id": "100264",
+     "number": "70",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 114
+    },
+    {
+     "route_id": "100003",
+     "number": "101",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 149
+    },
+    {
+     "route_id": "100487",
+     "number": "102",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 149
+    },
+    {
+     "route_id": "100005",
+     "number": "106",
+     "stop_id": "844",
+     "stop_name": "5th Ave S & S Weller St",
+     "distance_m": 89
+    },
+    {
+     "route_id": "100023",
+     "number": "124",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100030",
+     "number": "131",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100031",
+     "number": "132",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 219
+    },
+    {
+     "route_id": "100045",
+     "number": "150",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 149
+    },
+    {
+     "route_id": "102754",
+     "number": "256",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 149
+    }
+   ],
+   "CID-4TH-SHALLOW": [
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "515",
+     "stop_name": "3rd Ave S & S Main St",
+     "distance_m": 229
+    },
+    {
+     "route_id": "102615",
+     "number": "E Line",
+     "stop_id": "515",
+     "stop_name": "3rd Ave S & S Main St",
+     "distance_m": 229
+    },
+    {
+     "route_id": "100001",
+     "number": "1",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100089",
+     "number": "2",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100173",
+     "number": "3",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100219",
+     "number": "4",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100263",
+     "number": "7",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100028",
+     "number": "13",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100039",
+     "number": "14",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100062",
+     "number": "17",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100161",
+     "number": "27",
+     "stop_id": "1340",
+     "stop_name": "Yesler Way & Prefontaine Pl S",
+     "distance_m": 363
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100210",
+     "number": "36",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "102574",
+     "number": "40",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100447",
+     "number": "49",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 108
+    },
+    {
+     "route_id": "100252",
+     "number": "62",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100264",
+     "number": "70",
+     "stop_id": "1530",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100003",
+     "number": "101",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 46
+    },
+    {
+     "route_id": "100487",
+     "number": "102",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 46
+    },
+    {
+     "route_id": "100005",
+     "number": "106",
+     "stop_id": "1471",
+     "stop_name": "S Jackson St & 5th Ave S",
+     "distance_m": 108
+    },
+    {
+     "route_id": "100023",
+     "number": "124",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100030",
+     "number": "131",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100031",
+     "number": "132",
+     "stop_id": "619",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 158
+    },
+    {
+     "route_id": "100045",
+     "number": "150",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 46
+    },
+    {
+     "route_id": "102754",
+     "number": "256",
+     "stop_id": "620",
+     "stop_name": "4th Ave S & S Jackson St",
+     "distance_m": 46
+    },
+    {
+     "route_id": "7994",
+     "number": "Easy Loop",
+     "stop_id": "1370",
+     "stop_name": "Yesler Way & 3rd Ave",
+     "distance_m": 380
+    }
+   ]
+  },
+  "midtown": {
+   "MIDTOWN-NORTH-OF-CID": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "1710",
+     "stop_name": "Terrace St & 5th Ave",
+     "distance_m": 148
+    },
+    {
+     "route_id": "102615",
+     "number": "E Line",
+     "stop_id": "1610",
+     "stop_name": "Prefontaine Pl S & Yesler Way",
+     "distance_m": 166
+    },
+    {
+     "route_id": "102736",
+     "number": "H Line",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "100001",
+     "number": "1",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "100089",
+     "number": "2",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "100173",
+     "number": "3",
+     "stop_id": "1540",
+     "stop_name": "James St & 5th Ave",
+     "distance_m": 80
+    },
+    {
+     "route_id": "100219",
+     "number": "4",
+     "stop_id": "1540",
+     "stop_name": "James St & 5th Ave",
+     "distance_m": 80
+    },
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100263",
+     "number": "7",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "100028",
+     "number": "13",
+     "stop_id": "1540",
+     "stop_name": "James St & 5th Ave",
+     "distance_m": 80
+    },
+    {
+     "route_id": "100039",
+     "number": "14",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "100062",
+     "number": "17",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100161",
+     "number": "27",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100210",
+     "number": "36",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "102574",
+     "number": "40",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100447",
+     "number": "49",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "100242",
+     "number": "56",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "100252",
+     "number": "62",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100264",
+     "number": "70",
+     "stop_id": "500",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 165
+    },
+    {
+     "route_id": "100003",
+     "number": "101",
+     "stop_id": "640",
+     "stop_name": "4th Ave & James St",
+     "distance_m": 43
+    },
+    {
+     "route_id": "100487",
+     "number": "102",
+     "stop_id": "640",
+     "stop_name": "4th Ave & James St",
+     "distance_m": 43
+    },
+    {
+     "route_id": "100012",
+     "number": "113",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "100020",
+     "number": "121",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "100023",
+     "number": "124",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100024",
+     "number": "125",
+     "stop_id": "481",
+     "stop_name": "3rd Ave & Columbia St",
+     "distance_m": 290
+    },
+    {
+     "route_id": "100030",
+     "number": "131",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100031",
+     "number": "132",
+     "stop_id": "531",
+     "stop_name": "3rd Ave & James St",
+     "distance_m": 142
+    },
+    {
+     "route_id": "100045",
+     "number": "150",
+     "stop_id": "640",
+     "stop_name": "4th Ave & James St",
+     "distance_m": 43
+    },
+    {
+     "route_id": "102754",
+     "number": "256",
+     "stop_id": "640",
+     "stop_name": "4th Ave & James St",
+     "distance_m": 43
+    },
+    {
+     "route_id": "7994",
+     "number": "Easy Loop",
+     "stop_id": "1370",
+     "stop_name": "Yesler Way & 3rd Ave",
+     "distance_m": 151
+    }
+   ]
+  },
+  "westlake": {
+   "BLE-WESTLAKE": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "431",
+     "stop_name": "3rd Ave & Pike St",
+     "distance_m": 238
+    },
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "431",
+     "stop_name": "3rd Ave & Pike St",
+     "distance_m": 238
+    },
+    {
+     "route_id": "102615",
+     "number": "E Line",
+     "stop_id": "431",
+     "stop_name": "3rd Ave & Pike St",
+     "distance_m": 238
+    },
+    {
+     "route_id": "102736",
+     "number": "H Line",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100001",
+     "number": "1",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100089",
+     "number": "2",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100173",
+     "number": "3",
+     "stop_id": "1110",
+     "stop_name": "Pine St & 5th Ave",
+     "distance_m": 9
+    },
+    {
+     "route_id": "100219",
+     "number": "4",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100263",
+     "number": "7",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100002",
+     "number": "10",
+     "stop_id": "1110",
+     "stop_name": "Pine St & 5th Ave",
+     "distance_m": 9
+    },
+    {
+     "route_id": "100009",
+     "number": "11",
+     "stop_id": "1110",
+     "stop_name": "Pine St & 5th Ave",
+     "distance_m": 9
+    },
+    {
+     "route_id": "100018",
+     "number": "12",
+     "stop_id": "1110",
+     "stop_name": "Pine St & 5th Ave",
+     "distance_m": 9
+    },
+    {
+     "route_id": "100028",
+     "number": "13",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100039",
+     "number": "14",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100062",
+     "number": "17",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100161",
+     "number": "27",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100210",
+     "number": "36",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "102574",
+     "number": "40",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100447",
+     "number": "49",
+     "stop_id": "1110",
+     "stop_name": "Pine St & 5th Ave",
+     "distance_m": 9
+    },
+    {
+     "route_id": "100242",
+     "number": "56",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100252",
+     "number": "62",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100264",
+     "number": "70",
+     "stop_id": "430",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 207
+    },
+    {
+     "route_id": "100003",
+     "number": "101",
+     "stop_id": "700",
+     "stop_name": "4th Ave & Pike St",
+     "distance_m": 100
+    },
+    {
+     "route_id": "100487",
+     "number": "102",
+     "stop_id": "700",
+     "stop_name": "4th Ave & Pike St",
+     "distance_m": 100
+    },
+    {
+     "route_id": "100012",
+     "number": "113",
+     "stop_id": "433",
+     "stop_name": "3rd Ave & Pike St",
+     "distance_m": 297
+    },
+    {
+     "route_id": "100020",
+     "number": "121",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100023",
+     "number": "124",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100024",
+     "number": "125",
+     "stop_id": "575",
+     "stop_name": "3rd Ave & Pike St",
+     "distance_m": 242
+    },
+    {
+     "route_id": "100030",
+     "number": "131",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100031",
+     "number": "132",
+     "stop_id": "590",
+     "stop_name": "3rd Ave & Pine St",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100045",
+     "number": "150",
+     "stop_id": "700",
+     "stop_name": "4th Ave & Pike St",
+     "distance_m": 100
+    },
+    {
+     "route_id": "102754",
+     "number": "256",
+     "stop_id": "700",
+     "stop_name": "4th Ave & Pike St",
+     "distance_m": 100
+    },
+    {
+     "route_id": "7994",
+     "number": "Easy Loop",
+     "stop_id": "200",
+     "stop_name": "1st Ave & Pine St",
+     "distance_m": 383
+    }
+   ]
+  },
+  "denny": {
+   "BLE-DENNY": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "26690",
+     "stop_name": "Westlake & 9th-Denny",
+     "distance_m": 32
+    },
+    {
+     "route_id": "102615",
+     "number": "E Line",
+     "stop_id": "6236",
+     "stop_name": "7th Ave N & Denny Way",
+     "distance_m": 377
+    },
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "6236",
+     "stop_name": "7th Ave N & Denny Way",
+     "distance_m": 377
+    },
+    {
+     "route_id": "100275",
+     "number": "8",
+     "stop_id": "2255",
+     "stop_name": "Denny Way & Westlake Ave",
+     "distance_m": 22
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "6236",
+     "stop_name": "7th Ave N & Denny Way",
+     "distance_m": 377
+    },
+    {
+     "route_id": "102574",
+     "number": "40",
+     "stop_id": "26690",
+     "stop_name": "Westlake & 9th-Denny",
+     "distance_m": 32
+    },
+    {
+     "route_id": "100252",
+     "number": "62",
+     "stop_id": "6220",
+     "stop_name": "7th Ave & Blanchard St",
+     "distance_m": 233
+    },
+    {
+     "route_id": "100264",
+     "number": "70",
+     "stop_id": "900",
+     "stop_name": "Virginia St & 9th Ave",
+     "distance_m": 321
+    },
+    {
+     "route_id": "102754",
+     "number": "256",
+     "stop_id": "900",
+     "stop_name": "Virginia St & 9th Ave",
+     "distance_m": 321
+    },
+    {
+     "route_id": "100177",
+     "number": "303",
+     "stop_id": "900",
+     "stop_name": "Virginia St & 9th Ave",
+     "distance_m": 321
+    },
+    {
+     "route_id": "102729",
+     "number": "322",
+     "stop_id": "900",
+     "stop_name": "Virginia St & 9th Ave",
+     "distance_m": 321
+    },
+    {
+     "route_id": "7994",
+     "number": "Easy Loop",
+     "stop_id": "900",
+     "stop_name": "Virginia St & 9th Ave",
+     "distance_m": 321
+    }
+   ]
+  },
+  "slu": {
+   "BLE-SLU": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "26645",
+     "stop_name": "Westlake & Thomas",
+     "distance_m": 394
+    },
+    {
+     "route_id": "102615",
+     "number": "E Line",
+     "stop_id": "6237",
+     "stop_name": "7th Ave N & Harrison St",
+     "distance_m": 25
+    },
+    {
+     "route_id": "100219",
+     "number": "4",
+     "stop_id": "4220",
+     "stop_name": "5th Ave N & Broad St",
+     "distance_m": 297
+    },
+    {
+     "route_id": "100229",
+     "number": "5",
+     "stop_id": "6237",
+     "stop_name": "7th Ave N & Harrison St",
+     "distance_m": 25
+    },
+    {
+     "route_id": "100275",
+     "number": "8",
+     "stop_id": "2249",
+     "stop_name": "Denny Way & 7th Ave N",
+     "distance_m": 383
+    },
+    {
+     "route_id": "100169",
+     "number": "28",
+     "stop_id": "6237",
+     "stop_name": "7th Ave N & Harrison St",
+     "distance_m": 25
+    },
+    {
+     "route_id": "102574",
+     "number": "40",
+     "stop_id": "26645",
+     "stop_name": "Westlake & Thomas",
+     "distance_m": 394
+    },
+    {
+     "route_id": "100252",
+     "number": "62",
+     "stop_id": "18455",
+     "stop_name": "Dexter Ave N & Harrison St",
+     "distance_m": 115
+    }
+   ]
+  },
+  "seattle-center": {
+   "BLE-SEATTLE-CENTER": [
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "2672",
+     "stop_name": "Queen Anne Ave N & W Mercer St",
+     "distance_m": 126
+    },
+    {
+     "route_id": "100001",
+     "number": "1",
+     "stop_id": "2672",
+     "stop_name": "Queen Anne Ave N & W Mercer St",
+     "distance_m": 126
+    },
+    {
+     "route_id": "100089",
+     "number": "2",
+     "stop_id": "2672",
+     "stop_name": "Queen Anne Ave N & W Mercer St",
+     "distance_m": 126
+    },
+    {
+     "route_id": "100275",
+     "number": "8",
+     "stop_id": "2672",
+     "stop_name": "Queen Anne Ave N & W Mercer St",
+     "distance_m": 126
+    },
+    {
+     "route_id": "100028",
+     "number": "13",
+     "stop_id": "2672",
+     "stop_name": "Queen Anne Ave N & W Mercer St",
+     "distance_m": 126
+    },
+    {
+     "route_id": "100062",
+     "number": "17",
+     "stop_id": "19470",
+     "stop_name": "Elliott Ave W & 4th Ave W",
+     "distance_m": 345
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "19470",
+     "stop_name": "Elliott Ave W & 4th Ave W",
+     "distance_m": 345
+    },
+    {
+     "route_id": "100193",
+     "number": "32",
+     "stop_id": "2672",
+     "stop_name": "Queen Anne Ave N & W Mercer St",
+     "distance_m": 126
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "19470",
+     "stop_name": "Elliott Ave W & 4th Ave W",
+     "distance_m": 345
+    }
+   ]
+  },
+  "smith-cove": {
+   "BLE-SMITH-COVE": [
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "14090",
+     "stop_name": "Elliott Ave W & W Galer St",
+     "distance_m": 26
+    },
+    {
+     "route_id": "100001",
+     "number": "1",
+     "stop_id": "2090",
+     "stop_name": "10th Ave W & W Galer St",
+     "distance_m": 383
+    },
+    {
+     "route_id": "100132",
+     "number": "24",
+     "stop_id": "13870",
+     "stop_name": "Elliott Ave W & W Galer St",
+     "distance_m": 42
+    },
+    {
+     "route_id": "100193",
+     "number": "32",
+     "stop_id": "14090",
+     "stop_name": "Elliott Ave W & W Galer St",
+     "distance_m": 26
+    },
+    {
+     "route_id": "100194",
+     "number": "33",
+     "stop_id": "13870",
+     "stop_name": "Elliott Ave W & W Galer St",
+     "distance_m": 42
+    }
+   ]
+  },
+  "interbay": {
+   "BLE-INTERBAY": [
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "13800",
+     "stop_name": "15th Ave W & W Dravus St",
+     "distance_m": 157
+    },
+    {
+     "route_id": "100193",
+     "number": "32",
+     "stop_id": "13800",
+     "stop_name": "15th Ave W & W Dravus St",
+     "distance_m": 157
+    }
+   ]
+  },
+  "ballard": {
+   "BLE-BALLARD": [
+    {
+     "route_id": "102581",
+     "number": "D Line",
+     "stop_id": "14230",
+     "stop_name": "15th Ave NW & NW Market St",
+     "distance_m": 22
+    },
+    {
+     "route_id": "100224",
+     "number": "44",
+     "stop_id": "29215",
+     "stop_name": "NW Market St & 15th Ave NW",
+     "distance_m": 46
+    }
+   ]
+  },
+  "sodo": {
+   "SODO-1C": [
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "99261",
+     "stop_name": "S Lander St & SODO Busway",
+     "distance_m": 100
+    },
+    {
+     "route_id": "100003",
+     "number": "101",
+     "stop_id": "99254",
+     "stop_name": "SODO Busway & S Lander St",
+     "distance_m": 54
+    },
+    {
+     "route_id": "100487",
+     "number": "102",
+     "stop_id": "99254",
+     "stop_name": "SODO Busway & S Lander St",
+     "distance_m": 54
+    },
+    {
+     "route_id": "100030",
+     "number": "131",
+     "stop_id": "30570",
+     "stop_name": "4th Ave S & S Lander St",
+     "distance_m": 93
+    },
+    {
+     "route_id": "100031",
+     "number": "132",
+     "stop_id": "30570",
+     "stop_name": "4th Ave S & S Lander St",
+     "distance_m": 93
+    },
+    {
+     "route_id": "100045",
+     "number": "150",
+     "stop_id": "99254",
+     "stop_name": "SODO Busway & S Lander St",
+     "distance_m": 54
+    }
+   ]
+  },
+  "delridge": {
+   "DEL-ANDOVER": [
+    {
+     "route_id": "102736",
+     "number": "H Line",
+     "stop_id": "21620",
+     "stop_name": "Delridge Way SW & SW Andover St",
+     "distance_m": 129
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "15140",
+     "stop_name": "SW Spokane St & 26th Ave SW",
+     "distance_m": 303
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "21620",
+     "stop_name": "Delridge Way SW & SW Andover St",
+     "distance_m": 129
+    },
+    {
+     "route_id": "100024",
+     "number": "125",
+     "stop_id": "21620",
+     "stop_name": "Delridge Way SW & SW Andover St",
+     "distance_m": 129
+    }
+   ],
+   "DEL-DAKOTA": [
+    {
+     "route_id": "102736",
+     "number": "H Line",
+     "stop_id": "21600",
+     "stop_name": "Delridge Way SW & SW Genesee St",
+     "distance_m": 97
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "21600",
+     "stop_name": "Delridge Way SW & SW Genesee St",
+     "distance_m": 97
+    },
+    {
+     "route_id": "100024",
+     "number": "125",
+     "stop_id": "21600",
+     "stop_name": "Delridge Way SW & SW Genesee St",
+     "distance_m": 97
+    }
+   ],
+   "DEL-DELRIDGE-WAY": [
+    {
+     "route_id": "102736",
+     "number": "H Line",
+     "stop_id": "21990",
+     "stop_name": "Delridge Way SW & SW Andover St",
+     "distance_m": 16
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "21990",
+     "stop_name": "Delridge Way SW & SW Andover St",
+     "distance_m": 16
+    },
+    {
+     "route_id": "100024",
+     "number": "125",
+     "stop_id": "21990",
+     "stop_name": "Delridge Way SW & SW Andover St",
+     "distance_m": 16
+    }
+   ]
+  },
+  "avalon": {
+   "AVA-BELOW-GRADE": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 94
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 94
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 94
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 94
+    }
+   ],
+   "AVA-ELEVATED": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 95
+    },
+    {
+     "route_id": "100101",
+     "number": "21",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 95
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 95
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "22820",
+     "stop_name": "35th Ave SW & SW Avalon Way",
+     "distance_m": 95
+    }
+   ]
+  },
+  "alaska-junction": {
+   "WSJ-5": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "19862",
+     "stop_name": "SW Alaska St & California Ave SW - Bay 1",
+     "distance_m": 206
+    },
+    {
+     "route_id": "100111",
+     "number": "22",
+     "stop_id": "36390",
+     "stop_name": "44th Ave SW & SW Alaska St - Bay 6",
+     "distance_m": 296
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 65
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 255
+    },
+    {
+     "route_id": "100026",
+     "number": "128",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 255
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 65
+    }
+   ],
+   "WSJ-1": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "19862",
+     "stop_name": "SW Alaska St & California Ave SW - Bay 1",
+     "distance_m": 182
+    },
+    {
+     "route_id": "100111",
+     "number": "22",
+     "stop_id": "20050",
+     "stop_name": "California Ave SW & Erskine Way SW",
+     "distance_m": 240
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 92
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 226
+    },
+    {
+     "route_id": "100026",
+     "number": "128",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 226
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 92
+    }
+   ],
+   "WSJ-2": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "33220",
+     "stop_name": "SW Alaska St & Fauntleroy Way SW",
+     "distance_m": 7
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "33220",
+     "stop_name": "SW Alaska St & Fauntleroy Way SW",
+     "distance_m": 7
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "32364",
+     "stop_name": "SW Alaska St & Fauntleroy Way SW",
+     "distance_m": 34
+    }
+   ],
+   "WSJ-3A": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "19862",
+     "stop_name": "SW Alaska St & California Ave SW - Bay 1",
+     "distance_m": 206
+    },
+    {
+     "route_id": "100111",
+     "number": "22",
+     "stop_id": "36390",
+     "stop_name": "44th Ave SW & SW Alaska St - Bay 6",
+     "distance_m": 296
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 65
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 255
+    },
+    {
+     "route_id": "100026",
+     "number": "128",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 255
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 65
+    }
+   ],
+   "WSJ-3B": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "19862",
+     "stop_name": "SW Alaska St & California Ave SW - Bay 1",
+     "distance_m": 106
+    },
+    {
+     "route_id": "100111",
+     "number": "22",
+     "stop_id": "36390",
+     "stop_name": "44th Ave SW & SW Alaska St - Bay 6",
+     "distance_m": 196
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "20040",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 14
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 155
+    },
+    {
+     "route_id": "100026",
+     "number": "128",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 155
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "20040",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 14
+    }
+   ],
+   "WSJ-4": [
+    {
+     "route_id": "102576",
+     "number": "C Line",
+     "stop_id": "19862",
+     "stop_name": "SW Alaska St & California Ave SW - Bay 1",
+     "distance_m": 227
+    },
+    {
+     "route_id": "100111",
+     "number": "22",
+     "stop_id": "20050",
+     "stop_name": "California Ave SW & Erskine Way SW",
+     "distance_m": 277
+    },
+    {
+     "route_id": "100230",
+     "number": "50",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 112
+    },
+    {
+     "route_id": "100246",
+     "number": "57",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 273
+    },
+    {
+     "route_id": "100026",
+     "number": "128",
+     "stop_id": "31811",
+     "stop_name": "SW Alaska St & 44th Ave SW - Bay 2",
+     "distance_m": 273
+    },
+    {
+     "route_id": "100272",
+     "number": "773",
+     "stop_id": "19875",
+     "stop_name": "SW Alaska St & 42nd Ave SW",
+     "distance_m": 112
+    }
+   ]
+  }
+ }
+}

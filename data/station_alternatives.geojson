@@ -1,0 +1,1275 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "crs": "EPSG:4326",
+    "attribution": "Anchor intersections (c) OpenStreetMap contributors, ODbL",
+    "note": "Planned-station points are derived approximations; see derivation and confidence_m on each feature."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.326193,
+          47.595041
+        ]
+      },
+      "properties": {
+        "id": "CID-DEARBORN",
+        "project": "Ballard Link",
+        "station_area": "Chinatown-International District",
+        "option": "Dearborn Street (preferred, formerly 'South of CID')",
+        "status": "Board preferred alternative (2023); in Draft EIS",
+        "structure": "tunnel",
+        "depth_ft": null,
+        "location_text": "Beneath 6th Avenue South, straddling Seattle Boulevard South (ST, Nov 2024).",
+        "confidence_m": 75,
+        "impacts": "6-7 yr construction; 6th Ave S fully closed during station build; Seattle Blvd S (~7,000 veh/day) kept open on decking; building demolition in Stage 1; longest walk to King St Station / existing ID/C transfers. Pairs with a Midtown station north of CID.",
+        "lat": 47.595041,
+        "lon": -122.326193,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 6th Ave S & Seattle Blvd S",
+        "anchor_intersections": [
+          {
+            "name": "6th Ave S & Seattle Blvd S",
+            "lat": 47.5950414,
+            "lon": -122.3261925,
+            "method": "mean of 2 shared nodes",
+            "osm_nodes": [
+              53131120,
+              53131121
+            ],
+            "osm_ways": [
+              8044215,
+              101676426,
+              260316653,
+              428246459
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/Further%20Study-Results-Chinatown-International%20District-Alternatives%20Construction-20241114.pdf",
+          "https://www.soundtransit.org/blog/platform/additional-studies-ballard-link-cid-station-alternatives-wrap",
+          "https://www.theurbanist.org/crucial-ballard-link-deadline-pushed-back-yet-again-by-feds/",
+          "https://iexaminer.org/delays-uncertainty-and-opportunity-as-plans-for-cid-sound-transit-station-continue-to-be-in-flux/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.327027,
+          47.598362
+        ]
+      },
+      "properties": {
+        "id": "CID-5TH-DIAG",
+        "project": "Ballard Link",
+        "station_area": "Chinatown-International District",
+        "option": "5th Avenue Shallow Diagonal",
+        "status": "Studied in Draft EIS; cheapest/fastest; strong CID community opposition",
+        "structure": "tunnel",
+        "depth_ft": 115,
+        "location_text": "Beneath the area between 5th Ave S and 6th Ave S, east of and connected by underground passage to the existing ID/C station; 5th Ave option sits between S Jackson St and S Weller St (ST 2022, 2024).",
+        "confidence_m": 120,
+        "impacts": "5-6 yr construction (shortest); half a block of S King St closed; few business displacements but demolition in the heart of the CID; ~4 escalator flights to transfer at ID/C.",
+        "lat": 47.598362,
+        "lon": -122.327027,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Centroid of the block bounded by 5th Ave S & S Jackson St; 6th Ave S & S Jackson St; 5th Ave S & S Weller St; 6th Ave S & S Weller St",
+        "anchor_intersections": [
+          {
+            "name": "5th Ave S & S Jackson St",
+            "lat": 47.5991995,
+            "lon": -122.3276749,
+            "method": "shared node",
+            "osm_nodes": [
+              53088998
+            ],
+            "osm_ways": [
+              428230594,
+              771933387
+            ]
+          },
+          {
+            "name": "6th Ave S & S Jackson St",
+            "lat": 47.5991955,
+            "lon": -122.3263677,
+            "method": "shared node",
+            "osm_nodes": [
+              53088999
+            ],
+            "osm_ways": [
+              333370568,
+              456870928
+            ]
+          },
+          {
+            "name": "5th Ave S & S Weller St",
+            "lat": 47.5975283,
+            "lon": -122.327686,
+            "method": "shared node",
+            "osm_nodes": [
+              53198834
+            ],
+            "osm_ways": [
+              6477644,
+              736871279
+            ]
+          },
+          {
+            "name": "6th Ave S & S Weller St",
+            "lat": 47.5975244,
+            "lon": -122.3263788,
+            "method": "shared node",
+            "osm_nodes": [
+              53225171
+            ],
+            "osm_ways": [
+              6477644,
+              620596652
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/Further%20Study-Results-Chinatown-International%20District-Alternatives%20Construction-20241114.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-chinatown-international-district.pdf",
+          "https://seattletransitblog.com/2024/11/16/ballard-link-extension-4th-ave-shallow-is-dead-long-live-5th-ave-diagonal/",
+          "https://iexaminer.org/delays-uncertainty-and-opportunity-as-plans-for-cid-sound-transit-station-continue-to-be-in-flux/",
+          "https://www.theurbanist.org/crucial-ballard-link-deadline-pushed-back-yet-again-by-feds/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.328997,
+          47.598403
+        ]
+      },
+      "properties": {
+        "id": "CID-4TH-SHALLOW",
+        "project": "Ballard Link",
+        "station_area": "Chinatown-International District",
+        "option": "4th Avenue Shallow",
+        "status": "Studied in Draft EIS; ST found it technically infeasible (late 2024)",
+        "structure": "tunnel",
+        "depth_ft": 80,
+        "location_text": "Tunnel platform under 4th Ave S, west of the existing ID/C station, between S Jackson St and Seattle Blvd S; entrances at the Weller St pedestrian bridge and the south end of Union Station (ST 2022).",
+        "confidence_m": 120,
+        "impacts": "10-12 yr construction; 4th Ave S fully closed Jackson-Main for ~4 yrs; First Hill Streetcar cut at 4th/Jackson ~2 yrs; ~$600-700M above Dearborn; BNSF rail risk. Best hub connection to King St Station and Union Station.",
+        "lat": 47.598403,
+        "lon": -122.328997,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Midpoint of 4th Ave S & S Jackson St and 4th Ave S & Weller St pedestrian bridge",
+        "anchor_intersections": [
+          {
+            "name": "4th Ave S & S Jackson St",
+            "lat": 47.5992035,
+            "lon": -122.3290202,
+            "method": "shared node",
+            "osm_nodes": [
+              53088997
+            ],
+            "osm_ways": [
+              164242786,
+              1314058343
+            ]
+          },
+          {
+            "name": "4th Ave S & Weller St pedestrian bridge",
+            "lat": 47.5976018,
+            "lon": -122.3289748,
+            "method": "closest approach (8.6 m apart; no shared node)",
+            "osm_nodes": [],
+            "osm_ways": [
+              22927949,
+              1157540906
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/Further%20Study-Results-Chinatown-International%20District-Alternatives%20Construction-20241114.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-chinatown-international-district.pdf",
+          "https://ballardlink.participate.online/cid-further-studies.html",
+          "https://seattletransitblog.com/2024/11/16/ballard-link-extension-4th-ave-shallow-is-dead-long-live-5th-ave-diagonal/",
+          "https://www.theurbanist.org/crucial-ballard-link-deadline-pushed-back-yet-again-by-feds/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.329426,
+          47.603115
+        ]
+      },
+      "properties": {
+        "id": "MIDTOWN-NORTH-OF-CID",
+        "project": "Ballard Link",
+        "station_area": "Midtown / Pioneer Square",
+        "option": "Station north of CID (pairs with Dearborn)",
+        "status": "Part of Board preferred alternative (2023); James St vs Madison St sub-options",
+        "structure": "tunnel",
+        "depth_ft": null,
+        "location_text": "Close to Pioneer Square Station, east of 4th Avenue, between James St and Yesler Way; reported at the King County Administration Building block (ST 2024; Urbanist 2024).",
+        "confidence_m": 120,
+        "impacts": "Requires demolishing the King County Administration Building; James St closed ~4 yrs. A Madison St variant would give easy transfers to RapidRide G.",
+        "lat": 47.603115,
+        "lon": -122.329426,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Centroid of the block bounded by 4th Ave & James St; 5th Ave & James St; 4th Ave & Jefferson St; 5th Ave & Jefferson St",
+        "anchor_intersections": [
+          {
+            "name": "4th Ave & James St",
+            "lat": 47.6032433,
+            "lon": -122.3302856,
+            "method": "shared node",
+            "osm_nodes": [
+              53221906
+            ],
+            "osm_ways": [
+              428243941,
+              450919738
+            ]
+          },
+          {
+            "name": "5th Ave & James St",
+            "lat": 47.6036923,
+            "lon": -122.3291997,
+            "method": "shared node",
+            "osm_nodes": [
+              53221907
+            ],
+            "osm_ways": [
+              428230617,
+              484863624
+            ]
+          },
+          {
+            "name": "4th Ave & Jefferson St",
+            "lat": 47.6025328,
+            "lon": -122.329656,
+            "method": "shared node",
+            "osm_nodes": [
+              53114227
+            ],
+            "osm_ways": [
+              1125561813,
+              1268987447
+            ]
+          },
+          {
+            "name": "5th Ave & Jefferson St",
+            "lat": 47.6029916,
+            "lon": -122.3285633,
+            "method": "shared node",
+            "osm_nodes": [
+              53114228
+            ],
+            "osm_ways": [
+              1268987447,
+              1268987448
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/blog/platform/additional-studies-ballard-link-cid-station-alternatives-wrap",
+          "https://ballardlink.participate.online/cid-further-studies.html",
+          "https://www.theurbanist.org/why-ballard-link-is-still-trapped-in-planning-limbo/",
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://seattletransitblog.com/2024/11/16/ballard-link-extension-4th-ave-shallow-is-dead-long-live-5th-ave-diagonal/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.327989,
+          47.580759
+        ]
+      },
+      "properties": {
+        "id": "SODO-1C",
+        "project": "West Seattle Link + Ballard Link",
+        "station_area": "SODO",
+        "option": "SODO-1c At-Grade Lander Access (selected)",
+        "status": "Selected (Board M2024-59, Oct 2024); footprint reduced in 2025 savings",
+        "structure": "at-grade",
+        "depth_ft": null,
+        "location_text": "New at-grade station just west of the existing SODO Station, reached via the new S Lander St bridge (WSB 2024).",
+        "confidence_m": 80,
+        "impacts": "33 businesses / 240 employees displaced for SODO segment; 14,600 daily boardings (2042, new + existing).",
+        "lat": 47.580759,
+        "lon": -122.327989,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Existing station point: SODO (existing) (Sound Transit GTFS stops.txt), then shifted 35 m south and 45 m west to match the written description",
+        "anchor_intersections": [],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf",
+          "https://westseattleblog.com/2024/10/west-seattle-light-rail-heres-the-sound-transit-route-station-location-recommendations-for-first-of-two-major-votes/",
+          "https://www.westsideseattle.com/robinson-papers/2025/11/24/sound-transit-details-multi-million-dollar-savings-plan-west-seattle"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.364348,
+          47.568792
+        ]
+      },
+      "properties": {
+        "id": "DEL-ANDOVER",
+        "project": "West Seattle Link",
+        "station_area": "Delridge",
+        "option": "Andover Street station (DEL-5, DEL-6a, DEL-6b) - DEL-6b selected",
+        "status": "Selected (DEL-6b, Oct 2024); in final design",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "Elevated station west of Delridge Way SW and north of SW Andover St, oriented NE-SW, just east of Nucor Steel (ST SPPR; WSB 2024).",
+        "confidence_m": 100,
+        "impacts": "DEL-6b: 34 residential, 19 business, 130 employees displaced; 5,400 daily boardings; $700-750M. DEL-5: 114 residential. DEL-6a: 48 residential. Bridge and steel mill limit the walkshed.",
+        "lat": 47.568792,
+        "lon": -122.364348,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Midpoint of Delridge Way SW & SW Andover St and 26th Ave SW & SW Andover St, then shifted 50 m north to match the written description",
+        "anchor_intersections": [
+          {
+            "name": "Delridge Way SW & SW Andover St",
+            "lat": 47.5683489,
+            "lon": -122.3632782,
+            "method": "shared node",
+            "osm_nodes": [
+              53138947
+            ],
+            "osm_ways": [
+              283703697,
+              427904784
+            ]
+          },
+          {
+            "name": "26th Ave SW & SW Andover St",
+            "lat": 47.5683352,
+            "lon": -122.3654179,
+            "method": "shared node",
+            "osm_nodes": [
+              53140447
+            ],
+            "osm_ways": [
+              960880881,
+              1066303714
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-delridge.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf",
+          "https://westseattleblog.com/2024/10/west-seattle-light-rail-heres-the-sound-transit-route-station-location-recommendations-for-first-of-two-major-votes/",
+          "https://westseattlelink.infocommunity.org/wsle-further-studies.html"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.364114,
+          47.565634
+        ]
+      },
+      "properties": {
+        "id": "DEL-DAKOTA",
+        "project": "West Seattle Link",
+        "station_area": "Delridge",
+        "option": "Dakota Street station (DEL-1a, 1b, 2a, 2b)",
+        "status": "Not selected (was 2022 Board preferred, DEL-1a)",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "Elevated station west of Delridge Way SW between SW Dakota St and SW Genesee St, next to Youngstown Cultural Arts Center and Delridge Community Center (ST SPPR).",
+        "confidence_m": 100,
+        "impacts": "93-197 residential, 13-18 business displaced depending on variant; 5,400 daily boardings; $600M-1.05B. Closest to the Youngstown community hub; up to 1.0 mi of visual impact.",
+        "lat": 47.565634,
+        "lon": -122.364114,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Midpoint of Delridge Way SW & SW Dakota St and Delridge Way SW & SW Genesee St, then shifted 60 m west to match the written description",
+        "anchor_intersections": [
+          {
+            "name": "Delridge Way SW & SW Dakota St",
+            "lat": 47.5665438,
+            "lon": -122.3633104,
+            "method": "shared node",
+            "osm_nodes": [
+              53138948
+            ],
+            "osm_ways": [
+              6403944,
+              1413455574
+            ]
+          },
+          {
+            "name": "Delridge Way SW & SW Genesee St",
+            "lat": 47.5647238,
+            "lon": -122.3633198,
+            "method": "shared node",
+            "osm_nodes": [
+              53138949
+            ],
+            "osm_ways": [
+              427904780,
+              960880882
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-delridge.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.363294,
+          47.567446
+        ]
+      },
+      "properties": {
+        "id": "DEL-DELRIDGE-WAY",
+        "project": "West Seattle Link",
+        "station_area": "Delridge",
+        "option": "Delridge Way station (DEL-3, DEL-4)",
+        "status": "Not selected",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "Elevated station on Delridge Way SW north of SW Dakota St, straddling the street, entrances on both sides (ST SPPR).",
+        "confidence_m": 120,
+        "impacts": "70-151 residential, 14-18 business displaced; 5,400 daily boardings; $600-850M. Fewest properties touched, least room for TOD.",
+        "lat": 47.567446,
+        "lon": -122.363294,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Midpoint of Delridge Way SW & SW Dakota St and Delridge Way SW & SW Andover St",
+        "anchor_intersections": [
+          {
+            "name": "Delridge Way SW & SW Dakota St",
+            "lat": 47.5665438,
+            "lon": -122.3633104,
+            "method": "shared node",
+            "osm_nodes": [
+              53138948
+            ],
+            "osm_ways": [
+              6403944,
+              1413455574
+            ]
+          },
+          {
+            "name": "Delridge Way SW & SW Andover St",
+            "lat": 47.5683489,
+            "lon": -122.3632782,
+            "method": "shared node",
+            "osm_nodes": [
+              53138947
+            ],
+            "osm_ways": [
+              283703697,
+              427904784
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-delridge.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.376508,
+          47.564379
+        ]
+      },
+      "properties": {
+        "id": "AVA-ELEVATED",
+        "project": "West Seattle Link",
+        "station_area": "Avalon",
+        "option": "Elevated Avalon (paired with WSJ-1, WSJ-2)",
+        "status": "Not selected; Avalon station removed in 2025",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "Elevated station south of SW Genesee St and east of Fauntleroy Way SW (ST SPPR).",
+        "confidence_m": 80,
+        "impacts": "Station area (10-min walkshed, 2040): ~5,400 residents, 3,200 jobs.",
+        "lat": 47.564379,
+        "lon": -122.376508,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Midpoint of Fauntleroy Way SW & SW Genesee St and 35th Ave SW & SW Genesee St, then shifted 50 m south to match the written description",
+        "anchor_intersections": [
+          {
+            "name": "Fauntleroy Way SW & SW Genesee St",
+            "lat": 47.5647037,
+            "lon": -122.3769158,
+            "method": "shared node",
+            "osm_nodes": [
+              53203125
+            ],
+            "osm_ways": [
+              6470266,
+              49891947
+            ]
+          },
+          {
+            "name": "35th Ave SW & SW Genesee St",
+            "lat": 47.5649545,
+            "lon": -122.3761001,
+            "method": "closest approach (13.0 m apart; no shared node)",
+            "osm_nodes": [],
+            "osm_ways": [
+              31659195,
+              436179803
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-avalon.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.3761,
+          47.564415
+        ]
+      },
+      "properties": {
+        "id": "AVA-BELOW-GRADE",
+        "project": "West Seattle Link",
+        "station_area": "Avalon",
+        "option": "Below-grade Avalon (retained cut under 35th Ave SW; FEIS preferred)",
+        "status": "Selected Oct 2024, then REMOVED in 2025 cost savings",
+        "structure": "retained cut",
+        "depth_ft": null,
+        "location_text": "Lidded retained cut south of SW Genesee St, beneath 35th Ave SW (WSB 2024); 'south side of Fauntleroy Way SW under SW Genesee St and 35th Ave SW' (ST SPPR).",
+        "confidence_m": 80,
+        "impacts": "Removing it saved an estimated $375-470M and 48 residential displacements; ST expects riders to shift to Delridge/Alaska Junction. Cannot be added back later as an infill station.",
+        "lat": 47.564415,
+        "lon": -122.3761,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 35th Ave SW & SW Genesee St, then shifted 60 m south to match the written description",
+        "anchor_intersections": [
+          {
+            "name": "35th Ave SW & SW Genesee St",
+            "lat": 47.5649545,
+            "lon": -122.3761001,
+            "method": "closest approach (13.0 m apart; no shared node)",
+            "osm_nodes": [],
+            "osm_ways": [
+              31659195,
+              436179803
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-avalon.pdf",
+          "https://westseattleblog.com/2024/10/west-seattle-light-rail-heres-the-sound-transit-route-station-location-recommendations-for-first-of-two-major-votes/",
+          "https://www.westsideseattle.com/robinson-papers/2025/11/24/sound-transit-details-multi-million-dollar-savings-plan-west-seattle",
+          "https://www.theurbanist.org/west-seattle-link-date-slips-to-2035-as-sound-transit-greproperty-acquisitions/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.384129,
+          47.561073
+        ]
+      },
+      "properties": {
+        "id": "WSJ-5",
+        "project": "West Seattle Link",
+        "station_area": "Alaska Junction",
+        "option": "Medium Tunnel 41st Ave (WSJ-5a / WSJ-5b) - WSJ-5b selected",
+        "status": "Selected (WSJ-5b, Oct 2024); 2025 refinement: mined tunnel instead of deep open cut",
+        "structure": "tunnel",
+        "depth_ft": 50,
+        "location_text": "Tunnel station beneath 41st Ave SW and SW Alaska St; entrances on both sides of Alaska St, one shifted toward 42nd Ave SW (WSB 2024; ST further studies).",
+        "confidence_m": 80,
+        "impacts": "WSJ-5b: 111 residential, 44 business, 240 employees displaced; 7,600 daily boardings; $1.75-1.90B. 42nd Ave entrance added ~90 TOD units. Some reports say the 2025 redesign shifts the station about a block east (unverified).",
+        "lat": 47.561073,
+        "lon": -122.384129,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 41st Ave SW & SW Alaska St",
+        "anchor_intersections": [
+          {
+            "name": "41st Ave SW & SW Alaska St",
+            "lat": 47.5610726,
+            "lon": -122.3841286,
+            "method": "shared node",
+            "osm_nodes": [
+              53204099
+            ],
+            "osm_ways": [
+              481286382,
+              1066281617
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf",
+          "https://westseattleblog.com/2024/10/west-seattle-light-rail-heres-the-sound-transit-route-station-location-recommendations-for-first-of-two-major-votes/",
+          "https://westseattlelink.infocommunity.org/wsle-further-studies.html",
+          "https://www.westsideseattle.com/robinson-papers/2025/11/24/sound-transit-details-multi-million-dollar-savings-plan-west-seattle"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.38481,
+          47.560196
+        ]
+      },
+      "properties": {
+        "id": "WSJ-1",
+        "project": "West Seattle Link",
+        "station_area": "Alaska Junction",
+        "option": "Elevated 41st/42nd Ave (WSJ-1)",
+        "status": "Not selected",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "Elevated station south of SW Alaska St between 41st Ave SW and 42nd Ave SW, entrances on Alaska and Edmunds (ST SPPR).",
+        "confidence_m": 60,
+        "impacts": "351-370 residential, 57 business displaced; 7,600 daily boardings; $1.70-1.85B.",
+        "lat": 47.560196,
+        "lon": -122.38481,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Centroid of the block bounded by 41st Ave SW & SW Alaska St; 42nd Ave SW & SW Alaska St; 41st Ave SW & SW Edmunds St; 42nd Ave SW & SW Edmunds St",
+        "anchor_intersections": [
+          {
+            "name": "41st Ave SW & SW Alaska St",
+            "lat": 47.5610726,
+            "lon": -122.3841286,
+            "method": "shared node",
+            "osm_nodes": [
+              53204099
+            ],
+            "osm_ways": [
+              481286382,
+              1066281617
+            ]
+          },
+          {
+            "name": "42nd Ave SW & SW Alaska St",
+            "lat": 47.5610835,
+            "lon": -122.3854667,
+            "method": "shared node",
+            "osm_nodes": [
+              53120241
+            ],
+            "osm_ways": [
+              428003040,
+              999155183
+            ]
+          },
+          {
+            "name": "41st Ave SW & SW Edmunds St",
+            "lat": 47.5593107,
+            "lon": -122.3841225,
+            "method": "shared node",
+            "osm_nodes": [
+              53197386
+            ],
+            "osm_ways": [
+              1066281617,
+              1136652515
+            ]
+          },
+          {
+            "name": "42nd Ave SW & SW Edmunds St",
+            "lat": 47.5593154,
+            "lon": -122.385524,
+            "method": "shared node",
+            "osm_nodes": [
+              53120242
+            ],
+            "osm_ways": [
+              1020673039,
+              1136652515
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-alaska-junction.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.380932,
+          47.561058
+        ]
+      },
+      "properties": {
+        "id": "WSJ-2",
+        "project": "West Seattle Link",
+        "station_area": "Alaska Junction",
+        "option": "Elevated Fauntleroy Way (WSJ-2)",
+        "status": "Not selected",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "Elevated station south (east side) of Fauntleroy Way SW, straddling SW Alaska St (ST SPPR).",
+        "confidence_m": 80,
+        "impacts": "474-493 residential displaced (most of any option), 15-18 business; 8,000 daily boardings (highest); $1.05-1.15B (cheapest). Farther from the Junction core.",
+        "lat": 47.561058,
+        "lon": -122.380932,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of Fauntleroy Way SW & SW Alaska St, then shifted 40 m east to match the written description",
+        "anchor_intersections": [
+          {
+            "name": "Fauntleroy Way SW & SW Alaska St",
+            "lat": 47.5610578,
+            "lon": -122.3814645,
+            "method": "shared node",
+            "osm_nodes": [
+              53120923
+            ],
+            "osm_ways": [
+              368876855,
+              1031564367
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-alaska-junction.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.385467,
+          47.561084
+        ]
+      },
+      "properties": {
+        "id": "WSJ-3B",
+        "project": "West Seattle Link",
+        "station_area": "Alaska Junction",
+        "option": "Tunnel 42nd Ave (WSJ-3b)",
+        "status": "Not selected",
+        "structure": "tunnel",
+        "depth_ft": 80,
+        "location_text": "Tunnel station under 42nd Ave SW crossing beneath SW Alaska St (ST SPPR).",
+        "confidence_m": 60,
+        "impacts": "126-230 residential, 42-45 business displaced; displaces Junction Plaza Park; $2.20-2.40B (most expensive).",
+        "lat": 47.561084,
+        "lon": -122.385467,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 42nd Ave SW & SW Alaska St",
+        "anchor_intersections": [
+          {
+            "name": "42nd Ave SW & SW Alaska St",
+            "lat": 47.5610835,
+            "lon": -122.3854667,
+            "method": "shared node",
+            "osm_nodes": [
+              53120241
+            ],
+            "osm_ways": [
+              428003040,
+              999155183
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-alaska-junction.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.384129,
+          47.561073
+        ]
+      },
+      "properties": {
+        "id": "WSJ-3A",
+        "project": "West Seattle Link",
+        "station_area": "Alaska Junction",
+        "option": "Tunnel 41st Ave (WSJ-3a)",
+        "status": "Not selected",
+        "structure": "tunnel",
+        "depth_ft": 70,
+        "location_text": "Tunnel station under 41st Ave SW crossing beneath SW Alaska St (ST SPPR).",
+        "confidence_m": 60,
+        "impacts": "162-269 residential, 15-18 business displaced; $2.10-2.35B. Same station box as WSJ-5; differs in depth and tunnel length.",
+        "lat": 47.561073,
+        "lon": -122.384129,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 41st Ave SW & SW Alaska St",
+        "anchor_intersections": [
+          {
+            "name": "41st Ave SW & SW Alaska St",
+            "lat": 47.5610726,
+            "lon": -122.3841286,
+            "method": "shared node",
+            "osm_nodes": [
+              53204099
+            ],
+            "osm_ways": [
+              481286382,
+              1066281617
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-alaska-junction.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.384126,
+          47.560192
+        ]
+      },
+      "properties": {
+        "id": "WSJ-4",
+        "project": "West Seattle Link",
+        "station_area": "Alaska Junction",
+        "option": "Short Tunnel 41st Ave (WSJ-4)",
+        "status": "Not selected",
+        "structure": "tunnel",
+        "depth_ft": 55,
+        "location_text": "Tunnel station under 41st Ave SW south of SW Alaska St, third entrance at SW Edmunds St (ST SPPR).",
+        "confidence_m": 60,
+        "impacts": "253 residential, 17 business displaced; $1.65-1.80B.",
+        "lat": 47.560192,
+        "lon": -122.384126,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Midpoint of 41st Ave SW & SW Alaska St and 41st Ave SW & SW Edmunds St",
+        "anchor_intersections": [
+          {
+            "name": "41st Ave SW & SW Alaska St",
+            "lat": 47.5610726,
+            "lon": -122.3841286,
+            "method": "shared node",
+            "osm_nodes": [
+              53204099
+            ],
+            "osm_ways": [
+              481286382,
+              1066281617
+            ]
+          },
+          {
+            "name": "41st Ave SW & SW Edmunds St",
+            "lat": 47.5593107,
+            "lon": -122.3841225,
+            "method": "shared node",
+            "osm_nodes": [
+              53197386
+            ],
+            "osm_ways": [
+              1066281617,
+              1136652515
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.soundtransit.org/sites/default/files/documents/west-seattle-and-ballard-link-extensions-station-planning-progress-report-alaska-junction.pdf",
+          "https://www.soundtransit.org/sites/default/files/documents/06-WSLE-FinalEIS-alternativesevaluation.pdf"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.336471,
+          47.611683
+        ]
+      },
+      "properties": {
+        "id": "BLE-WESTLAKE",
+        "project": "Ballard Link",
+        "station_area": "Westlake",
+        "option": "Westlake new platforms",
+        "status": "Preferred alternative; Phase 1 (target 2042)",
+        "structure": "tunnel",
+        "depth_ft": null,
+        "location_text": "5th Avenue and Pine Street (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "",
+        "lat": 47.611683,
+        "lon": -122.336471,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 5th Ave & Pine St",
+        "anchor_intersections": [
+          {
+            "name": "5th Ave & Pine St",
+            "lat": 47.6116831,
+            "lon": -122.336471,
+            "method": "shared node",
+            "osm_nodes": [
+              53213824
+            ],
+            "osm_ways": [
+              620595195,
+              1121977395
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://council.seattle.gov/2026/07/31/sound-transit-announces-timeline-for-building-light-rail-to-ballard/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.33849,
+          47.618541
+        ]
+      },
+      "properties": {
+        "id": "BLE-DENNY",
+        "project": "Ballard Link",
+        "station_area": "Denny",
+        "option": "Denny (Westlake Ave & Denny Way)",
+        "status": "Preferred alternative; Phase 1. 2026: Board weighing merging Denny + South Lake Union into one station here",
+        "structure": "tunnel",
+        "depth_ft": null,
+        "location_text": "Westlake Avenue and Denny Way (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "",
+        "lat": 47.618541,
+        "lon": -122.33849,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of Westlake Ave N & Denny Way",
+        "anchor_intersections": [
+          {
+            "name": "Westlake Ave N & Denny Way",
+            "lat": 47.6185409,
+            "lon": -122.3384897,
+            "method": "shared node",
+            "osm_nodes": [
+              53147432
+            ],
+            "osm_ways": [
+              242288220,
+              338863386
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://www.theurbanist.org/crucial-ballard-link-deadline-pushed-back-yet-again-by-feds/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.343717,
+          47.622066
+        ]
+      },
+      "properties": {
+        "id": "BLE-SLU",
+        "project": "Ballard Link",
+        "station_area": "South Lake Union",
+        "option": "South Lake Union (Harrison St & 7th Ave N)",
+        "status": "Preferred alternative; Phase 1. 2026: may be eliminated if merged with Denny",
+        "structure": "tunnel",
+        "depth_ft": null,
+        "location_text": "Harrison Street and 7th Avenue North (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "Without this station, about two dozen blocks of Uptown/Belltown/SLU fall outside a 10-minute walk of Ballard Link (ST analysis via The Urbanist, 2023).",
+        "lat": 47.622066,
+        "lon": -122.343717,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 7th Ave N & Harrison St",
+        "anchor_intersections": [
+          {
+            "name": "7th Ave N & Harrison St",
+            "lat": 47.6220661,
+            "lon": -122.3437175,
+            "method": "mean of 2 shared nodes",
+            "osm_nodes": [
+              2511119195,
+              2511119206
+            ],
+            "osm_ways": [
+              243738304,
+              367069126,
+              791135499,
+              1120290079
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://www.theurbanist.org/crucial-ballard-link-deadline-pushed-back-yet-again-by-feds/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.358031,
+          47.623279
+        ]
+      },
+      "properties": {
+        "id": "BLE-SEATTLE-CENTER",
+        "project": "Ballard Link",
+        "station_area": "Seattle Center",
+        "option": "Seattle Center (W Republican St & 1st Ave W)",
+        "status": "Preferred alternative; Phase 1 terminus until Phase 2",
+        "structure": "tunnel",
+        "depth_ft": null,
+        "location_text": "West Republican Street and 1st Avenue West (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "",
+        "lat": 47.623279,
+        "lon": -122.358031,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 1st Ave W & W Republican St",
+        "anchor_intersections": [
+          {
+            "name": "1st Ave W & W Republican St",
+            "lat": 47.6232792,
+            "lon": -122.3580308,
+            "method": "shared node",
+            "osm_nodes": [
+              53155882
+            ],
+            "osm_ways": [
+              6406233,
+              6441317
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://council.seattle.gov/2026/07/31/sound-transit-announces-timeline-for-building-light-rail-to-ballard/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.375605,
+          47.632197
+        ]
+      },
+      "properties": {
+        "id": "BLE-SMITH-COVE",
+        "project": "Ballard Link",
+        "station_area": "Smith Cove",
+        "option": "Smith Cove (15th Ave W & W Galer St)",
+        "status": "Preferred alternative; Phase 2 (unfunded)",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "15th Avenue West and West Galer Street (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "",
+        "lat": 47.632197,
+        "lon": -122.375605,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 15th Ave W & W Galer St",
+        "anchor_intersections": [
+          {
+            "name": "15th Ave W & W Galer St",
+            "lat": 47.632197,
+            "lon": -122.3756053,
+            "method": "shared node",
+            "osm_nodes": [
+              2853599281
+            ],
+            "osm_ways": [
+              352161588,
+              443481684
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://council.seattle.gov/2026/07/31/sound-transit-announces-timeline-for-building-light-rail-to-ballard/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37888,
+          47.648467
+        ]
+      },
+      "properties": {
+        "id": "BLE-INTERBAY",
+        "project": "Ballard Link",
+        "station_area": "Interbay",
+        "option": "Interbay (17th Ave W & W Dravus St)",
+        "status": "Preferred alternative; Phase 2 (unfunded)",
+        "structure": "elevated",
+        "depth_ft": null,
+        "location_text": "17th Avenue West and West Dravus Street (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "",
+        "lat": 47.648467,
+        "lon": -122.37888,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 17th Ave W & W Dravus St",
+        "anchor_intersections": [
+          {
+            "name": "17th Ave W & W Dravus St",
+            "lat": 47.6484667,
+            "lon": -122.3788803,
+            "method": "shared node",
+            "osm_nodes": [
+              53151163
+            ],
+            "osm_ways": [
+              6465628,
+              389798783
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://council.seattle.gov/2026/07/31/sound-transit-announces-timeline-for-building-light-rail-to-ballard/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.376203,
+          47.668668
+        ]
+      },
+      "properties": {
+        "id": "BLE-BALLARD",
+        "project": "Ballard Link",
+        "station_area": "Ballard",
+        "option": "Ballard (15th Ave NW & NW Market St)",
+        "status": "Preferred alternative; Phase 2 (unfunded)",
+        "structure": "tunnel or elevated (sources conflict)",
+        "depth_ft": null,
+        "location_text": "Northwest 15th Avenue and Northwest Market Street (Wikipedia, citing ST).",
+        "confidence_m": 150,
+        "impacts": "",
+        "lat": 47.668668,
+        "lon": -122.376203,
+        "coord_source": "derived from OpenStreetMap intersections (no official coordinates published)",
+        "derivation": "Intersection of 15th Ave NW & NW Market St",
+        "anchor_intersections": [
+          {
+            "name": "15th Ave NW & NW Market St",
+            "lat": 47.6686684,
+            "lon": -122.3762025,
+            "method": "mean of 2 shared nodes",
+            "osm_nodes": [
+              6208598367,
+              7298857421
+            ],
+            "osm_ways": [
+              739589147,
+              964199858,
+              1051246043
+            ]
+          }
+        ],
+        "sources": [
+          "https://en.wikipedia.org/wiki/Ballard_Link_Extension",
+          "https://council.seattle.gov/2026/07/31/sound-transit-announces-timeline-for-building-light-rail-to-ballard/"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.327992,
+          47.598355
+        ]
+      },
+      "properties": {
+        "id": "International District/Chinatown (existing)",
+        "status": "existing station (reference only)",
+        "coord_source": "Sound Transit GTFS stops.txt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.32739,
+          47.581074
+        ]
+      },
+      "properties": {
+        "id": "SODO (existing)",
+        "status": "existing station (reference only)",
+        "coord_source": "Sound Transit GTFS stops.txt"
+      }
+    }
+  ]
+}

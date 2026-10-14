@@ -22,22 +22,44 @@
   </div>
 
   <!-- Phone width: the panels open as drawers from these buttons -->
-  <button class="drawer-btn left" type="button" data-drawer="controls" aria-controls="controls" aria-expanded="false">Controls</button>
+  <button class="drawer-btn left" type="button" data-drawer="controls" aria-controls="controls" aria-expanded="false">Layers</button>
   <button class="drawer-btn right" type="button" data-drawer="headways" aria-controls="headways" aria-expanded="false">Headways</button>
 
-  <aside id="controls" class="panel panel-left" aria-label="Map controls">
+  <aside id="controls" class="panel panel-left" aria-label="Map layers">
     <div class="panel-head">
       <h1>Link Light Rail</h1>
-      <button class="close" type="button" data-close aria-label="Close controls">×</button>
+      <button class="close" type="button" data-close aria-label="Close layers">×</button>
     </div>
-    <div id="line-toggles"></div>
+
+    <section class="group" aria-labelledby="live-name">
+      <div class="group-head">
+        <button type="button" class="collapse" aria-expanded="true" aria-controls="live-body">
+          <span class="chev" aria-hidden="true"></span><span id="live-name" class="group-name">Live Link (Existing)</span>
+        </button>
+        <label class="switch"><input type="checkbox" id="live-toggle" checked><span class="track" aria-hidden="true"></span><span class="sr-only">Show Live Link</span></label>
+      </div>
+      <div id="live-body" class="group-body">
+        <div id="line-toggles"></div>
+        <label class="switch"><input type="checkbox" id="ghost-toggle" checked><span class="track" aria-hidden="true"></span><span>Ghost Trains</span></label>
+        <label class="switch"><input type="checkbox" id="tag-toggle" checked><span class="track" aria-hidden="true"></span><span>Delay Tags</span></label>
+        <ul class="legend-trains">
+          <li><span class="dot live"></span>Live Train</li>
+          <li><span class="dot ghost"></span>Scheduled Position</li>
+        </ul>
+      </div>
+    </section>
+
     <div class="divider"></div>
-    <label class="switch"><input type="checkbox" id="ghost-toggle" checked><span class="track" aria-hidden="true"></span><span>Ghost Trains</span></label>
-    <label class="switch"><input type="checkbox" id="tag-toggle" checked><span class="track" aria-hidden="true"></span><span>Delay Tags</span></label>
-    <ul class="legend-trains">
-      <li><span class="dot live"></span>Live Train</li>
-      <li><span class="dot ghost"></span>Scheduled Position</li>
-    </ul>
+
+    <section class="group" aria-labelledby="st3-name">
+      <div class="group-head">
+        <button type="button" class="collapse" aria-expanded="true" aria-controls="st3-body">
+          <span class="chev" aria-hidden="true"></span><span id="st3-name" class="group-name">Sound Transit 3 – Future Network</span>
+        </button>
+        <label class="switch"><input type="checkbox" id="st3-toggle" checked><span class="track" aria-hidden="true"></span><span class="sr-only">Show Sound Transit 3 Future Network</span></label>
+      </div>
+      <div id="st3-body" class="group-body"><p class="muted">Loading…</p></div>
+    </section>
   </aside>
 
   <aside id="headways" class="panel panel-right" aria-label="Headways">
@@ -52,6 +74,14 @@
       <div id="headway-rows"></div>
       <p id="headway-updated" class="hw-footer"></p>
     </div>
+  </aside>
+
+  <aside id="alt-card" class="card" role="dialog" aria-labelledby="alt-card-title" hidden>
+    <div class="card-head">
+      <h2 id="alt-card-title"></h2>
+      <button class="close" type="button" data-close-card aria-label="Close card">×</button>
+    </div>
+    <div class="card-body" data-body></div>
   </aside>
 </body>
 </html>

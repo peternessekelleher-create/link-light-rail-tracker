@@ -1,0 +1,382 @@
+{
+  "source": "OpenStreetMap via Overpass API",
+  "license": "ODbL 1.0, (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+  "anchors": {
+    "6th Ave S & Seattle Blvd S": {
+      "lat": 47.5950414,
+      "lon": -122.3261925,
+      "method": "mean of 2 shared nodes",
+      "osm_nodes": [
+        53131120,
+        53131121
+      ],
+      "osm_ways": [
+        8044215,
+        101676426,
+        260316653,
+        428246459
+      ]
+    },
+    "6th Ave S & S Dearborn St": {
+      "lat": 47.5958434,
+      "lon": -122.32639,
+      "method": "shared node",
+      "osm_nodes": [
+        53217375
+      ],
+      "osm_ways": [
+        360589227,
+        428245586
+      ]
+    },
+    "5th Ave S & S Jackson St": {
+      "lat": 47.5991995,
+      "lon": -122.3276749,
+      "method": "shared node",
+      "osm_nodes": [
+        53088998
+      ],
+      "osm_ways": [
+        428230594,
+        771933387
+      ]
+    },
+    "6th Ave S & S Jackson St": {
+      "lat": 47.5991955,
+      "lon": -122.3263677,
+      "method": "shared node",
+      "osm_nodes": [
+        53088999
+      ],
+      "osm_ways": [
+        333370568,
+        456870928
+      ]
+    },
+    "5th Ave S & S Weller St": {
+      "lat": 47.5975283,
+      "lon": -122.327686,
+      "method": "shared node",
+      "osm_nodes": [
+        53198834
+      ],
+      "osm_ways": [
+        6477644,
+        736871279
+      ]
+    },
+    "6th Ave S & S Weller St": {
+      "lat": 47.5975244,
+      "lon": -122.3263788,
+      "method": "shared node",
+      "osm_nodes": [
+        53225171
+      ],
+      "osm_ways": [
+        6477644,
+        620596652
+      ]
+    },
+    "4th Ave S & S Jackson St": {
+      "lat": 47.5992035,
+      "lon": -122.3290202,
+      "method": "shared node",
+      "osm_nodes": [
+        53088997
+      ],
+      "osm_ways": [
+        164242786,
+        1314058343
+      ]
+    },
+    "4th Ave S & Weller St pedestrian bridge": {
+      "lat": 47.5976018,
+      "lon": -122.3289748,
+      "method": "closest approach (8.6 m apart; no shared node)",
+      "osm_nodes": [],
+      "osm_ways": [
+        22927949,
+        1157540906
+      ]
+    },
+    "4th Ave & James St": {
+      "lat": 47.6032433,
+      "lon": -122.3302856,
+      "method": "shared node",
+      "osm_nodes": [
+        53221906
+      ],
+      "osm_ways": [
+        428243941,
+        450919738
+      ]
+    },
+    "5th Ave & James St": {
+      "lat": 47.6036923,
+      "lon": -122.3291997,
+      "method": "shared node",
+      "osm_nodes": [
+        53221907
+      ],
+      "osm_ways": [
+        428230617,
+        484863624
+      ]
+    },
+    "4th Ave & Jefferson St": {
+      "lat": 47.6025328,
+      "lon": -122.329656,
+      "method": "shared node",
+      "osm_nodes": [
+        53114227
+      ],
+      "osm_ways": [
+        1125561813,
+        1268987447
+      ]
+    },
+    "5th Ave & Jefferson St": {
+      "lat": 47.6029916,
+      "lon": -122.3285633,
+      "method": "shared node",
+      "osm_nodes": [
+        53114228
+      ],
+      "osm_ways": [
+        1268987447,
+        1268987448
+      ]
+    },
+    "S Lander St & 5th Pl S": {
+      "lat": 47.5798022,
+      "lon": -122.3267414,
+      "method": "shared node",
+      "osm_nodes": [
+        53234666
+      ],
+      "osm_ways": [
+        6491254,
+        427906017
+      ]
+    },
+    "Delridge Way SW & SW Andover St": {
+      "lat": 47.5683489,
+      "lon": -122.3632782,
+      "method": "shared node",
+      "osm_nodes": [
+        53138947
+      ],
+      "osm_ways": [
+        283703697,
+        427904784
+      ]
+    },
+    "26th Ave SW & SW Andover St": {
+      "lat": 47.5683352,
+      "lon": -122.3654179,
+      "method": "shared node",
+      "osm_nodes": [
+        53140447
+      ],
+      "osm_ways": [
+        960880881,
+        1066303714
+      ]
+    },
+    "Delridge Way SW & SW Dakota St": {
+      "lat": 47.5665438,
+      "lon": -122.3633104,
+      "method": "shared node",
+      "osm_nodes": [
+        53138948
+      ],
+      "osm_ways": [
+        6403944,
+        1413455574
+      ]
+    },
+    "Delridge Way SW & SW Genesee St": {
+      "lat": 47.5647238,
+      "lon": -122.3633198,
+      "method": "shared node",
+      "osm_nodes": [
+        53138949
+      ],
+      "osm_ways": [
+        427904780,
+        960880882
+      ]
+    },
+    "35th Ave SW & SW Genesee St": {
+      "lat": 47.5649545,
+      "lon": -122.3761001,
+      "method": "closest approach (13.0 m apart; no shared node)",
+      "osm_nodes": [],
+      "osm_ways": [
+        31659195,
+        436179803
+      ]
+    },
+    "Fauntleroy Way SW & SW Genesee St": {
+      "lat": 47.5647037,
+      "lon": -122.3769158,
+      "method": "shared node",
+      "osm_nodes": [
+        53203125
+      ],
+      "osm_ways": [
+        6470266,
+        49891947
+      ]
+    },
+    "41st Ave SW & SW Alaska St": {
+      "lat": 47.5610726,
+      "lon": -122.3841286,
+      "method": "shared node",
+      "osm_nodes": [
+        53204099
+      ],
+      "osm_ways": [
+        481286382,
+        1066281617
+      ]
+    },
+    "42nd Ave SW & SW Alaska St": {
+      "lat": 47.5610835,
+      "lon": -122.3854667,
+      "method": "shared node",
+      "osm_nodes": [
+        53120241
+      ],
+      "osm_ways": [
+        428003040,
+        999155183
+      ]
+    },
+    "41st Ave SW & SW Edmunds St": {
+      "lat": 47.5593107,
+      "lon": -122.3841225,
+      "method": "shared node",
+      "osm_nodes": [
+        53197386
+      ],
+      "osm_ways": [
+        1066281617,
+        1136652515
+      ]
+    },
+    "42nd Ave SW & SW Edmunds St": {
+      "lat": 47.5593154,
+      "lon": -122.385524,
+      "method": "shared node",
+      "osm_nodes": [
+        53120242
+      ],
+      "osm_ways": [
+        1020673039,
+        1136652515
+      ]
+    },
+    "Fauntleroy Way SW & SW Alaska St": {
+      "lat": 47.5610578,
+      "lon": -122.3814645,
+      "method": "shared node",
+      "osm_nodes": [
+        53120923
+      ],
+      "osm_ways": [
+        368876855,
+        1031564367
+      ]
+    },
+    "5th Ave & Pine St": {
+      "lat": 47.6116831,
+      "lon": -122.336471,
+      "method": "shared node",
+      "osm_nodes": [
+        53213824
+      ],
+      "osm_ways": [
+        620595195,
+        1121977395
+      ]
+    },
+    "Westlake Ave N & Denny Way": {
+      "lat": 47.6185409,
+      "lon": -122.3384897,
+      "method": "shared node",
+      "osm_nodes": [
+        53147432
+      ],
+      "osm_ways": [
+        242288220,
+        338863386
+      ]
+    },
+    "7th Ave N & Harrison St": {
+      "lat": 47.6220661,
+      "lon": -122.3437175,
+      "method": "mean of 2 shared nodes",
+      "osm_nodes": [
+        2511119195,
+        2511119206
+      ],
+      "osm_ways": [
+        243738304,
+        367069126,
+        791135499,
+        1120290079
+      ]
+    },
+    "1st Ave W & W Republican St": {
+      "lat": 47.6232792,
+      "lon": -122.3580308,
+      "method": "shared node",
+      "osm_nodes": [
+        53155882
+      ],
+      "osm_ways": [
+        6406233,
+        6441317
+      ]
+    },
+    "15th Ave W & W Galer St": {
+      "lat": 47.632197,
+      "lon": -122.3756053,
+      "method": "shared node",
+      "osm_nodes": [
+        2853599281
+      ],
+      "osm_ways": [
+        352161588,
+        443481684
+      ]
+    },
+    "17th Ave W & W Dravus St": {
+      "lat": 47.6484667,
+      "lon": -122.3788803,
+      "method": "shared node",
+      "osm_nodes": [
+        53151163
+      ],
+      "osm_ways": [
+        6465628,
+        389798783
+      ]
+    },
+    "15th Ave NW & NW Market St": {
+      "lat": 47.6686684,
+      "lon": -122.3762025,
+      "method": "mean of 2 shared nodes",
+      "osm_nodes": [
+        6208598367,
+        7298857421
+      ],
+      "osm_ways": [
+        739589147,
+        964199858,
+        1051246043
+      ]
+    }
+  }
+}

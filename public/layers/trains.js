@@ -49,9 +49,9 @@ export default {
       showGhosts = ui.toggle.checked;
       try { localStorage.setItem(GHOSTS_KEY, showGhosts ? '1' : '0'); } catch {}
     });
-    ui.tags.addEventListener('change', () =>
-      map.setLayoutProperty('link-train-tags', 'visibility', ui.tags.checked ? 'visible' : 'none'),
-    );
+    // The tag layer's visibility also depends on the Live Link master switch,
+    // so app.js sets it from the view store.
+    ui.tags.addEventListener('change', () => view.update());
 
     // Line and direction switches act as map filters: instant, no re-fetch.
     view.subscribe(() => {

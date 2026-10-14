@@ -1,7 +1,7 @@
 // Shared page state. Layers and panels subscribe instead of reaching into
 // each other, so new ones can be added without touching the rest.
 
-function store(initial) {
+export function store(initial) {
   const listeners = new Set();
   return {
     ...initial,
@@ -19,6 +19,7 @@ function store(initial) {
 // Which lines and directions are switched on. A line that is off remembers
 // its direction settings for when it comes back on.
 export const view = store({
+  live: true, // "Live Link (Existing)" master switch
   lines: {}, // { "1 Line": true }
   dirs: {}, // { "1 Line": { "0": true, "1": true } }
   init(directions, lines) {

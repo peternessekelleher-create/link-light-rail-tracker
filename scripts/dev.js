@@ -1,15 +1,16 @@
-// Local preview that mimics Vercel: serves public/ and routes /api/<name> to
-// api/<name>.js. Reads MAPBOX_TOKEN from .env.local on every request, so
+// Local preview that mimics Vercel: serves public/ (plus the public files in
+// data/) and routes /api/<name> to api/<name>.js. Reads MAPBOX_TOKEN from .env.local on every request, so
 // editing that file needs no restart. Usage: npm run dev
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PUBLIC_DATA } from './copy-data.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const PORT = Number(process.env.PORT) || 3000;
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.geojson': 'application/geo+json', '.svg': 'image/svg+xml', '.png': 'image/png' };
 
 function loadEnv() {
   const file = join(root, '.env.local');
@@ -30,6 +31,13 @@ createServer(async (req, res) => {
       res.status = (code) => ((res.statusCode = code), res);
       res.json = (body) => (res.setHeader('Content-Type', 'application/json'), res.end(JSON.stringify(body)));
       return await handler(req, res);
+    }
+    // /data/<file> is served from data/ (Vercel copies these at build time).
+    const data = pathname.match(/^\/data\/([\w.-]+)$/);
+    if (data && PUBLIC_DATA.includes(data[1])) {
+      const body = await readFile(join(root, 'data', data[1]));
+      res.writeHead(200, { 'Content-Type': TYPES[extname(data[1])] });
+      return res.end(body);
     }
     const rel = normalize(pathname === '/' ? '/index.html' : pathname).replace(/^(\.\.[/\\])+/, '');
     const body = await readFile(join(root, 'public', rel));
