@@ -108,6 +108,35 @@ REP_DAY_MIN_SHARE = 0.9
 # Worker processes for the reach build (one station per task).
 WORKERS = int(os.environ.get("REACH_WORKERS") or os.cpu_count() or 2)
 
+# --- Walk sheds --------------------------------------------------------------
+# From every stop reached within 30 min (and from the station itself), the
+# streets you can walk along in 5 and 10 minutes at WALK_SPEED_FT_PER_MIN,
+# buffered and merged into one area per band.
+WALK_SHED_MIN = (5, 10)
+WALK_SHED_FT = {m: m * WALK_SPEED_FT_PER_MIN for m in WALK_SHED_MIN}  # 1,320 and 2,640 ft
+WALK_SHED_BUFFER_FT = 100  # each reachable street piece is widened this much each side
+WALK_SHED_SIMPLIFY_FT = 30
+# A stop farther than this from any walkable way gets no shed.
+WALK_SNAP_MAX_FT = 330
+WALKSHED_DIR = DATA / "walksheds"
+# Coordinates in the TopoJSON files are quantized to this many degrees
+# (about 2.4 ft east-west and 3.6 ft north-south).
+WALKSHED_QUANTUM_DEG = 1e-5
+# Warn if a walk-shed file is bigger than this (gzipped bytes).
+WALKSHED_WARN_GZ_BYTES = 400_000
+
+# OpenStreetMap: Geofabrik's Washington extract, read with pyosmium.
+OSM_PBF_URL = "https://download.geofabrik.de/north-america/us/washington-latest.osm.pbf"
+# highway=* values a pedestrian can use. Motorways are left out, as are ways
+# tagged foot=no, foot=use_sidepath or access=no/private (unless foot=yes).
+WALK_HIGHWAYS = {
+    "footway", "path", "pedestrian", "steps", "corridor", "elevator", "living_street", "residential",
+    "service", "unclassified", "road", "track", "cycleway", "bridleway",
+    "tertiary", "tertiary_link", "secondary", "secondary_link", "primary", "primary_link", "trunk", "trunk_link",
+}
+WALK_OK_FOOT = {"yes", "designated", "permissive"}
+WALK_EXCLUDE_ACCESS = {"no", "private"}
+
 # --- Output ------------------------------------------------------------------
 # Bus shapes are simplified to this tolerance to keep files small.
 SHAPE_SIMPLIFY_FT = 13

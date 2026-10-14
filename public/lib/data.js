@@ -20,3 +20,5 @@ export const loadRoutes = () => getJson('/data/routes.geojson');
 export const loadNetwork = () => getJson('/data/st3_network.json');
 export const loadAlternatives = () => getJson('/data/station_alternatives.geojson');
 export const loadReachFile = (stationId) => getJson(`/data/reach/${encodeURIComponent(stationId)}.json`);
+// "<station id>_<window>", e.g. "link-C27_weekday-pm"
+export const loadWalkShedFile = (key) => getJson(`/data/walksheds/${encodeURIComponent(key)}.topojson`);

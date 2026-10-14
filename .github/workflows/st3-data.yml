@@ -5,8 +5,9 @@
 # them if anything changed. The site only reads those committed files; the
 # browser never loads raw GTFS.
 #
-# The reach build runs one station per worker process across the runner's
-# cores (pipeline/reach.py); all 51 stations take well under a minute.
+# Reach and walk sheds run one station per worker process across the
+# runner's cores. Reach takes under a minute; walk sheds (OpenStreetMap
+# Washington extract, about 365 MB) take about 10 minutes on 4 cores.
 name: Transit data
 
 on:
@@ -29,13 +30,17 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+
+      - name: Install walk-shed dependencies
+        run: pip install -r requirements.txt
 
       - name: Build data
         run: python -m pipeline.build ${{ inputs.rebuild_anchors && '--rebuild-anchors' || '' }}

@@ -1,7 +1,7 @@
 // Corner box for bus reach: the time picker (day type + period, defaulting
 // to the current time in Seattle), the summary for the station shown, and
 // the legend.
-import { NOTES, REACH_COLORS } from '../config.js';
+import { NOTES, REACH_COLORS, WALK_COLORS } from '../config.js';
 import { reachView, currentWindow, windowLabel } from '../lib/reach.js';
 
 const escapeHtml = (s) =>
@@ -32,7 +32,10 @@ export function createReachBox(root, meta, stationName) {
       <li><span class="sw" style="background:${REACH_COLORS[15]}"></span>Within 15 min</li>
       <li><span class="sw" style="background:${REACH_COLORS[30]}"></span>15–30 min</li>
       <li><span class="sw dashed"></span>After 1 transfer</li>
-    </ul>`;
+      <li><span class="sw area" style="background:${WALK_COLORS[5].color}"></span>5-min walk</li>
+      <li><span class="sw area" style="background:${WALK_COLORS[10].color}"></span>10-min walk</li>
+    </ul>
+    <p class="note">${escapeHtml(NOTES.walk)}</p>`;
 
   const day = root.querySelector('[data-pick="day"]');
   const period = root.querySelector('[data-pick="period"]');

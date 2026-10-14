@@ -1,5 +1,6 @@
 // Track polylines, one per line, colored with the GTFS route_color.
 import { view } from '../lib/view.js';
+import { DIM, focus } from '../lib/focus.js';
 
 const OFF_OPACITY = 0.25; // a line switched off fades instead of disappearing
 
@@ -49,12 +50,17 @@ export default {
       },
     });
 
-    // Direction switches don't affect track: both directions share it.
-    view.subscribe(() => {
+    // Direction switches don't affect track: both directions share it. A
+    // line switched off fades; focus mode fades every line further.
+    for (const id of ['link-routes', 'link-routes-casing']) map.setPaintProperty(id, 'line-opacity-transition', { duration: DIM.ms, delay: 0 });
+    const apply = () => {
       const off = Object.keys(view.lines).filter((l) => !view.lines[l]);
-      const opacity = off.length ? ['case', ['in', ['get', 'line'], ['literal', off]], OFF_OPACITY, 1] : 1;
+      const k = focus.id ? DIM.lines : 1;
+      const opacity = off.length ? ['case', ['in', ['get', 'line'], ['literal', off]], OFF_OPACITY * k, k] : k;
       map.setPaintProperty('link-routes', 'line-opacity', opacity);
       map.setPaintProperty('link-routes-casing', 'line-opacity', opacity);
-    });
+    };
+    view.subscribe(apply);
+    focus.subscribe(apply);
   },
 };

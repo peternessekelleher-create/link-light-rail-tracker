@@ -1,11 +1,14 @@
 // Bus reach on the map: hover a station (tap on touch screens) to draw the
 // bus segments you can ride within 15 and 30 minutes, dots on the stops you
-// can reach, and the farthest stop on each route in each band.
+// can reach, the farthest stop on each route in each band, and the 5- and
+// 10-minute walk sheds around all of them. Clicking pins the view; clicking
+// empty map or pressing Esc clears it.
 //
 // Also owns the invisible hit areas over every station (Link and ST3) and the
 // highlight for a route hovered in the station card.
-import { REACH_COLORS } from '../config.js';
-import { reachView, loadReach, windowFeatures } from '../lib/reach.js';
+import { REACH_COLORS, WALK_COLORS } from '../config.js';
+import { reachView, loadReach, loadWalkShed, windowFeatures } from '../lib/reach.js';
+import { focus } from '../lib/focus.js';
 import { st3 } from '../lib/st3.js';
 import { view } from '../lib/view.js';
 import { loadRoutes } from '../lib/data.js';
@@ -24,7 +27,18 @@ export default function reachLayer(stations, { onSelect, onStatus }) {
     add(map) {
       // Drawn over the Link tracks, under the station markers.
       const below = map.getLayer('link-stations') ? 'link-stations' : undefined;
-      for (const id of ['reach-segments', 'reach-stops', 'reach-labels', 'route-highlight']) map.addSource(id, { type: 'geojson', data: EMPTY });
+      for (const id of ['reach-segments', 'reach-stops', 'reach-labels', 'route-highlight', 'walk']) map.addSource(id, { type: 'geojson', data: EMPTY });
+
+      // Walk sheds: flat fills, no outline. Layer order is set in focus.js.
+      for (const m of [10, 5]) {
+        map.addLayer({
+          id: `walk-${m}`,
+          type: 'fill',
+          source: 'walk',
+          filter: ['==', ['get', 'minutes'], m],
+          paint: { 'fill-color': WALK_COLORS[m].color, 'fill-opacity': WALK_COLORS[m].opacity, 'fill-antialias': false },
+        });
+      }
 
       map.addLayer({ id: 'route-highlight-casing', type: 'line', source: 'route-highlight', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': 7 } }, below);
       map.addLayer({ id: 'route-highlight', type: 'line', source: 'route-highlight', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#0f1318', 'line-width': 3 } }, below);
@@ -91,6 +105,10 @@ export default function reachLayer(stations, { onSelect, onStatus }) {
         reachView.update((v) => (v.hover = null));
       });
       map.on('click', 'station-hit', (e) => onSelect(e.features[0].properties.id));
+      // Clicking empty map clears the pin.
+      map.on('click', (e) => {
+        if (!map.queryRenderedFeatures(e.point, { layers: ['station-hit'] }).length) onSelect(null);
+      });
 
       // Draw whatever is active in the picked window. A newer request
       // supersedes an older one still loading.
@@ -98,18 +116,23 @@ export default function reachLayer(stations, { onSelect, onStatus }) {
       let token = 0;
       reachView.subscribe(async (v) => {
         const id = v.active();
+        if (focus.id !== id) focus.update((f) => (f.id = id));
         const key = `${id}|${v.window}`;
         if (key === drawn) return;
         drawn = key;
         const mine = ++token;
         if (!id || !v.window) return draw(map, null), onStatus(null);
         onStatus({ id, loading: true });
+        // The walk shed is optional: if it fails, the bus reach still shows.
+        const shed = loadWalkShed(id, v.window).catch((err) => (console.error(err), null));
         try {
           const doc = await loadReach(id);
           if (mine !== token) return;
           const f = windowFeatures(doc, v.window);
           draw(map, f);
           onStatus({ id, summary: f.summary });
+          const walk = await shed;
+          if (mine === token) map.getSource('walk').setData(walk || EMPTY);
         } catch (err) {
           if (mine !== token) return;
           console.error(err);
@@ -130,6 +153,7 @@ export default function reachLayer(stations, { onSelect, onStatus }) {
 }
 
 function draw(map, f) {
+  if (!f) map.getSource('walk').setData(EMPTY);
   map.getSource('reach-segments').setData(f ? f.segments : EMPTY);
   map.getSource('reach-stops').setData(f ? f.stops : EMPTY);
   map.getSource('reach-labels').setData(f ? f.labels : EMPTY);

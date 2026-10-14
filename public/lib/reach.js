@@ -9,8 +9,9 @@
 //   windows  { "<day>-<period>": { samples, departures, routes, stops15, stops30,
 //              reached:  [[stop, minutes, band, transfer 0|1, [[pattern, board stop, alight stop], ...]]],
 //              segments: [[hop, band, transfer 0|1]] } }
-import { loadReachFile } from './data.js';
+import { loadReachFile, loadWalkShedFile } from './data.js';
 import { decodePolyline } from './polyline.js';
+import { topoFeatures } from './topojson.js';
 import { store } from './view.js';
 
 // What's shown. `hover` follows the pointer; `selected` is the station whose
@@ -62,6 +63,19 @@ export function loadReach(stationId) {
     decoded.set(stationId, p);
   }
   return decoded.get(stationId);
+}
+
+// The 5- and 10-minute walk sheds for a station and window, as GeoJSON
+// features with property `minutes`. Decoded once per file.
+const sheds = new Map();
+export function loadWalkShed(stationId, wid) {
+  const key = `${stationId}_${wid}`;
+  if (!sheds.has(key)) {
+    const p = loadWalkShedFile(key).then((topo) => topoFeatures(topo, 'walk'));
+    p.catch(() => sheds.delete(key));
+    sheds.set(key, p);
+  }
+  return sheds.get(key);
 }
 
 // Map features and summary for one window of a loaded file.

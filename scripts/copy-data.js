@@ -13,7 +13,7 @@ export const PUBLIC_DATA = [
   'METHODS.md',
 ];
 // Directories copied whole: one reach file per station.
-export const PUBLIC_DATA_DIRS = ['reach'];
+export const PUBLIC_DATA_DIRS = ['reach', 'walksheds'];
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = new URL('..', import.meta.url);

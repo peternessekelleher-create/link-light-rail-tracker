@@ -17,3 +17,9 @@ export const NOTES = {
 
 // Bus reach bands, by upper bound in minutes.
 export const REACH_COLORS = { 15: '#C8102E', 30: '#FF8C7A' };
+
+// Walk sheds, by minutes of walking.
+export const WALK_COLORS = {
+  5: { color: '#1E9E57', opacity: 0.4 },
+  10: { color: '#9BE0B0', opacity: 0.28 },
+};

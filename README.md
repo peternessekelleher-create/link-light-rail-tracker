@@ -8,7 +8,10 @@ An interactive map of Sound Transit's Link **1 Line** and **2 Line**, built live
 - **Step 4:** car count and passenger capacity in each train's popup, Title Case labels, and higher contrast (Lighthouse accessibility 100, no contrast failures).
 
 - **Step 5:** a "Sound Transit 3 – Future Network" layer for Ballard Link and West Seattle Link.
-- **Step 6:** groundwork for isochrones.
+- **Step 6:** groundwork for isochrones (M1–M3 below).
+- **M1:** every distance is in feet (miles above 5,280 ft), on Mapbox's dark basemap. Disclaimers are small print, and a "How this works" panel explains the methods.
+- **M2:** bus reach in red, with the time picker (described below).
+- **M3:** 5- and 10-minute walk sheds in green. Focus mode: hover a station to preview it, and click to pin it. Everything else dims (other stations 25%, lines 30%, trains 40%) and the basemap darkens. Esc or a click on empty map clears the pin.
   - **One ST3 switch:** it shows only the 12 preferred stations (hollow markers, labelled with their target opening) and a dashed approximate alignment.
   - **Station card:** click any 1 Line, 2 Line or ST3 station to see its connecting bus routes from every agency.
   - **Bus reach:** hover a station (tap on a phone) to see where buses take you within 15 and 30 minutes, from schedules, for any day type and time of day.
@@ -85,6 +88,7 @@ It prints the station → route table and the checks, and it exits non-zero if a
 | `connections.json` | Every station (id, name, kind, lines or ST3 project, opening, coordinates) with its connecting routes grouped by agency: number, name, BRT brand, weekday midday trips/hr, nearest stop and distance. `metadata` holds the feed versions, representative dates, time windows and reach constants. | 13 KB |
 | `routes.geojson` | Each connecting route's shape (most common per direction on the representative weekday). Loaded only when a card is open. | 130 KB |
 | `reach/<station id>.json` | Bus reach for all 15 time windows (format below) | 9–70 KB each, median 21 KB |
+| `walksheds/<station id>_<window>.topojson` | 5- and 10-minute walk sheds for one station and window: TopoJSON object `walk`, two MultiPolygons with `minutes` 5 and 10; coordinates quantized to 1e-5° | 765 files, median 29 KB, largest 75 KB |
 | `station_alternatives.geojson` | All 23 ST3 options with `preferred`; see [METHODS.md](data/METHODS.md) | |
 | `st3_network.json` | Hand-maintained: projects, colors, phases, opening labels, alignment order | |
 
@@ -105,6 +109,19 @@ It prints the station → route table and the checks, and it exits non-zero if a
 - **Median:** each stop keeps the median total over the samples, and a sample that misses 30 minutes counts as too long. With an even number of samples it's the lower median, so the time is one a rider actually gets, and the stored path is that sample's path. Bands: at most 15 minutes, or at most 30.
 - **Transfers:** a second ride on the same route but a different trip pattern is allowed. Short-turn and through-routed trips (e.g. a 50 that ends at Seward Park and one that starts there) are a real change of trip, and ruling them out cut Othello's reach by a fifth.
 - **Why rush can reach more than midday:** at 4 of the 5 checked stations, rush hour reaches more stops. This comes from the schedules. Ballard's D Line runs every 8 minutes at rush and every 10 at midday, and its AM run to downtown is scheduled 2 minutes faster. Westlake also gains peak-only routes (510, 577, 590, 13).
+
+### Walk sheds (5 / 10 minutes)
+
+- **Where from:** the station and every stop in its reach file for that window.
+- **Distances:** 1,320 ft and 2,640 ft along the OpenStreetMap pedestrian network (`pipeline/walknet.py`), read from Geofabrik's Washington extract with pyosmium.
+- **What's walkable:** walkable `highway=*` values (sidewalks, paths, steps, crossings, streets). Motorways and ways tagged `foot=no`, `foot=use_sidepath` or `access=no`/`private` are excluded.
+- **Method:**
+  - Each stop is snapped to the nearest way within 330 ft, and a shortest-path search runs to 2,640 ft, cutting edges partway.
+  - Every reachable piece is buffered 100 ft and merged (shapely).
+  - Pieces are unioned per station and window, simplified to 30 ft, and written as TopoJSON (`pipeline/walksheds.py`).
+- **Dependencies:** only this step needs them: `pip install -r requirements.txt`.
+- **Time:** about 5 minutes on 8 cores. Peak memory is about 2 GB.
+- **Barrier check:** the build picks a stop within 300 ft of I-5 and one on Lake Union's shore. It counts street points within 1,500 ft in a straight line that are more than a 2,640 ft walk away, and fails if the 10-minute shed covers 2% or more of them. In October 2026 the I-5 stop (5th Ave NE & NE 123rd St) had 0 of 369 covered and the Lake Union stop (Westlake Ave N & Halladay St) 3 of 356, all within the 100 ft buffer.
 
 ### Reach file format
 

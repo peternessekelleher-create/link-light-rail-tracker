@@ -1,0 +1,4 @@
+# Only the walk-shed step (pipeline/walknet.py, pipeline/walksheds.py) needs
+# these; everything else in pipeline/ is standard-library Python.
+shapely==2.1.2
+osmium==4.1.1

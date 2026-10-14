@@ -3,6 +3,7 @@ import stationsLayer from './layers/stations.js';
 import trainsLayer from './layers/trains.js';
 import st3Layer from './layers/st3.js';
 import reachLayer from './layers/reach.js';
+import focusLayer, { applyLayerOrder } from './layers/focus.js';
 import { renderControls } from './ui/controls.js';
 import { renderHeadways } from './ui/headways.js';
 import { renderSt3Panel } from './ui/st3panel.js';
@@ -110,11 +111,16 @@ async function main() {
     st3Body.innerHTML = '<p class="error-text">Future Network Data Unavailable</p>';
     document.getElementById('st3-toggle').disabled = true;
   }
-  if (conn) LAYERS.push(setupReach(map, conn, data, !!model));
-  else document.getElementById('reach-box').hidden = true;
+  if (conn) {
+    const stations = conn.stations.filter((s) => model || s.kind === 'link');
+    LAYERS.push(setupReach(map, conn, data, stations));
+    // Last: it dims layers the others added, and sets the final layer order.
+    LAYERS.push(focusLayer(stations, data.stations));
+  } else document.getElementById('reach-box').hidden = true;
 
   const ready = () => {
     for (const layer of LAYERS) layer.add(map, data);
+    applyLayerOrder(map);
     view.subscribe(() => {
       const tags = document.getElementById('tag-toggle').checked;
       for (const id of LIVE_LAYERS) {
@@ -130,8 +136,7 @@ async function main() {
 
 // Station card (click / tap) and bus reach (hover / tap) for every Link and
 // ST3 station in connections.json.
-function setupReach(map, conn, data, withSt3) {
-  const stations = conn.stations.filter((s) => withSt3 || s.kind === 'link');
+function setupReach(map, conn, data, stations) {
   const nameOf = (id) => stations.find((s) => s.id === id)?.name || id;
   let layer;
   const card = createStationCard(conn, {
@@ -147,6 +152,13 @@ function setupReach(map, conn, data, withSt3) {
       card.open(id);
     },
     onStatus: box.status,
+  });
+
+  // "Pinned: Othello · Esc or click map to clear" while a station is pinned.
+  const chip = document.getElementById('pin-chip');
+  reachView.subscribe((v) => {
+    chip.hidden = !v.selected;
+    if (v.selected) chip.textContent = `Pinned: ${nameOf(v.selected)} · Esc or click map to clear`;
   });
   return layer;
 }

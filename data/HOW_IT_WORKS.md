@@ -22,10 +22,21 @@ Everything on the map except the live trains comes from small files a weekly bui
 - **Algorithm:** RAPTOR limited to two rides. Each reached stop keeps its path (route, pattern, boarding stop, alighting stop), so the ridden segments can be drawn.
 - **Windows:** Weekday, Saturday and Sunday, each on a representative non-holiday date from the feed calendars. Periods are AM rush 6–9, Midday 9–3, PM rush 3–6, Evening 6–10 and Night 10–1.
 
+## Walk sheds (5 and 10 minutes)
+
+- **Where from:** the station itself, and every stop the bus reach shows in the chosen window (both bands, including stops reached after a transfer).
+- **Distances:** 5 minutes is 1,320 ft and 10 minutes is 2,640 ft, walked along the street network at 264 ft/min (3 mph). A whole trip, door to door, can therefore take about 40 minutes.
+- **Walking network:** OpenStreetMap's sidewalks, paths, stairs, crossings, pedestrian bridges and ordinary streets. Freeways and ways tagged as closed to people on foot are left out, so a freeway or a lake is a barrier unless a bridge or crossing exists.
+- **Method:**
+  - Each stop is snapped to the nearest walkable way (within 330 ft).
+  - Every street piece within the walking distance is widened by 100 ft, and the pieces are merged.
+  - Per station and window, all the stops' areas merge into one 5-minute area and one 10-minute area, simplified to about 30 ft.
+- **Check:** each weekly build tests a stop beside I-5 and one on the shore of Lake Union. Fewer than 2% of the street points across the barrier may fall inside the shed, and in practice it's nearly none.
+
 ## Sources
 
 - King County Metro GTFS: metro.kingcounty.gov/GTFS/google_transit.zip
 - Sound Transit GTFS: gtfs.sound.obaweb.org/prod/40_gtfs.zip
 - Community Transit GTFS: communitytransit.org (open data)
 - Pierce Transit GTFS: gtfs.sound.obaweb.org/prod/3_gtfs.zip
-- Street intersections for the ST3 stations: © OpenStreetMap contributors, ODbL
+- Street intersections for the ST3 stations and the walking network: © OpenStreetMap contributors, ODbL (Geofabrik Washington extract)

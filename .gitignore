@@ -5,3 +5,4 @@ node_modules/
 .cache/
 __pycache__/
 public/data/
+.venv/

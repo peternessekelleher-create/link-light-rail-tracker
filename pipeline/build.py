@@ -3,6 +3,9 @@
     python -m pipeline.build                    # weekly: stations, buses, reach
     python -m pipeline.build --rebuild-anchors  # also re-query OpenStreetMap
     python -m pipeline.build --only link-C27    # reach for some stations only
+    python -m pipeline.build --skip-walksheds   # skip the OpenStreetMap walk sheds
+
+Walk sheds need shapely and pyosmium (pip install -r requirements.txt).
 
 Exits non-zero if a check fails, so the scheduled Action doesn't commit a
 broken build.
@@ -25,6 +28,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--rebuild-anchors", action="store_true")
     ap.add_argument("--only", nargs="*", help="station ids to rebuild reach for")
+    ap.add_argument("--skip-walksheds", action="store_true")
     args = ap.parse_args()
 
     cmd = [sys.executable, str(DATA / "build_station_alternatives.py")]
@@ -66,7 +70,22 @@ def main():
     results = reach.build_all(net, todo, dates) if not args.only else _only(net, todo, dates)
     print(f"Reach for {len(todo)} stations in {time.time() - t:.0f}s on {WORKERS} workers")
 
-    if not report.run(net, stations, conn, results, dates):
+    ok = report.run(net, stations, conn, results, dates)
+
+    if not args.skip_walksheds:
+        from . import walksheds
+
+        t = time.time()
+        shed_results, unsnapped, walk_net, points = walksheds.build_all()
+        print(f"\nWalk sheds for {len(shed_results)} station-windows in {time.time() - t:.0f}s on {WORKERS} workers")
+        if unsnapped:
+            print(f"  No walkable way within reach of: {', '.join(unsnapped)}")
+        ok &= walksheds.sizes_report(shed_results)
+        print("\nCHECK walk sheds start only from stops reached within 30 min: PASS (asserted while reading reach files)")
+        print("CHECK walk sheds follow streets, not across barriers:")
+        ok &= walksheds.barrier_check(walk_net, points)
+
+    if not ok:
         sys.exit("A check failed; outputs were written but should not be committed.")
 
 
