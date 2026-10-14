@@ -6,6 +6,8 @@
 //     time picker; speed is the 1 Line's average scheduled speed between
 //     stations, with a dwell at every station;
 //   - each marker fills to its segment's estimated load (data/crowding.json);
+//   - markers look like the live 1 Line trains (circle, white outline,
+//     rotating arrow) in the project's color, with a small "SIM" tag;
 //   - on Phase 2 (Seattle Center to Ballard, unfunded) trains are drawn at
 //     50% and tagged "SIM · unfunded".
 // Positions are a pure function of the clock, so every viewer sees the same
@@ -20,7 +22,7 @@ const TICK_MS = 250;
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const PHASE2_OPACITY = 0.5;
-const OPACITY = 0.9;
+const OPACITY = 1;
 const EMPTY = { type: 'FeatureCollection', features: [] };
 
 export const loadSimulated = () => getJson('/data/simulated_trains.json');
@@ -32,14 +34,21 @@ function timeline(line, reverse, dwell) {
   const out = [];
   let t = 0;
   for (let i = 0; i < segs.length; i++) {
-    out.push({ start: t, end: t + segs[i].run_s, from: stations[i], to: stations[i + 1], seg: segs[i] });
+    const bearing = bearingOf(stations[i], stations[i + 1]);
+    out.push({ start: t, end: t + segs[i].run_s, from: stations[i], to: stations[i + 1], seg: segs[i], bearing });
     t += segs[i].run_s;
     if (i < segs.length - 1) {
-      out.push({ start: t, end: t + dwell, from: stations[i + 1], to: stations[i + 1], seg: segs[i], dwell: true });
+      out.push({ start: t, end: t + dwell, from: stations[i + 1], to: stations[i + 1], seg: segs[i], dwell: true, bearing });
       t += dwell;
     }
   }
   return { parts: out, total: t, stations };
+}
+
+// Degrees clockwise from north, from station a to station b.
+function bearingOf(a, b) {
+  const k = Math.cos((a.lat * Math.PI) / 180);
+  return (Math.atan2((b.lon - a.lon) * k, b.lat - a.lat) * 180) / Math.PI;
 }
 
 // Every train on the line at time `now` (epoch seconds) for one direction.
@@ -53,7 +62,7 @@ function trainsAt(tl, headwayS, now, phaseOffset) {
     const part = tl.parts.find((p) => e >= p.start && e < p.end);
     if (!part) continue;
     const f = part.dwell ? 0 : (e - part.start) / (part.end - part.start);
-    out.push({ k, part, lon: part.from.lon + (part.to.lon - part.from.lon) * f, lat: part.from.lat + (part.to.lat - part.from.lat) * f });
+    out.push({ k, part, lon: part.from.lon + (part.to.lon - part.from.lon) * f, lat: part.from.lat + (part.to.lat - part.from.lat) * f, bearing: part.bearing });
   }
   return out;
 }
@@ -67,7 +76,21 @@ export default function simTrainsLayer(sim, crowding, meta, currentWindow) {
         id: 'sim-trains',
         type: 'symbol',
         source: 'sim-trains',
-        layout: { 'icon-image': ['get', 'icon'], 'icon-allow-overlap': true, 'icon-ignore-placement': true, 'icon-size': ['interpolate', ['linear'], ['zoom'], 9, 0.75, 14, 1.05] },
+        layout: { 'icon-image': ['get', 'icon'], 'icon-allow-overlap': true, 'icon-ignore-placement': true, 'icon-size': ['interpolate', ['linear'], ['zoom'], 9, 0.75, 14, 1.1] },
+        paint: { 'icon-opacity': ['get', 'opacity'] },
+      });
+      map.addLayer({
+        id: 'sim-train-arrows',
+        type: 'symbol',
+        source: 'sim-trains',
+        layout: {
+          'icon-image': 'train-arrow',
+          'icon-rotate': ['get', 'bearing'],
+          'icon-rotation-alignment': 'map',
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true,
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 9, 0.75, 14, 1.1],
+        },
         paint: { 'icon-opacity': ['get', 'opacity'] },
       });
       map.addLayer({
@@ -119,6 +142,7 @@ export default function simTrainsLayer(sim, crowding, meta, currentWindow) {
                   line: l.name,
                   toward: d.tl.stations.at(-1).name,
                   icon: `sim:${l.id}:${fillLevel(load)}`,
+                  bearing: tr.bearing,
                   opacity: phase2 ? PHASE2_OPACITY : OPACITY,
                   tag: phase2 ? 'SIM · unfunded' : 'SIM',
                   load: load ? loadText(load) : '',
@@ -132,7 +156,7 @@ export default function simTrainsLayer(sim, crowding, meta, currentWindow) {
 
       const run = () => {
         const on = st3.master && !document.hidden;
-        for (const id of ['sim-trains', 'sim-train-tags']) map.setLayoutProperty(id, 'visibility', st3.master ? 'visible' : 'none');
+        for (const id of ['sim-trains', 'sim-train-arrows', 'sim-train-tags']) map.setLayoutProperty(id, 'visibility', st3.master ? 'visible' : 'none');
         if (on && !timer) {
           tick();
           timer = setInterval(tick, TICK_MS);

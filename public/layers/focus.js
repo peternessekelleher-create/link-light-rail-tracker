@@ -21,8 +21,8 @@ export const LAYER_ORDER = [
   'st3-alignment-casing', 'st3-alignment',
   'link-routes-casing', 'link-routes',
   'reach-stops',
-  'link-stations', 'st3-marker-halo', 'st3-markers', 'st3-alt-markers',
-  'link-gaps', 'link-ghosts', 'sim-trains', 'link-trains', 'link-train-arrows',
+  'link-stations', 'st3-markers', 'st3-alt-markers',
+  'link-gaps', 'link-ghosts', 'sim-trains', 'sim-train-arrows', 'link-trains', 'link-train-arrows',
   'link-station-labels', 'st3-labels', 'st3-alt-labels', 'reach-labels', 'sim-train-tags', 'link-train-tags',
   'station-hit',
 ];
@@ -32,7 +32,6 @@ export const LAYER_ORDER = [
 const FADES = [
   { id: 'link-stations', props: ['circle-opacity', 'circle-stroke-opacity'], station: 'sid', k: DIM.stations },
   { id: 'link-station-labels', props: ['text-opacity'], station: 'sid', k: DIM.stations },
-  { id: 'st3-marker-halo', props: ['circle-opacity'], station: 'id', k: DIM.stations },
   { id: 'st3-markers', props: ['circle-opacity', 'circle-stroke-opacity'], station: 'id', k: DIM.stations },
   { id: 'st3-labels', props: ['text-opacity'], station: 'id', k: DIM.stations },
   { id: 'st3-alignment', props: ['line-opacity'], k: DIM.lines },
@@ -43,6 +42,7 @@ const FADES = [
   { id: 'link-train-arrows', props: ['icon-opacity'], k: DIM.trains },
   { id: 'link-train-tags', props: ['text-opacity'], k: DIM.trains },
   { id: 'sim-trains', props: ['icon-opacity'], k: DIM.trains },
+  { id: 'sim-train-arrows', props: ['icon-opacity'], k: DIM.trains },
   { id: 'sim-train-tags', props: ['text-opacity'], k: DIM.trains },
 ];
 

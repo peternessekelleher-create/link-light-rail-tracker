@@ -11,6 +11,7 @@ An interactive map of Sound Transit's Link **1 Line** and **2 Line**, built live
 - **Step 6:** groundwork for isochrones (M1–M3 below).
 - **M1:** every distance is in feet (miles above 5,280 ft), on Mapbox's dark basemap. Disclaimers are small print, and a "How this works" panel explains the methods.
 - **M2:** bus reach in red, with the time picker (described below).
+- **ST3 styling:** lines, stations and simulated trains use the live 1 Line's design (a solid line with casing, Link-style stations, round trains with direction arrows), in each project's color.
 - **M4:** simulated future trains on Ballard Link and West Seattle Link, plus estimated typical crowding. Every train marker, live and simulated, fills to its estimated load, and hovering shows "Est. 78% full · Crowded". The model is in `pipeline/crowding.py`, its outputs are `data/crowding.json` and `data/simulated_trains.json`, and its inputs and sources are in `data/ridership/`.
 - **M3:** 5- and 10-minute walk sheds in green. Focus mode: hover a station to preview it, and click to pin it. Everything else dims (other stations 25%, lines 30%, trains 40%) and the basemap darkens. Esc or a click on empty map clears the pin.
   - **One ST3 switch:** it shows only the 12 preferred stations (hollow markers, labelled with their target opening) and a dashed approximate alignment.
@@ -89,7 +90,7 @@ It prints the station → route table and the checks, and it exits non-zero if a
 | `connections.json` | Every station (id, name, kind, lines or ST3 project, opening, coordinates) with its connecting routes grouped by agency: number, name, BRT brand, weekday midday trips/hr, nearest stop and distance. `metadata` holds the feed versions, representative dates, time windows and reach constants. | 13 KB |
 | `routes.geojson` | Each connecting route's shape (most common per direction on the representative weekday). Loaded only when a card is open. | 130 KB |
 | `reach/<station id>.json` | Bus reach for all 15 time windows (format below) | 9–70 KB each, median 21 KB |
-| `walksheds/<station id>_<window>.topojson` | 5- and 10-minute walk sheds for one station and window: TopoJSON object `walk`, two MultiPolygons with `minutes` 5 and 10; coordinates quantized to 1e-5° | 765 files, median 29 KB, largest 75 KB |
+| `walksheds/<station id>_<window>.topojson` | 5- and 10-minute walk sheds for one station and window: TopoJSON object `walk`, two MultiPolygons with `minutes` 5 and 10; coordinates quantized to 1e-5° | 765 files, median 8 KB, largest 22 KB |
 | `station_alternatives.geojson` | All 23 ST3 options with `preferred`; see [METHODS.md](data/METHODS.md) | |
 | `st3_network.json` | Hand-maintained: projects, colors, phases, opening labels, alignment order | |
 
@@ -119,7 +120,8 @@ It prints the station → route table and the checks, and it exits non-zero if a
 - **Method:**
   - Each stop is snapped to the nearest way within 330 ft, and a shortest-path search runs to 2,640 ft, cutting edges partway.
   - Every reachable piece is buffered 100 ft and merged (shapely).
-  - Pieces are unioned per station and window, simplified to 30 ft, and written as TopoJSON (`pipeline/walksheds.py`).
+  - Pieces are unioned per station and window.
+  - Smoothing: the union is closed by 40 ft (grow, then shrink), and enclosed holes up to 20 acres are filled (block interiors). It's then simplified to 30 ft and written as TopoJSON (`pipeline/walksheds.py`). The constants are `WALK_SHED_CLOSE_FT` and `WALK_SHED_FILL_HOLE_ACRES`.
 - **Dependencies:** only this step needs them: `pip install -r requirements.txt`.
 - **Time:** about 5 minutes on 8 cores. Peak memory is about 2 GB.
 - **Barrier check:** the build picks a stop within 300 ft of I-5 and one on Lake Union's shore. It counts street points within 1,500 ft in a straight line that are more than a 2,640 ft walk away, and fails if the 10-minute shed covers 2% or more of them. In October 2026 the I-5 stop (5th Ave NE & NE 123rd St) had 0 of 369 covered and the Lake Union stop (Westlake Ave N & Halladay St) 3 of 356, all within the 100 ft buffer.

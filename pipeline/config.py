@@ -116,6 +116,12 @@ WALK_SHED_MIN = (5, 10)
 WALK_SHED_FT = {m: m * WALK_SPEED_FT_PER_MIN for m in WALK_SHED_MIN}  # 1,320 and 2,640 ft
 WALK_SHED_BUFFER_FT = 100  # each reachable street piece is widened this much each side
 WALK_SHED_SIMPLIFY_FT = 30
+# Smoothing of each merged shed: grow by WALK_SHED_CLOSE_FT and shrink back
+# (closes slivers and notches without moving the outer edge), then fill any
+# enclosed hole up to WALK_SHED_FILL_HOLE_ACRES. Block interiors are almost
+# all under 5 acres; lakes and large parks (Green Lake is 259) stay open.
+WALK_SHED_CLOSE_FT = 40
+WALK_SHED_FILL_HOLE_ACRES = 20
 # A stop farther than this from any walkable way gets no shed.
 WALK_SNAP_MAX_FT = 330
 WALKSHED_DIR = DATA / "walksheds"

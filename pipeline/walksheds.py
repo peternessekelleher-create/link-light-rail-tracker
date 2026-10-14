@@ -20,7 +20,7 @@ import json
 import multiprocessing as mp
 
 from .config import (
-    MAX_TRIP_MIN, REACH_DIR, WALK_SHED_BUFFER_FT, WALK_SHED_FT, WALK_SHED_MIN, WALK_SHED_SIMPLIFY_FT, WALKSHED_DIR,
+    MAX_TRIP_MIN, REACH_DIR, WALK_SHED_BUFFER_FT, WALK_SHED_CLOSE_FT, WALK_SHED_FILL_HOLE_ACRES, WALK_SHED_FT, WALK_SHED_MIN, WALK_SHED_SIMPLIFY_FT, WALKSHED_DIR,
     WALKSHED_QUANTUM_DEG, WALKSHED_WARN_GZ_BYTES, WORKERS,
 )
 from .walknet import WalkNet, cell_of, to_lonlat, to_xy
@@ -116,7 +116,7 @@ def _station_files(sid):
             parts = [sheds[f"stop:{s}"][i] for s in stop_ids if f"stop:{s}" in sheds]
             if own:
                 parts.append(own[i])
-            g = shapely.union_all(parts).simplify(WALK_SHED_SIMPLIFY_FT) if parts else shapely.Polygon()
+            g = smooth(shapely.union_all(parts)).simplify(WALK_SHED_SIMPLIFY_FT) if parts else shapely.Polygon()
             layers.append((m, g))
         text = topojson(layers)
         (WALKSHED_DIR / f"{sid}_{wid}.topojson").write_text(text)
@@ -126,6 +126,22 @@ def _station_files(sid):
             "acres": {m: round(g.area / 43_560) for m, g in layers},
         })
     return out
+
+
+def smooth(g):
+    """Close slivers (grow and shrink by WALK_SHED_CLOSE_FT), then fill the
+    enclosed holes up to WALK_SHED_FILL_HOLE_ACRES: the gaps between blocks
+    that the 100 ft street buffers leave."""
+    import shapely
+
+    g = g.buffer(WALK_SHED_CLOSE_FT, quad_segs=2).buffer(-WALK_SHED_CLOSE_FT, quad_segs=2)
+    max_hole = WALK_SHED_FILL_HOLE_ACRES * 43_560
+    polys = []
+    for p in getattr(g, "geoms", [g]):
+        if isinstance(p, shapely.Polygon) and not p.is_empty:
+            keep = [r for r in p.interiors if shapely.Polygon(r).area > max_hole]
+            polys.append(shapely.Polygon(p.exterior, keep))
+    return shapely.MultiPolygon(polys) if polys else shapely.Polygon()
 
 
 # --- TopoJSON ----------------------------------------------------------------
@@ -195,8 +211,8 @@ def barrier_check(net, points):
     """Walk sheds must follow streets, not jump a freeway or a lake. For one
     stop beside I-5 and one on the Lake Union shore (picked automatically),
     count the street points within ACROSS_FT in a straight line that are more
-    than the 10-minute walk away, and how many of them the 10-minute shed
-    covers anyway (only the 100 ft buffer can reach them). Returns True if the
+    than the 10-minute walk away, and how many of them the 10-minute shed (as
+    drawn: smoothed, holes filled) covers anyway. Returns True if the
     shed covers under 2% of them."""
     import math
 
@@ -247,7 +263,7 @@ def barrier_check(net, points):
             ok = False
             continue
         key, far = max(scored, key=lambda kf: len(kf[1]))
-        inside = int(shapely.contains_xy(_S["sheds"][key][1], [p[0] for p in far], [p[1] for p in far]).sum())
+        inside = int(shapely.contains_xy(smooth(_S["sheds"][key][1]), [p[0] for p in far], [p[1] for p in far]).sum())
         share = inside / len(far)
         ok &= share < 0.02
         print(f"  {'PASS' if share < 0.02 else 'FAIL'}  {label}: {names.get(key, key)} -- {len(far)} street points within "

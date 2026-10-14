@@ -30,7 +30,8 @@ Everything on the map except the live trains comes from small files a weekly bui
 - **Method:**
   - Each stop is snapped to the nearest walkable way (within 330 ft).
   - Every street piece within the walking distance is widened by 100 ft, and the pieces are merged.
-  - Per station and window, all the stops' areas merge into one 5-minute area and one 10-minute area, simplified to about 30 ft.
+  - Per station and window, all the stops' areas merge into one 5-minute area and one 10-minute area.
+  - Smoothing: the merged area is grown by 40 ft and shrunk back, which closes slivers. Then every enclosed gap up to 20 acres is filled, which covers the insides of blocks the street buffers leave open. Lakes and large parks stay open. The result is simplified to about 30 ft.
 - **Check:** each weekly build tests a stop beside I-5 and one on the shore of Lake Union. Fewer than 2% of the street points across the barrier may fall inside the shed, and in practice it's nearly none.
 
 ## Crowding (estimated, not live)

@@ -16,13 +16,13 @@ export function renderSt3Panel(model, root) {
         .map(
           (p) => `
         <li style="--line:${p.color}">
-          <span class="mk hollow" aria-hidden="true"></span><span class="swatch" aria-hidden="true"></span>
+          <span class="mk st3" aria-hidden="true"></span><span class="swatch" aria-hidden="true"></span>
           <span><strong>${escapeHtml(p.name)}</strong><span class="sub">${Object.values(p.opening).map((o) => escapeHtml(phaseText(p, o))).join(' · ')}</span></span>
         </li>`,
         )
         .join('')}
     </ul>
-    <p class="st3-note">${model.stations.length} planned stations (preferred options). Lines are approximate; Phase 2 is drawn fainter.</p>
+    <p class="st3-note">${model.stations.length} planned stations (preferred options). Lines are approximate, drawn straight between stations; Phase 2 is fainter.</p>
     <ul class="legend-sim"><li><span class="mk sim" aria-hidden="true"></span>Simulated future trains</li></ul>
     <p class="note">${escapeHtml(NOTES.simulated)}</p>
     <p class="note">${escapeHtml(NOTES.futureLocation)}</p>

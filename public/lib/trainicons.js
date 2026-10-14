@@ -2,8 +2,9 @@
 // bottom up (empty to full), in the line's color, so crowding never changes
 // the color. Icons are drawn once per line and level (0..10) on a canvas.
 //
-//   live       circle, white outline (an arrow is a separate rotating layer)
-//   simulated  rounded square, translucent, dashed line-color outline
+// Live and simulated trains share one design: a circle with a white outline,
+// filled in the line's color; the direction arrow is a separate rotating
+// layer. Simulated trains differ only in color (and a small "SIM" tag).
 const RATIO = 2;
 
 function canvas(size) {
@@ -12,16 +13,6 @@ function canvas(size) {
   const ctx = c.getContext('2d');
   ctx.scale(RATIO, RATIO);
   return { c, ctx };
-}
-
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
 }
 
 // Fill the current path's interior from the bottom to `level` (0..1).
@@ -38,7 +29,7 @@ function fillLevel(ctx, path, top, bottom, width, level, color, alpha) {
   ctx.restore();
 }
 
-export function addLiveTrainIcons(map, colors) {
+export function addLiveTrainIcons(map, colors, prefix = 'train') {
   const size = 34;
   const r = 10;
   const mid = size / 2;
@@ -58,10 +49,11 @@ export function addLiveTrainIcons(map, colors) {
       ctx.lineWidth = 3.5;
       ctx.strokeStyle = '#ffffff';
       ctx.stroke();
-      map.addImage(`train:${line}:${lvl}`, ctx.getImageData(0, 0, size * RATIO, size * RATIO), { pixelRatio: RATIO });
+      map.addImage(`${prefix}:${line}:${lvl}`, ctx.getImageData(0, 0, size * RATIO, size * RATIO), { pixelRatio: RATIO });
     }
   }
   // Direction arrow, drawn on its own rotating layer above the body.
+  if (map.hasImage('train-arrow')) return;
   const { ctx } = canvas(size);
   ctx.beginPath();
   ctx.moveTo(mid, mid - 6);
@@ -77,26 +69,7 @@ export function addLiveTrainIcons(map, colors) {
   map.addImage('train-arrow', ctx.getImageData(0, 0, size * RATIO, size * RATIO), { pixelRatio: RATIO });
 }
 
+// Simulated trains look exactly like live ones, in the project's color.
 export function addSimTrainIcons(map, lines) {
-  const size = 30;
-  const box = 18;
-  const x0 = (size - box) / 2;
-  for (const { id, color } of lines) {
-    for (let lvl = 0; lvl <= 10; lvl++) {
-      const { ctx } = canvas(size);
-      const shape = () => roundRect(ctx, x0, x0, box, box, 4);
-      fillLevel(ctx, shape, x0, x0 + box, size, lvl / 10, color, 0.75);
-      shape();
-      ctx.lineWidth = 2.5;
-      ctx.setLineDash([3, 2]);
-      ctx.strokeStyle = color;
-      ctx.stroke();
-      ctx.setLineDash([]);
-      roundRect(ctx, x0 - 2, x0 - 2, box + 4, box + 4, 5);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-      ctx.stroke();
-      map.addImage(`sim:${id}:${lvl}`, ctx.getImageData(0, 0, size * RATIO, size * RATIO), { pixelRatio: RATIO });
-    }
-  }
+  addLiveTrainIcons(map, Object.fromEntries(lines.map((l) => [l.id, l.color])), 'sim');
 }

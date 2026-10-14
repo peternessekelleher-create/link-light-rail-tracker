@@ -1,6 +1,8 @@
-// ST3 future network on the map: a dashed approximate alignment through the
-// preferred stations, hollow station markers, and labels with each station's
-// target opening. One switch (st3.master) hides all of it.
+// ST3 future network on the map, drawn like the live 1 Line in each
+// project's color: a solid line with a dark casing through the preferred
+// stations (approximate alignment; Phase 2 fainter), Link-style station
+// markers ringed in the project color, and labels with each station's target
+// opening. One switch (st3.master) hides all of it.
 // With SHOW_ALTERNATIVES on, the other options are drawn too, smaller, with
 // their location-accuracy circles.
 import { SHOW_ALTERNATIVES } from '../config.js';
@@ -24,7 +26,7 @@ function circle(lon, lat, r, steps = 48) {
 
 // Every ST3 map layer, for the master switch.
 export const ST3_LAYERS = [
-  'st3-alignment-casing', 'st3-alignment', 'st3-marker-halo', 'st3-markers', 'st3-labels',
+  'st3-alignment-casing', 'st3-alignment', 'st3-markers', 'st3-labels',
   'st3-alt-circles', 'st3-alt-markers', 'st3-alt-labels',
 ];
 
@@ -57,7 +59,11 @@ export default function st3Layer(model) {
           type: 'line',
           source: 'st3-alignment',
           layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': 'rgba(0,0,0,0.85)', 'line-width': ['interpolate', ['linear'], ['zoom'], 9, 6, 15, 10] },
+          paint: {
+            'line-color': 'rgba(0,0,0,0.9)',
+            'line-width': ['interpolate', ['linear'], ['zoom'], 9, 7.5, 15, 13],
+            'line-opacity': ['case', ['==', ['get', 'phase'], 2], 0.55, 1],
+          },
         },
         below,
       );
@@ -66,11 +72,10 @@ export default function st3Layer(model) {
           id: 'st3-alignment',
           type: 'line',
           source: 'st3-alignment',
-          layout: { 'line-join': 'round' },
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
           paint: {
             'line-color': ['get', 'color'],
-            'line-width': ['interpolate', ['linear'], ['zoom'], 9, 3.5, 15, 6.5],
-            'line-dasharray': [2, 1.4],
+            'line-width': ['interpolate', ['linear'], ['zoom'], 9, 4.5, 15, 8.5],
             'line-opacity': ['case', ['==', ['get', 'phase'], 2], 0.55, 1],
           },
         },
@@ -79,26 +84,17 @@ export default function st3Layer(model) {
 
       if (SHOW_ALTERNATIVES) addAlternatives(map, model);
 
-      // Hollow markers: a dark disk ringed in the project color, with a black
-      // halo so the ring reads over bright imagery.
-      // (Mapbox only allows zoom at the top of an expression, so the halo has
-      // its own stops: the marker radius plus stroke plus 1 px.)
-      const radius = ['interpolate', ['linear'], ['zoom'], 9, 5, 15, 9];
-      map.addLayer({
-        id: 'st3-marker-halo',
-        type: 'circle',
-        source: 'st3-stations',
-        paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 8.5, 15, 13.5], 'circle-color': 'rgba(0,0,0,0.85)' },
-      });
+      // Station markers sized like the Link stations: white disk, ring in
+      // the project color instead of black.
       map.addLayer({
         id: 'st3-markers',
         type: 'circle',
         source: 'st3-stations',
         paint: {
-          'circle-radius': radius,
-          'circle-color': 'rgba(15,19,24,0.9)',
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 4.5, 15, 8.5],
+          'circle-color': '#ffffff',
           'circle-stroke-color': ['get', 'color'],
-          'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 9, 2.5, 15, 3.5],
+          'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 9, 2, 15, 3],
         },
       });
       map.addLayer({
